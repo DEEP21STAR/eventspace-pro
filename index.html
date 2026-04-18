@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EventSpace Pro — Marquee Sizing Wizard</title>
+<!--
+  © 2026 Whetū Digital Ltd. All rights reserved.
+  Licenced to Events Pro Hire Group.
+  Unauthorised copying or redistribution is prohibited.
+  Contact: hello@whetudigital.co.nz
+-->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   EVENTSPACE PRO — Whetū Digital · 2026
+   ═══════════════════════════════════════════════════════════ */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#04050f;--card:#080c1e;--card2:#0c1228;
+  --cyan:#00e6ff;--gold:#ffd700;--green:#00ff88;
+  --red:#ff4466;--purple:#c060ff;--orange:#ff8c00;
+  --text:#e0f0ff;--muted:#5a7a90;--border:#1a2a40;
+  --font:'Segoe UI',system-ui,sans-serif;
+  --sidebar:400px;--header:58px;--steps:46px;--status:38px;
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font)}
+
+/* ── HEADER ── */
+.hdr{
+  height:var(--header);display:flex;align-items:center;gap:16px;
+  padding:0 20px;background:rgba(4,5,15,.95);
+  border-bottom:1px solid rgba(0,230,255,.18);
+  backdrop-filter:blur(12px);position:relative;z-index:600}
+.hdr-logo{display:flex;align-items:center;gap:10px}
+.hdr-logo-icon{
+  width:34px;height:34px;background:linear-gradient(135deg,var(--cyan),var(--purple));
+  border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:900;color:#000;flex-shrink:0}
+.hdr-logo-text{font-size:15px;font-weight:800;letter-spacing:2px;color:#fff}
+.hdr-logo-sub{font-size:9px;color:var(--muted);letter-spacing:3px;margin-top:1px}
+.hdr-client{
+  flex:1;background:rgba(0,230,255,.06);border:1px solid rgba(0,230,255,.15);
+  border-radius:8px;padding:6px 14px;cursor:pointer;transition:all .2s}
+.hdr-client:hover{background:rgba(0,230,255,.12);border-color:rgba(0,230,255,.3)}
+.hdr-client-lbl{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+.hdr-client-name{font-size:14px;font-weight:700;color:var(--cyan)}
+.hdr-btns{display:flex;gap:8px}
+.hdr-btn{
+  padding:7px 16px;border-radius:8px;border:1px solid var(--border);
+  background:rgba(255,255,255,.04);color:var(--text);cursor:pointer;
+  font-size:12px;letter-spacing:.5px;transition:all .2s;font-family:var(--font)}
+.hdr-btn:hover{background:rgba(0,230,255,.1);border-color:rgba(0,230,255,.3);color:var(--cyan)}
+.hdr-btn.primary{
+  background:linear-gradient(135deg,rgba(0,230,255,.2),rgba(192,96,255,.2));
+  border-color:rgba(0,230,255,.4);color:var(--cyan);font-weight:700}
+.hdr-btn.primary:hover{background:linear-gradient(135deg,rgba(0,230,255,.35),rgba(192,96,255,.35))}
+
+/* ── STEP NAV ── */
+.step-nav{
+  height:var(--steps);display:flex;align-items:stretch;
+  background:rgba(6,8,22,.9);border-bottom:1px solid var(--border);
+  position:relative;z-index:500}
+.sn-step{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:8px;
+  cursor:pointer;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--muted);transition:all .2s;border-right:1px solid var(--border);
+  position:relative}
+.sn-step:last-child{border-right:none}
+.sn-step:hover{background:rgba(0,230,255,.05);color:var(--text)}
+.sn-step.active{
+  color:var(--cyan);background:rgba(0,230,255,.08);
+  border-bottom:2px solid var(--cyan)}
+.sn-step.done{color:var(--green)}
+.sn-step.done .sn-num{background:var(--green);color:#000}
+.sn-num{
+  width:20px;height:20px;border-radius:50%;background:var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:900;flex-shrink:0;transition:all .2s}
+.sn-step.active .sn-num{background:var(--cyan);color:#000}
+.sn-lbl{display:none}
+@media(min-width:900px){.sn-lbl{display:inline}}
+
+/* ── MAIN LAYOUT ── */
+.main{
+  display:flex;
+  height:calc(100vh - var(--header) - var(--steps) - var(--status))}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sidebar);flex-shrink:0;
+  background:rgba(6,8,22,.97);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;position:relative;z-index:400}
+.step-panel{display:none;flex-direction:column;height:100%;overflow-y:auto}
+.step-panel.active{display:flex}
+.step-panel::-webkit-scrollbar{width:4px}
+.step-panel::-webkit-scrollbar-track{background:transparent}
+.step-panel::-webkit-scrollbar-thumb{background:rgba(0,230,255,.2);border-radius:2px}
+.panel-head{
+  padding:18px 20px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
+.panel-title{font-size:13px;font-weight:800;letter-spacing:2px;color:var(--cyan);margin-bottom:3px}
+.panel-sub{font-size:11px;color:var(--muted);line-height:1.5}
+.panel-body{padding:16px 20px;flex:1}
+.panel-foot{padding:14px 20px;border-top:1px solid var(--border);flex-shrink:0}
+
+/* ── FORM ELEMENTS ── */
+.field{margin-bottom:14px}
+.field label{
+  display:block;font-size:10px;letter-spacing:2px;color:var(--muted);
+  text-transform:uppercase;margin-bottom:5px}
+.field input,.field select,.field textarea{
+  width:100%;background:rgba(255,255,255,.04);
+  border:1px solid var(--border);border-radius:8px;
+  color:var(--text);font-family:var(--font);font-size:14px;
+  padding:9px 12px;transition:all .2s;outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:rgba(0,230,255,.4);background:rgba(0,230,255,.06);
+  box-shadow:0 0 0 2px rgba(0,230,255,.1)}
+.field textarea{resize:vertical;min-height:70px;line-height:1.5}
+.field select option{background:#0a0f2e}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* ── ADDRESS SEARCH ── */
+.addr-search{position:relative;margin-bottom:14px}
+.addr-input{
+  width:100%;background:rgba(0,230,255,.06);
+  border:1px solid rgba(0,230,255,.25);border-radius:10px;
+  color:var(--text);font-family:var(--font);font-size:14px;
+  padding:11px 44px 11px 14px;outline:none;transition:all .2s}
+.addr-input:focus{border-color:rgba(0,230,255,.5);box-shadow:0 0 0 2px rgba(0,230,255,.1)}
+.addr-search-btn{
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  width:30px;height:30px;border-radius:6px;border:none;
+  background:linear-gradient(135deg,var(--cyan),var(--purple));
+  color:#000;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center}
+.addr-results{
+  position:absolute;top:100%;left:0;right:0;z-index:1000;
+  background:rgba(8,12,30,.98);border:1px solid rgba(0,230,255,.2);
+  border-radius:8px;margin-top:4px;max-height:200px;overflow-y:auto;display:none}
+.addr-result-item{
+  padding:10px 14px;cursor:pointer;font-size:12px;
+  border-bottom:1px solid rgba(255,255,255,.04);transition:background .15s}
+.addr-result-item:hover{background:rgba(0,230,255,.1);color:var(--cyan)}
+.addr-result-item:last-child{border-bottom:none}
+
+/* ── BUTTONS ── */
+.btn{
+  width:100%;padding:11px;border-radius:10px;border:none;cursor:pointer;
+  font-family:var(--font);font-size:13px;font-weight:700;
+  letter-spacing:.5px;transition:all .2s}
+.btn-primary{
+  background:linear-gradient(135deg,rgba(0,230,255,.25),rgba(192,96,255,.25));
+  border:1px solid rgba(0,230,255,.4);color:var(--cyan)}
+.btn-primary:hover{
+  background:linear-gradient(135deg,rgba(0,230,255,.4),rgba(192,96,255,.4));
+  box-shadow:0 0 20px rgba(0,230,255,.2)}
+.btn-gold{
+  background:linear-gradient(135deg,rgba(255,215,0,.2),rgba(255,140,0,.2));
+  border:1px solid rgba(255,215,0,.4);color:var(--gold)}
+.btn-gold:hover{background:linear-gradient(135deg,rgba(255,215,0,.35),rgba(255,140,0,.35))}
+.btn-green{
+  background:linear-gradient(135deg,rgba(0,255,136,.2),rgba(0,200,100,.2));
+  border:1px solid rgba(0,255,136,.4);color:var(--green)}
+.btn-green:hover{background:linear-gradient(135deg,rgba(0,255,136,.35),rgba(0,200,100,.35))}
+.btn-danger{
+  background:rgba(255,68,102,.1);border:1px solid rgba(255,68,102,.3);color:var(--red)}
+.btn-sm{padding:7px 12px;width:auto;font-size:11px;border-radius:7px;border:1px solid;cursor:pointer;font-family:var(--font);font-weight:700;transition:all .2s}
+.btn-row{display:flex;gap:8px;margin-bottom:12px}
+
+/* ── INFO CARDS ── */
+.info-card{
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.info-card.cyan{border-color:rgba(0,230,255,.25);background:rgba(0,230,255,.04)}
+.info-card.gold{border-color:rgba(255,215,0,.25);background:rgba(255,215,0,.04)}
+.info-card.green{border-color:rgba(0,255,136,.25);background:rgba(0,255,136,.04)}
+.info-card.red{border-color:rgba(255,68,102,.25);background:rgba(255,68,102,.04)}
+.info-card.purple{border-color:rgba(192,96,255,.25);background:rgba(192,96,255,.04)}
+.ic-title{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.ic-val{font-size:18px;font-weight:800;line-height:1.2}
+.ic-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.metrics-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+
+/* ── DRAWING INSTRUCTIONS ── */
+.draw-instruction{
+  background:linear-gradient(135deg,rgba(0,230,255,.08),rgba(192,96,255,.08));
+  border:1px solid rgba(0,230,255,.2);border-radius:10px;
+  padding:14px;margin-bottom:14px;text-align:center}
+.draw-instruction .icon{font-size:28px;margin-bottom:6px}
+.draw-instruction p{font-size:12px;color:var(--muted);line-height:1.6}
+.draw-instruction strong{color:var(--cyan)}
+.draw-zones-list{margin-bottom:12px}
+.zone-item{
+  display:flex;align-items:center;gap:10px;padding:8px 10px;
+  background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.2);
+  border-radius:8px;margin-bottom:6px;font-size:12px}
+.zone-item .zone-area{font-weight:700;color:var(--green);margin-left:auto}
+.zone-delete{
+  width:20px;height:20px;border-radius:4px;background:rgba(255,68,102,.15);
+  border:1px solid rgba(255,68,102,.3);color:var(--red);cursor:pointer;
+  font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* ── MARQUEE CARDS ── */
+.marquee-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.marquee-card{
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;gap:12px}
+.marquee-card:hover{border-color:rgba(0,230,255,.3);background:rgba(0,230,255,.06)}
+.marquee-card.selected{
+  border-color:var(--cyan);background:rgba(0,230,255,.1);
+  box-shadow:0 0 0 1px rgba(0,230,255,.3)}
+.marquee-card.too-small{opacity:.4;cursor:not-allowed;pointer-events:none}
+.marquee-card.recommended{border-color:var(--gold)}
+.mc-dims{
+  width:52px;height:52px;background:rgba(0,230,255,.08);border:1px solid rgba(0,230,255,.2);
+  border-radius:8px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;flex-shrink:0}
+.mc-dims-text{font-size:9px;font-weight:800;color:var(--cyan);line-height:1.3;text-align:center}
+.mc-info{flex:1;min-width:0}
+.mc-name{font-size:13px;font-weight:700;margin-bottom:2px}
+.mc-specs{font-size:10px;color:var(--muted)}
+.mc-price{font-size:14px;font-weight:800;color:var(--gold);flex-shrink:0}
+.mc-badge{
+  font-size:8px;letter-spacing:1px;padding:2px 7px;border-radius:20px;
+  background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.3);
+  color:var(--gold);display:inline-block;margin-top:3px}
+.mc-fit{color:var(--green);font-size:9px;margin-top:2px}
+
+/* ── GUEST SLIDER ── */
+.guest-slider-wrap{margin-bottom:16px}
+.guest-count-display{
+  text-align:center;font-size:48px;font-weight:900;color:var(--cyan);
+  text-shadow:0 0 20px rgba(0,230,255,.4);line-height:1;margin:8px 0}
+.guest-count-lbl{text-align:center;font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:10px}
+input[type=range]{
+  width:100%;accent-color:var(--cyan);height:4px;
+  background:rgba(0,230,255,.2);border-radius:2px;outline:none;cursor:pointer}
+
+/* ── FURNITURE BUILDER ── */
+.furniture-item{
+  display:flex;align-items:center;gap:10px;padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.04)}
+.furniture-item:last-child{border-bottom:none}
+.fi-icon{font-size:20px;width:28px;flex-shrink:0;text-align:center}
+.fi-info{flex:1;min-width:0}
+.fi-name{font-size:12px;font-weight:600;margin-bottom:1px}
+.fi-price{font-size:10px;color:var(--muted)}
+.fi-qty{display:flex;align-items:center;gap:6px}
+.qty-btn{
+  width:26px;height:26px;border-radius:6px;border:1px solid var(--border);
+  background:rgba(255,255,255,.04);color:var(--text);cursor:pointer;
+  font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  transition:all .15s;font-family:var(--font)}
+.qty-btn:hover{background:rgba(0,230,255,.15);border-color:rgba(0,230,255,.4);color:var(--cyan)}
+.qty-val{font-size:14px;font-weight:800;width:28px;text-align:center;color:var(--cyan)}
+.fi-total{font-size:11px;color:var(--gold);font-weight:700;width:45px;text-align:right;flex-shrink:0}
+
+/* ── QUOTE PREVIEW ── */
+.quote-section{margin-bottom:16px}
+.quote-section-title{
+  font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;
+  border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:10px}
+.quote-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:5px 0;font-size:12px;border-bottom:1px solid rgba(255,255,255,.03)}
+.quote-row:last-child{border-bottom:none}
+.quote-row .lbl{color:var(--muted)}
+.quote-row .val{font-weight:600;color:var(--text)}
+.quote-total-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0;margin-top:8px;border-top:2px solid rgba(0,230,255,.3)}
+.quote-total-row .lbl{font-size:13px;font-weight:700;color:var(--cyan)}
+.quote-total-row .val{font-size:20px;font-weight:900;color:var(--gold)}
+.price-edit-field{
+  width:80px;background:transparent;border:none;border-bottom:1px solid rgba(0,230,255,.3);
+  color:var(--gold);font-size:13px;font-weight:700;text-align:right;font-family:var(--font);outline:none}
+.consent-warning{
+  background:rgba(255,140,0,.1);border:1px solid rgba(255,140,0,.3);
+  border-radius:8px;padding:10px 12px;font-size:11px;color:var(--orange);
+  display:none;margin-bottom:10px;line-height:1.6}
+
+/* ── MAP CONTAINER ── */
+.map-wrap{flex:1;position:relative;overflow:hidden}
+#map{position:absolute;inset:0;z-index:100}
+
+/* ── MAP OVERLAYS ── */
+.map-badge{
+  position:absolute;top:14px;left:50%;transform:translateX(-50%);
+  background:rgba(4,5,15,.9);border:1px solid rgba(0,230,255,.3);
+  border-radius:20px;padding:6px 16px;font-size:11px;
+  color:var(--cyan);letter-spacing:1px;z-index:200;white-space:nowrap;
+  backdrop-filter:blur(8px);display:none}
+.map-area-badge{
+  position:absolute;bottom:50px;left:50%;transform:translateX(-50%);
+  z-index:200;display:none;gap:8px}
+.mab-item{
+  background:rgba(4,5,15,.92);border:1px solid rgba(0,255,136,.3);
+  border-radius:10px;padding:8px 16px;text-align:center;backdrop-filter:blur(8px)}
+.mab-val{font-size:18px;font-weight:900;color:var(--green)}
+.mab-lbl{font-size:9px;color:var(--muted);letter-spacing:1px}
+.map-tool-hint{
+  position:absolute;top:14px;right:14px;z-index:200;
+  background:rgba(4,5,15,.88);border:1px solid rgba(192,96,255,.25);
+  border-radius:10px;padding:10px 14px;font-size:11px;
+  color:var(--muted);max-width:200px;line-height:1.7;backdrop-filter:blur(8px)}
+.map-tool-hint strong{color:var(--cyan)}
+.marquee-overlay-info{
+  position:absolute;bottom:50px;right:14px;z-index:200;
+  background:rgba(4,5,15,.92);border:1px solid rgba(255,215,0,.3);
+  border-radius:10px;padding:10px 16px;backdrop-filter:blur(8px);
+  font-size:11px;display:none;max-width:180px}
+.moi-title{font-weight:800;color:var(--gold);margin-bottom:4px;font-size:12px}
+.moi-spec{color:var(--muted)}
+.moi-area{color:var(--cyan);font-weight:700}
+
+/* ── STATUS BAR ── */
+.status-bar{
+  height:var(--status);display:flex;align-items:center;gap:0;
+  background:rgba(4,5,15,.98);border-top:1px solid var(--border);
+  padding:0 20px;font-size:11px;color:var(--muted);flex-shrink:0}
+.sb-item{display:flex;align-items:center;gap:6px;padding:0 16px;border-right:1px solid var(--border)}
+.sb-item:first-child{padding-left:0}
+.sb-item:last-child{border-right:none}
+.sb-label{letter-spacing:1px;text-transform:uppercase}
+.sb-val{font-weight:800;font-size:13px;color:var(--text)}
+.sb-val.cyan{color:var(--cyan)}
+.sb-val.gold{color:var(--gold)}
+.sb-val.green{color:var(--green)}
+.sb-spacer{flex:1}
+.sb-brand{font-size:9px;color:rgba(0,230,255,.3);letter-spacing:2px}
+
+/* ── MODAL ── */
+.modal{
+  position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.75);
+  backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex}
+.modal-box{
+  background:rgba(8,12,30,.98);border:1px solid rgba(0,230,255,.25);
+  border-radius:20px;padding:28px;max-width:640px;width:100%;
+  max-height:90vh;overflow-y:auto;box-shadow:0 40px 100px rgba(0,0,0,.8)}
+.modal-box h2{font-size:16px;font-weight:800;color:var(--cyan);letter-spacing:2px;margin-bottom:6px}
+.modal-box p{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:16px}
+.modal-close{
+  float:right;width:28px;height:28px;border-radius:7px;border:1px solid var(--border);
+  background:rgba(255,255,255,.05);color:var(--muted);cursor:pointer;
+  font-size:14px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--font)}
+.modal-close:hover{background:rgba(255,68,102,.2);color:var(--red);border-color:rgba(255,68,102,.4)}
+
+/* ── PDF QUOTE PREVIEW ── */
+#quotePreview{
+  background:#fff;color:#1a1a2e;border-radius:10px;padding:30px;
+  font-family:'Segoe UI',system-ui,sans-serif;margin-top:16px;font-size:12px}
+.qp-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #e8e8f0}
+.qp-logo{font-size:22px;font-weight:900;color:#1a1a2e;letter-spacing:2px}
+.qp-logo span{color:#00b4cc}
+.qp-ref{font-size:11px;color:#888;text-align:right}
+.qp-ref strong{display:block;font-size:18px;color:#1a1a2e;font-weight:900}
+.qp-section{margin-bottom:20px}
+.qp-section-title{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#888;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #e8e8f0}
+.qp-row{display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:1px solid #f5f5f8}
+.qp-row:last-child{border-bottom:none}
+.qp-row .l{color:#555}
+.qp-row .r{font-weight:600;color:#1a1a2e}
+.qp-total{display:flex;justify-content:space-between;padding:10px 0;border-top:2px solid #1a1a2e;margin-top:10px}
+.qp-total .l{font-size:14px;font-weight:800;color:#1a1a2e}
+.qp-total .r{font-size:22px;font-weight:900;color:#00b4cc}
+.qp-footer{margin-top:20px;padding-top:12px;border-top:1px solid #e8e8f0;font-size:10px;color:#aaa;text-align:center}
+.qp-marquee-vis{
+  display:flex;justify-content:center;margin:16px 0;
+  background:linear-gradient(135deg,#f0f8ff,#e8f4ff);
+  border:1px solid #cce8ff;border-radius:8px;padding:20px}
+.qp-tent-svg{display:block;margin:auto}
+
+/* ── UPLOAD ZONE ── */
+.upload-zone{
+  border:2px dashed rgba(0,230,255,.3);border-radius:14px;
+  padding:32px;text-align:center;cursor:pointer;transition:all .2s;
+  background:rgba(0,230,255,.04);margin-bottom:14px}
+.upload-zone:hover{border-color:rgba(0,230,255,.6);background:rgba(0,230,255,.08)}
+.upload-zone .icon{font-size:32px;margin-bottom:8px}
+.upload-zone p{font-size:12px;color:var(--muted);line-height:1.6}
+.upload-zone strong{color:var(--cyan)}
+#uploadInput{display:none}
+#uploadPreview{max-width:100%;border-radius:10px;margin-top:10px;display:none}
+
+/* ── VISIT FORM ── */
+.visit-slots{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.visit-slot{
+  padding:10px;border:1px solid var(--border);border-radius:8px;
+  cursor:pointer;text-align:center;transition:all .2s;font-size:12px}
+.visit-slot:hover,.visit-slot.selected{
+  border-color:rgba(0,230,255,.4);background:rgba(0,230,255,.08);color:var(--cyan)}
+.visit-slot .date{font-weight:700;font-size:13px;margin-bottom:2px}
+.visit-slot .time{font-size:10px;color:var(--muted)}
+
+/* ── PROPERTY ANALYSIS CARD ── */
+.property-analysis{
+  background:linear-gradient(135deg,rgba(0,230,255,.06),rgba(192,96,255,.06));
+  border:1px solid rgba(0,230,255,.2);border-radius:12px;padding:14px;margin-bottom:14px}
+.pa-title{font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
+.pa-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pa-item{text-align:center}
+.pa-val{font-size:18px;font-weight:800;color:var(--cyan)}
+.pa-lbl{font-size:9px;color:var(--muted);letter-spacing:1px}
+
+/* ── LEAFLET OVERRIDES ── */
+.leaflet-draw-toolbar a{background-color:rgba(8,12,30,.95) !important;border-color:rgba(0,230,255,.3) !important;color:var(--cyan) !important}
+.leaflet-bar a{background-color:rgba(8,12,30,.95) !important;border-color:rgba(0,230,255,.2) !important;color:var(--cyan) !important}
+.leaflet-bar a:hover{background:rgba(0,230,255,.15) !important}
+.leaflet-control-attribution{background:rgba(4,5,15,.7) !important;color:rgba(255,255,255,.3) !important;font-size:9px !important}
+.leaflet-control-attribution a{color:rgba(0,230,255,.4) !important}
+
+/* ── UTILITY ── */
+.divider{height:1px;background:var(--border);margin:14px 0}
+.tag{
+  display:inline-block;padding:2px 8px;border-radius:20px;font-size:9px;
+  letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-right:4px}
+.tag-cyan{background:rgba(0,230,255,.1);color:var(--cyan);border:1px solid rgba(0,230,255,.2)}
+.tag-gold{background:rgba(255,215,0,.1);color:var(--gold);border:1px solid rgba(255,215,0,.2)}
+.tag-green{background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.2)}
+.tag-red{background:rgba(255,68,102,.1);color:var(--red);border:1px solid rgba(255,68,102,.2)}
+.tag-orange{background:rgba(255,140,0,.1);color:var(--orange);border:1px solid rgba(255,140,0,.2)}
+.spinner{
+  width:16px;height:16px;border:2px solid rgba(0,230,255,.3);
+  border-top-color:var(--cyan);border-radius:50%;display:inline-block;
+  animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hidden{display:none !important}
+
+/* ── WHETŪ WATERMARK ── */
+.whetu-credit{
+  position:fixed;bottom:var(--status);right:14px;z-index:300;
+  font-size:9px;color:rgba(0,230,255,.15);letter-spacing:2px;pointer-events:none}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  :root{--sidebar:100%;--header:52px}
+  .main{flex-direction:column}
+  .sidebar{width:100%;height:50vh;border-right:none;border-bottom:1px solid var(--border)}
+  .map-wrap{height:50vh}
+  .sn-lbl{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ HEADER ═══════════════════ -->
+<header class="hdr">
+  <div class="hdr-logo">
+    <div class="hdr-logo-icon">⛺</div>
+    <div>
+      <div class="hdr-logo-text">EVENTSPACE PRO</div>
+      <div class="hdr-logo-sub">Marquee Sizing Wizard · Whetū Digital</div>
+    </div>
+  </div>
+  <div class="hdr-client" onclick="focusStep(1)">
+    <div class="hdr-client-lbl">Active Quote</div>
+    <div class="hdr-client-name" id="hdrClientName">— New Quote —</div>
+  </div>
+  <div class="hdr-btns">
+    <button class="hdr-btn" onclick="openSavedModal()">📂 Saved</button>
+    <button class="hdr-btn" onclick="openUploadModal()">📸 Upload Photo</button>
+    <button class="hdr-btn" onclick="openVisitModal()">📅 Site Visit</button>
+    <button class="hdr-btn primary" onclick="newQuote()">+ New Quote</button>
+  </div>
+</header>
+
+<!-- ═══════════════════ STEP NAV ═══════════════════ -->
+<nav class="step-nav">
+  <div class="sn-step active" id="sn1" onclick="focusStep(1)">
+    <span class="sn-num">1</span>
+    <span class="sn-lbl">Property &amp; Client</span>
+  </div>
+  <div class="sn-step" id="sn2" onclick="focusStep(2)">
+    <span class="sn-num">2</span>
+    <span class="sn-lbl">Zone Mapping</span>
+  </div>
+  <div class="sn-step" id="sn3" onclick="focusStep(3)">
+    <span class="sn-num">3</span>
+    <span class="sn-lbl">Marquee &amp; Furniture</span>
+  </div>
+  <div class="sn-step" id="sn4" onclick="focusStep(4)">
+    <span class="sn-num">4</span>
+    <span class="sn-lbl">Quote &amp; Export</span>
+  </div>
+</nav>
+
+<!-- ═══════════════════ MAIN ═══════════════════ -->
+<div class="main">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+
+    <!-- STEP 1: PROPERTY & CLIENT -->
+    <div id="step1" class="step-panel active">
+      <div class="panel-head">
+        <div class="panel-title">◈ PROPERTY &amp; CLIENT</div>
+        <div class="panel-sub">Enter client details and find the event property on the satellite map.</div>
+      </div>
+      <div class="panel-body">
+        <div class="field-row">
+          <div class="field">
+            <label>Client Name</label>
+            <input id="clientName" type="text" placeholder="Full name" oninput="updateClientHeader()">
+          </div>
+          <div class="field">
+            <label>Phone</label>
+            <input id="clientPhone" type="tel" placeholder="021 xxx xxxx">
+          </div>
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input id="clientEmail" type="email" placeholder="client@email.com">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Event Date</label>
+            <input id="eventDate" type="date">
+          </div>
+          <div class="field">
+            <label>Event Type</label>
+            <select id="eventType">
+              <option value="">Select type</option>
+              <option>Birthday Party</option>
+              <option>Wedding Reception</option>
+              <option>Corporate Event</option>
+              <option>Family Gathering</option>
+              <option>Market / Expo</option>
+              <option>School Event</option>
+              <option>Sports Event</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="field">
+          <label>🗺 Property Address (NZ)</label>
+          <div class="addr-search">
+            <input class="addr-input" id="addrInput" type="text" placeholder="e.g. 14 Beaumont Street, Hamilton" value="14 Beaumont Street, Hamilton, NZ" onkeydown="if(event.key==='Enter')searchAddress()">
+            <button class="addr-search-btn" onclick="searchAddress()">🔍</button>
+            <div class="addr-results" id="addrResults"></div>
+          </div>
+        </div>
+        <div class="property-analysis" id="propAnalysis" style="display:none">
+          <div class="pa-title">◈ Property Analysis</div>
+          <div class="pa-grid">
+            <div class="pa-item"><div class="pa-val" id="paSection">—</div><div class="pa-lbl">Section m²</div></div>
+            <div class="pa-item"><div class="pa-val" id="paUsable">—</div><div class="pa-lbl">Est. Usable m²</div></div>
+            <div class="pa-item"><div class="pa-val" id="paBackyard">—</div><div class="pa-lbl">Backyard m²</div></div>
+            <div class="pa-item"><div class="pa-val" id="paMqFit">—</div><div class="pa-lbl">Max Marquee</div></div>
+          </div>
+        </div>
+        <div class="info-card cyan" style="font-size:11px;color:var(--muted);line-height:1.8;margin-top:6px">
+          <strong style="color:var(--cyan)">💡 Tip:</strong> The satellite map will centre on the property. Use Step 2 to draw the available outdoor zones — grass, patio, driveway.
+        </div>
+      </div>
+      <div class="panel-foot">
+        <button class="btn btn-primary" onclick="searchAddress();focusStep(2)">Find Property &amp; Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: ZONE MAPPING -->
+    <div id="step2" class="step-panel">
+      <div class="panel-head">
+        <div class="panel-title">◈ ZONE MAPPING</div>
+        <div class="panel-sub">Draw available outdoor areas on the satellite map. Exclude the house, driveway, and trees.</div>
+      </div>
+      <div class="panel-body">
+        <div class="draw-instruction">
+          <div class="icon">✏️</div>
+          <p>Click <strong>Start Drawing</strong>, then click points on the map to trace available outdoor space. <strong>Double-click</strong> to finish a zone. Draw multiple zones if needed.</p>
+        </div>
+        <div class="btn-row">
+          <button class="btn-sm btn-primary" style="flex:1" onclick="startDrawing()">✏️ Draw Zone</button>
+          <button class="btn-sm" style="flex:1;background:rgba(255,68,102,.1);border:1px solid rgba(255,68,102,.3);color:var(--red);font-family:var(--font);font-weight:700;border-radius:7px;cursor:pointer" onclick="clearAllZones()">🗑 Clear All</button>
+        </div>
+        <div class="draw-zones-list" id="zoneList">
+          <div style="text-align:center;font-size:11px;color:var(--muted);padding:20px 0">No zones drawn yet.<br>Click Draw Zone to start.</div>
+        </div>
+        <div class="metrics-row" id="zoneMetrics" style="display:none">
+          <div class="info-card green">
+            <div class="ic-title">Total Drawn</div>
+            <div class="ic-val" id="metricTotal">0 m²</div>
+          </div>
+          <div class="info-card cyan">
+            <div class="ic-title">After 2m Clearance</div>
+            <div class="ic-val" id="metricUsable">0 m²</div>
+          </div>
+        </div>
+        <div class="consent-warning" id="consentWarning">
+          ⚠ <strong>NZ Consent Notice:</strong> Total area exceeds 100m². Marquees over 100m² may require a building consent or PS1 Engineer's Statement. Check with your local council before hire.
+        </div>
+        <div class="info-card" style="font-size:11px;color:var(--muted);line-height:1.8">
+          <strong style="color:var(--cyan)">🔧 Rules:</strong><br>
+          · Leave 2m clearance around all marquee sides<br>
+          · Avoid powerlines, drains, slopes >5°<br>
+          · Check boundary setbacks with council
+        </div>
+      </div>
+      <div class="panel-foot">
+        <button class="btn btn-primary" onclick="focusStep(3)">Select Marquee →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: MARQUEE & FURNITURE -->
+    <div id="step3" class="step-panel">
+      <div class="panel-head">
+        <div class="panel-title">◈ MARQUEE &amp; FURNITURE</div>
+        <div class="panel-sub">Set guest count, choose your marquee, and configure the furniture package.</div>
+      </div>
+      <div class="panel-body">
+        <!-- Guest count -->
+        <div class="guest-slider-wrap">
+          <div class="guest-count-display" id="guestDisplay">50</div>
+          <div class="guest-count-lbl">ESTIMATED GUESTS</div>
+          <input type="range" id="guestSlider" min="5" max="300" value="50" step="5" oninput="updateGuests(this.value)">
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:4px"><span>5</span><span>150</span><span>300</span></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Layout type -->
+        <div class="field" style="margin-bottom:10px">
+          <label>Layout Style</label>
+          <select id="layoutType" onchange="updateMarqueeRecs()">
+            <option value="seated">Seated Dining (0.8 m²/guest)</option>
+            <option value="standing">Cocktail/Standing (0.5 m²/guest)</option>
+            <option value="ceremony">Ceremony/Theatre (0.7 m²/guest)</option>
+            <option value="mixed">Mixed Layout (0.65 m²/guest)</option>
+          </select>
+        </div>
+
+        <div style="font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase">◈ Available Marquees</div>
+        <div id="marqueeRecommendations" class="marquee-grid"></div>
+
+        <div class="divider"></div>
+        <div style="font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase">◈ Furniture &amp; Extras</div>
+        <div id="furnitureList"></div>
+      </div>
+      <div class="panel-foot">
+        <div class="info-card gold" style="margin-bottom:10px">
+          <div class="ic-title">Package Subtotal (excl. GST)</div>
+          <div class="ic-val gold" id="furnitureSubtotal" style="color:var(--gold)">$0.00</div>
+        </div>
+        <button class="btn btn-primary" onclick="buildQuote();focusStep(4)">Generate Quote →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: QUOTE -->
+    <div id="step4" class="step-panel">
+      <div class="panel-head">
+        <div class="panel-title">◈ QUOTE PREVIEW</div>
+        <div class="panel-sub">Review, adjust pricing, then export or send to client.</div>
+      </div>
+      <div class="panel-body">
+        <div id="quoteSummary">
+          <div style="text-align:center;font-size:11px;color:var(--muted);padding:20px 0">Complete Steps 1-3 to generate a quote.</div>
+        </div>
+      </div>
+      <div class="panel-foot">
+        <div class="btn-row" style="margin-bottom:8px">
+          <button class="btn-sm btn-gold" style="flex:1;padding:9px" onclick="exportPDF()">📄 Export PDF</button>
+          <button class="btn-sm btn-primary" style="flex:1;padding:9px" onclick="openPreviewModal()">👁 Preview</button>
+        </div>
+        <div class="btn-row">
+          <button class="btn-sm btn-green" style="flex:1;padding:9px" onclick="saveQuote()">💾 Save Quote</button>
+          <button class="btn-sm" style="flex:1;padding:9px;background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.3);color:#25d366;font-family:var(--font);font-weight:700;border-radius:7px;cursor:pointer" onclick="sendWhatsApp()">💬 WhatsApp</button>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ── MAP ── -->
+  <div class="map-wrap">
+    <div id="map"></div>
+    <div class="map-badge" id="mapBadge">📍 Searching…</div>
+    <div class="map-area-badge" id="mapAreaBadge">
+      <div class="mab-item">
+        <div class="mab-val" id="badgeArea">0</div>
+        <div class="mab-lbl">m² Drawn</div>
+      </div>
+      <div class="mab-item">
+        <div class="mab-val" id="badgeUsable">0</div>
+        <div class="mab-lbl">m² Usable</div>
+      </div>
+    </div>
+    <div class="map-tool-hint" id="mapToolHint" style="display:none">
+      <strong>Drawing Mode</strong><br>
+      Click points on the map to trace the available area.<br>
+      Double-click to finish zone.<br>
+      Press <strong>ESC</strong> to cancel.
+    </div>
+    <div class="marquee-overlay-info" id="marqueeOverlayInfo">
+      <div class="moi-title" id="moiName">—</div>
+      <div class="moi-spec" id="moiSpec"></div>
+      <div class="moi-area" id="moiArea"></div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px">Drag to reposition</div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- ═══════════════════ STATUS BAR ═══════════════════ -->
+<div class="status-bar">
+  <div class="sb-item">
+    <span class="sb-label">Client</span>
+    <span class="sb-val cyan" id="sbClient">—</span>
+  </div>
+  <div class="sb-item">
+    <span class="sb-label">Area</span>
+    <span class="sb-val green" id="sbArea">— m²</span>
+  </div>
+  <div class="sb-item">
+    <span class="sb-label">Marquee</span>
+    <span class="sb-val" id="sbMarquee">—</span>
+  </div>
+  <div class="sb-item">
+    <span class="sb-label">Guests</span>
+    <span class="sb-val" id="sbGuests">50</span>
+  </div>
+  <div class="sb-spacer"></div>
+  <div class="sb-item">
+    <span class="sb-label">Est. Total</span>
+    <span class="sb-val gold" id="sbTotal">$0</span>
+  </div>
+  <div class="sb-brand">EVENTSPACE PRO · WHETŪ DIGITAL · 2026</div>
+</div>
+
+<!-- ═══════════════════ MODALS ═══════════════════ -->
+
+<!-- PREVIEW MODAL -->
+<div class="modal" id="previewModal">
+  <div class="modal-box" style="max-width:700px">
+    <button class="modal-close" onclick="closeModal('previewModal')">✕</button>
+    <h2>QUOTE PREVIEW</h2>
+    <p>Review your quote before exporting. Scroll to see the full document.</p>
+    <div id="quotePreview"></div>
+    <br>
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="btn btn-gold" onclick="exportPDF()" style="flex:1">📄 Export PDF</button>
+      <button class="btn btn-primary" onclick="closeModal('previewModal')" style="flex:1">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- UPLOAD PHOTO MODAL -->
+<div class="modal" id="uploadModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('uploadModal')">✕</button>
+    <h2>📸 CLIENT PHOTO UPLOAD</h2>
+    <p>If the property isn't on Google Maps or the satellite image is outdated, ask the client for an aerial photo (drone photo, Google Maps screenshot, or overhead shot).</p>
+    <div class="upload-zone" onclick="document.getElementById('uploadInput').click()">
+      <div class="icon">📷</div>
+      <p>Click to upload or <strong>drag a photo here</strong><br>
+      Aerial photos, drone shots, or Google Maps screenshots</p>
+      <input type="file" id="uploadInput" accept="image/*" onchange="handlePhotoUpload(this)">
+    </div>
+    <img id="uploadPreview" alt="Property photo">
+    <div class="info-card cyan" style="font-size:11px;color:var(--muted);line-height:1.7;margin-top:10px">
+      <strong style="color:var(--cyan)">💡 After uploading:</strong> Use the measurement tool to mark zones on the photo. Estimate scale using the driveway width (typically 3m) or car length (4.5m).
+    </div>
+    <br>
+    <button class="btn btn-primary" onclick="closeModal('uploadModal')">Done</button>
+  </div>
+</div>
+
+<!-- SITE VISIT MODAL -->
+<div class="modal" id="visitModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('visitModal')">✕</button>
+    <h2>📅 SCHEDULE SITE VISIT</h2>
+    <p>Book a site visit when: satellite imagery is unavailable or outdated, the property has unusual features, or the client needs a formal consultation.</p>
+    <div class="field">
+      <label>Preferred Visit Date &amp; Time</label>
+      <div class="visit-slots">
+        <div class="visit-slot" onclick="selectSlot(this)">
+          <div class="date" id="slot1date">—</div>
+          <div class="time">9:00 AM – 11:00 AM</div>
+        </div>
+        <div class="visit-slot" onclick="selectSlot(this)">
+          <div class="date" id="slot2date">—</div>
+          <div class="time">12:00 PM – 2:00 PM</div>
+        </div>
+        <div class="visit-slot" onclick="selectSlot(this)">
+          <div class="date" id="slot3date">—</div>
+          <div class="time">2:00 PM – 4:00 PM</div>
+        </div>
+        <div class="visit-slot" onclick="selectSlot(this)">
+          <div class="date" id="slot4date">—</div>
+          <div class="time">Any time (call first)</div>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Notes for Site Visit</label>
+      <textarea id="visitNotes" placeholder="Access issues, gate codes, dog on property, specific areas to check…"></textarea>
+    </div>
+    <div class="field">
+      <label>Confirm Client Address</label>
+      <input type="text" id="visitAddr" placeholder="Property address for visit">
+    </div>
+    <button class="btn btn-primary" onclick="confirmSiteVisit()">✅ Confirm Site Visit</button>
+  </div>
+</div>
+
+<!-- SAVED QUOTES MODAL -->
+<div class="modal" id="savedModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('savedModal')">✕</button>
+    <h2>📂 SAVED QUOTES</h2>
+    <p>All quotes are saved in your browser. Export to PDF to keep a permanent record.</p>
+    <div id="savedList"></div>
+    <br>
+    <button class="btn btn-danger" onclick="clearAllSaved()" style="margin-top:8px">🗑 Clear All Saved</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ SCRIPTS ═══════════════════ -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// EVENTSPACE PRO — Whetū Digital · 2026
+// Marquee Sizing Wizard
+// ════════════════════════════════════════════════════════════
+
+// ── CONFIG ──────────────────────────────────────────────────
+var CONFIG = {
+  companyName: 'Events Pro Hire Group',
+  companyPhone: '0800 XXX XXX',
+  companyEmail: 'hire@eventsprohire.co.nz',
+  companyAddress: 'Hamilton, Waikato, New Zealand',
+  gstRate: 0.15,
+  deliveryBase: 150,
+  setupBase: 200,
+  clearanceM: 2, // metres clearance around marquee
+};
+
+// ── MARQUEE SIZES ────────────────────────────────────────────
+var MARQUEES = [
+  { id:'g3x3',   name:'Gazebo 3×3m',    w:3,  d:3,  area:9,   maxG:8,   price:150,  desc:'Ideal for small gatherings or extra sheltered area' },
+  { id:'s3x6',   name:'Small 3×6m',     w:3,  d:6,  area:18,  maxG:16,  price:280,  desc:'Perfect for intimate parties, outdoor dining' },
+  { id:'m4x8',   name:'Medium 4×8m',    w:4,  d:8,  area:32,  maxG:28,  price:420,  desc:'Great for birthday parties and small receptions' },
+  { id:'st6x9',  name:'Standard 6×9m',  w:6,  d:9,  area:54,  maxG:45,  price:650,  desc:'Most popular size — suits most residential events' },
+  { id:'l6x12',  name:'Large 6×12m',    w:6,  d:12, area:72,  maxG:60,  price:820,  desc:'Generous space for seated dining with dance floor' },
+  { id:'xl9x12', name:'XL 9×12m',       w:9,  d:12, area:108, maxG:90,  price:1100, desc:'Ideal for weddings and corporate events' },
+  { id:'xxl9x15',name:'XXL 9×15m',      w:9,  d:15, area:135, maxG:112, price:1380, desc:'Substantial venue — requires large open section' },
+  { id:'g12x15', name:'Grand 12×15m',   w:12, d:15, area:180, maxG:150, price:1750, desc:'Large-scale events, requires site assessment' },
+  { id:'m12x18', name:'Mega 12×18m',    w:12, d:18, area:216, maxG:180, price:2100, desc:'Maximum size — always requires site visit' },
+];
+
+// ── FURNITURE ────────────────────────────────────────────────
+var FURNITURE = [
+  { id:'chair',    name:'Chiavari Chairs',          icon:'🪑', unit:'each',   price:5,   qty:0 },
+  { id:'t_round',  name:'Round Tables (seats 8)',   icon:'⭕', unit:'each',   price:28,  qty:0 },
+  { id:'t_rect',   name:'Trestle Tables (6 seats)', icon:'📋', unit:'each',   price:22,  qty:0 },
+  { id:'heater',   name:'Patio Heaters',            icon:'🔥', unit:'each',   price:65,  qty:0 },
+  { id:'lights',   name:'String Lights (10m set)',  icon:'✨', unit:'set',    price:85,  qty:0 },
+  { id:'sidewall', name:'Sidewall Panels',          icon:'🧱', unit:'panel',  price:18,  qty:0 },
+  { id:'dance',    name:'Dance Floor (per m²)',     icon:'🕺', unit:'m²',     price:14,  qty:0 },
+  { id:'linen',    name:'Table Linen',              icon:'🎀', unit:'each',   price:9,   qty:0 },
+  { id:'carpet',   name:'Marquee Carpet',           icon:'🟥', unit:'marquee',price:130, qty:0 },
+  { id:'power',    name:'Power Board + Extension',  icon:'🔌', unit:'each',   price:25,  qty:0 },
+];
+
+// ── STATE ────────────────────────────────────────────────────
+var state = {
+  step: 1,
+  lat: -37.7879, lng: 175.2793, // Hamilton default
+  address: '14 Beaumont Street, Hamilton, NZ',
+  clientName: '', clientPhone: '', clientEmail: '',
+  eventDate: '', eventType: '',
+  zones: [], // [{latlngs, area}]
+  totalArea: 0, usableArea: 0,
+  guests: 50,
+  layoutType: 'seated',
+  selectedMarquee: null,
+  marqueeRect: null, // Leaflet rectangle
+  quoteRef: generateRef(),
+  notes: '',
+};
+
+// ── MAP SETUP ────────────────────────────────────────────────
+var map = L.map('map', {
+  center: [state.lat, state.lng],
+  zoom: 19,
+  zoomControl: true,
+});
+
+// Satellite tiles (ESRI World Imagery — free, no API key)
+var satelliteLayer = L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  { attribution: 'Tiles © Esri — Esri, DigitalGlobe, GeoEye, Earthstar Geographics, CNES/Airbus DS', maxZoom: 21 }
+).addTo(map);
+
+// Labels overlay (street names on satellite)
+var labelsLayer = L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',
+  { attribution: '', maxZoom: 21, opacity: 0.8 }
+).addTo(map);
+
+// Layer for drawn zones
+var drawnItems = new L.FeatureGroup().addTo(map);
+
+// Leaflet.draw control
+var drawControl = new L.Control.Draw({
+  draw: {
+    polygon: {
+      allowIntersection: false,
+      shapeOptions: { color: '#00ff88', fillColor: '#00ff88', fillOpacity: 0.25, weight: 2 },
+      showArea: true,
+    },
+    polyline: false, rectangle: false, circle: false, marker: false, circlemarker: false,
+  },
+  edit: { featureGroup: drawnItems, edit: false },
+});
+
+map.on(L.Draw.Event.CREATED, function(e) {
+  var layer = e.layer;
+  drawnItems.addLayer(layer);
+  var latlngs = layer.getLatLngs()[0];
+  var coords = latlngs.map(function(ll){ return [ll.lng, ll.lat]; });
+  coords.push(coords[0]);
+  var poly = turf.polygon([coords]);
+  var areaM2 = turf.area(poly);
+  var zone = { layer: layer, area: Math.round(areaM2), id: Date.now(), name: 'Zone ' + (state.zones.length + 1) };
+  state.zones.push(zone);
+  layer._zoneId = zone.id;
+  updateZoneMetrics();
+  renderZoneList();
+  showMapToolHint(false);
+  document.getElementById('mapToolHint').style.display = 'none';
+});
+
+map.on('draw:drawstart', function() {
+  document.getElementById('mapToolHint').style.display = 'block';
+  document.getElementById('mapAreaBadge').style.display = 'flex';
+});
+map.on('draw:drawstop', function() {
+  document.getElementById('mapToolHint').style.display = 'none';
+});
+
+// ── GEOCODING ────────────────────────────────────────────────
+var geocodeTimeout;
+function searchAddress() {
+  var addr = document.getElementById('addrInput').value.trim();
+  if (!addr) return;
+  showMapBadge('🔍 Searching…');
+  fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(addr) + '&countrycodes=nz&limit=5', {
+    headers: { 'Accept-Language': 'en', 'User-Agent': 'EventSpacePro/1.0' }
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data) {
+    if (!data.length) { showMapBadge('❌ Address not found — try again'); return; }
+    var r = data[0];
+    state.lat = parseFloat(r.lat);
+    state.lng = parseFloat(r.lon);
+    state.address = r.display_name;
+    map.setView([state.lat, state.lng], 19);
+    // Add property marker
+    if (state.marker) map.removeLayer(state.marker);
+    state.marker = L.marker([state.lat, state.lng], {
+      icon: L.divIcon({
+        className: '',
+        html: '<div style="width:14px;height:14px;border-radius:50%;background:#ff4466;border:2px solid #fff;box-shadow:0 0 8px rgba(255,68,102,.8)"></div>',
+        iconSize: [14, 14], iconAnchor: [7, 7]
+      })
+    }).addTo(map).bindPopup('<strong>' + document.getElementById('clientName').value || 'Property' + '</strong><br>' + state.address.split(',')[0]);
+    showMapBadge('📍 ' + state.address.split(',').slice(0,2).join(','));
+    setTimeout(function(){ document.getElementById('mapBadge').style.display = 'none'; }, 3000);
+    // Show estimated property analysis
+    showPropertyAnalysis();
+  })
+  .catch(function(){ showMapBadge('⚠ Network error — check connection'); });
+}
+
+function showPropertyAnalysis() {
+  var pa = document.getElementById('propAnalysis');
+  pa.style.display = 'block';
+  // Rough estimates for a standard NZ residential section
+  document.getElementById('paSection').textContent = '~600';
+  document.getElementById('paUsable').textContent = '~400';
+  document.getElementById('paBackyard').textContent = '~200';
+  document.getElementById('paMqFit').textContent = '9×12m';
+}
+
+// Live address autocomplete
+document.getElementById('addrInput').addEventListener('input', function() {
+  clearTimeout(geocodeTimeout);
+  var val = this.value.trim();
+  if (val.length < 4) { document.getElementById('addrResults').style.display = 'none'; return; }
+  geocodeTimeout = setTimeout(function() {
+    fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(val) + '&countrycodes=nz&limit=5', {
+      headers: { 'Accept-Language': 'en', 'User-Agent': 'EventSpacePro/1.0' }
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(data) {
+      var el = document.getElementById('addrResults');
+      if (!data.length) { el.style.display = 'none'; return; }
+      el.innerHTML = data.map(function(r) {
+        return '<div class="addr-result-item" onclick="selectAddress(\'' +
+          r.lat + '\',\'' + r.lon + '\',\'' + escQ(r.display_name) + '\')">' +
+          r.display_name.split(',').slice(0,3).join(',') + '</div>';
+      }).join('');
+      el.style.display = 'block';
+    });
+  }, 400);
+});
+
+function selectAddress(lat, lng, name) {
+  state.lat = parseFloat(lat);
+  state.lng = parseFloat(lng);
+  state.address = name;
+  document.getElementById('addrInput').value = name.split(',').slice(0,3).join(',');
+  document.getElementById('addrResults').style.display = 'none';
+  map.setView([state.lat, state.lng], 19);
+  if (state.marker) map.removeLayer(state.marker);
+  state.marker = L.marker([state.lat, state.lng], {
+    icon: L.divIcon({
+      className: '',
+      html: '<div style="width:14px;height:14px;border-radius:50%;background:#ff4466;border:2px solid #fff;box-shadow:0 0 8px rgba(255,68,102,.8)"></div>',
+      iconSize: [14, 14], iconAnchor: [7, 7]
+    })
+  }).addTo(map);
+  showPropertyAnalysis();
+}
+
+// Close autocomplete on outside click
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.addr-search')) document.getElementById('addrResults').style.display = 'none';
+});
+
+// ── ZONE DRAWING ─────────────────────────────────────────────
+function startDrawing() {
+  var handler = new L.Draw.Polygon(map, drawControl.options.draw.polygon);
+  handler.enable();
+}
+
+function clearAllZones() {
+  drawnItems.clearLayers();
+  state.zones = [];
+  state.totalArea = 0;
+  state.usableArea = 0;
+  updateZoneMetrics();
+  renderZoneList();
+  if (state.marqueeRect) { map.removeLayer(state.marqueeRect); state.marqueeRect = null; }
+  document.getElementById('marqueeOverlayInfo').style.display = 'none';
+  document.getElementById('mapAreaBadge').style.display = 'none';
+}
+
+function deleteZone(id) {
+  var idx = state.zones.findIndex(function(z){ return z.id === id; });
+  if (idx === -1) return;
+  var zone = state.zones[idx];
+  drawnItems.removeLayer(zone.layer);
+  state.zones.splice(idx, 1);
+  updateZoneMetrics();
+  renderZoneList();
+}
+
+function updateZoneMetrics() {
+  var total = state.zones.reduce(function(s,z){ return s + z.area; }, 0);
+  var usable = Math.max(0, total - (state.zones.length * CONFIG.clearanceM * CONFIG.clearanceM * 4));
+  state.totalArea = total;
+  state.usableArea = usable;
+  // Update UI
+  document.getElementById('metricTotal').textContent = total + ' m²';
+  document.getElementById('metricUsable').textContent = Math.round(usable) + ' m²';
+  document.getElementById('badgeArea').textContent = total;
+  document.getElementById('badgeUsable').textContent = Math.round(usable);
+  document.getElementById('sbArea').textContent = total + ' m²';
+  var metrics = document.getElementById('zoneMetrics');
+  metrics.style.display = total > 0 ? 'grid' : 'none';
+  var warning = document.getElementById('consentWarning');
+  warning.style.display = total > 100 ? 'block' : 'none';
+  updateMarqueeRecs();
+  updateTotal();
+}
+
+function renderZoneList() {
+  var el = document.getElementById('zoneList');
+  if (!state.zones.length) {
+    el.innerHTML = '<div style="text-align:center;font-size:11px;color:var(--muted);padding:16px 0">No zones drawn yet.<br>Click Draw Zone to start.</div>';
+    return;
+  }
+  el.innerHTML = state.zones.map(function(z,i) {
+    return '<div class="zone-item">' +
+      '<span style="font-size:11px;color:var(--green)">▣</span>' +
+      '<span style="flex:1;font-size:12px">' + z.name + '</span>' +
+      '<span class="zone-area">' + z.area + ' m²</span>' +
+      '<button class="zone-delete" onclick="deleteZone(' + z.id + ')">✕</button>' +
+      '</div>';
+  }).join('');
+}
+
+// ── GUEST + MARQUEE ──────────────────────────────────────────
+var layoutRatios = { seated: 0.8, standing: 0.5, ceremony: 0.7, mixed: 0.65 };
+
+function updateGuests(val) {
+  state.guests = parseInt(val);
+  document.getElementById('guestDisplay').textContent = state.guests;
+  document.getElementById('sbGuests').textContent = state.guests;
+  updateMarqueeRecs();
+  updateTotal();
+}
+
+function updateMarqueeRecs() {
+  state.layoutType = document.getElementById('layoutType').value;
+  var ratio = layoutRatios[state.layoutType] || 0.8;
+  var minArea = Math.ceil(state.guests * ratio);
+  var usable = state.usableArea || 9999; // If no zone drawn, show all
+  var el = document.getElementById('marqueeRecommendations');
+  // Find recommended (smallest that fits guests and site)
+  var recommended = null;
+  for (var i = 0; i < MARQUEES.length; i++) {
+    var mq = MARQUEES[i];
+    var withClearance = (mq.w + CONFIG.clearanceM * 2) * (mq.d + CONFIG.clearanceM * 2);
+    if (mq.area >= minArea && withClearance <= usable) { recommended = mq.id; break; }
+  }
+  if (!recommended) {
+    for (var j = 0; j < MARQUEES.length; j++) {
+      if (MARQUEES[j].area >= minArea) { recommended = MARQUEES[j].id; break; }
+    }
+  }
+  el.innerHTML = MARQUEES.map(function(mq) {
+    var withClearance = (mq.w + CONFIG.clearanceM * 2) * (mq.d + CONFIG.clearanceM * 2);
+    var fits = state.usableArea === 0 || withClearance <= state.usableArea;
+    var isRec = mq.id === recommended;
+    var isSelected = state.selectedMarquee && state.selectedMarquee.id === mq.id;
+    var cls = 'marquee-card' + (isSelected ? ' selected' : '') + (isRec ? ' recommended' : '') + (!fits ? ' too-small' : '');
+    var badge = isRec ? '<span class="mc-badge">★ RECOMMENDED</span>' : '';
+    var fit = fits ? '<div class="mc-fit">✓ Fits with clearance' + (state.usableArea > 0 ? ' ('+withClearance+'m² needed)' : '') + '</div>' : '';
+    return '<div class="' + cls + '" onclick="selectMarquee(\'' + mq.id + '\')">' +
+      '<div class="mc-dims"><div class="mc-dims-text">' + mq.w + 'm<br>×<br>' + mq.d + 'm</div></div>' +
+      '<div class="mc-info">' +
+        '<div class="mc-name">' + mq.name + '</div>' +
+        '<div class="mc-specs">' + mq.area + 'm² · ' + mq.maxG + ' guests max</div>' +
+        badge + fit +
+      '</div>' +
+      '<div class="mc-price">$' + mq.price + '</div>' +
+      '</div>';
+  }).join('');
+}
+
+function selectMarquee(id) {
+  state.selectedMarquee = MARQUEES.find(function(m){ return m.id === id; });
+  if (!state.selectedMarquee) return;
+  document.getElementById('sbMarquee').textContent = state.selectedMarquee.name;
+  updateMarqueeRecs(); // refresh selection highlight
+  // Draw marquee overlay on map
+  drawMarqueeOnMap();
+  updateTotal();
+}
+
+function drawMarqueeOnMap() {
+  var mq = state.selectedMarquee;
+  if (!mq) return;
+  if (state.marqueeRect) map.removeLayer(state.marqueeRect);
+  var lat = state.lat, lng = state.lng;
+  // Offset slightly to show near drawn zones
+  if (state.zones.length) {
+    var center = state.zones[0].layer.getBounds().getCenter();
+    lat = center.lat; lng = center.lng;
+  }
+  var mPerDegLat = 111319.5;
+  var mPerDegLng = 111319.5 * Math.cos(lat * Math.PI / 180);
+  var dLat = (mq.d / 2) / mPerDegLat;
+  var dLng = (mq.w / 2) / mPerDegLng;
+  var bounds = [[lat - dLat, lng - dLng],[lat + dLat, lng + dLng]];
+  state.marqueeRect = L.rectangle(bounds, {
+    color: '#ffd700', fillColor: '#ffd700', fillOpacity: 0.2, weight: 2,
+    dashArray: '6,4'
+  }).addTo(map);
+  state.marqueeRect.on('click', function() {
+    document.getElementById('marqueeOverlayInfo').style.display = 'block';
+  });
+  // Enable drag
+  if (state.marqueeRect.dragging) state.marqueeRect.dragging.enable();
+  // Show info overlay
+  var moi = document.getElementById('marqueeOverlayInfo');
+  moi.style.display = 'block';
+  document.getElementById('moiName').textContent = mq.name;
+  document.getElementById('moiSpec').textContent = mq.w + 'm × ' + mq.d + 'm · up to ' + mq.maxG + ' guests';
+  document.getElementById('moiArea').textContent = mq.area + 'm² footprint';
+}
+
+// ── FURNITURE ────────────────────────────────────────────────
+function renderFurniture() {
+  var el = document.getElementById('furnitureList');
+  el.innerHTML = FURNITURE.map(function(f, i) {
+    return '<div class="furniture-item">' +
+      '<div class="fi-icon">' + f.icon + '</div>' +
+      '<div class="fi-info"><div class="fi-name">' + f.name + '</div><div class="fi-price">$' + f.price + ' per ' + f.unit + '</div></div>' +
+      '<div class="fi-qty">' +
+        '<button class="qty-btn" onclick="adjQty(' + i + ',-1)">−</button>' +
+        '<div class="qty-val" id="qty_' + f.id + '">' + f.qty + '</div>' +
+        '<button class="qty-btn" onclick="adjQty(' + i + ',1)">+</button>' +
+      '</div>' +
+      '<div class="fi-total" id="ftotal_' + f.id + '">$' + (f.qty * f.price) + '</div>' +
+      '</div>';
+  }).join('');
+}
+
+function adjQty(idx, delta) {
+  FURNITURE[idx].qty = Math.max(0, FURNITURE[idx].qty + delta);
+  document.getElementById('qty_' + FURNITURE[idx].id).textContent = FURNITURE[idx].qty;
+  document.getElementById('ftotal_' + FURNITURE[idx].id).textContent = '$' + (FURNITURE[idx].qty * FURNITURE[idx].price);
+  updateTotal();
+}
+
+function getFurnitureTotal() {
+  return FURNITURE.reduce(function(s, f){ return s + f.qty * f.price; }, 0);
+}
+
+function updateTotal() {
+  var mqPrice = state.selectedMarquee ? state.selectedMarquee.price : 0;
+  var fTotal = getFurnitureTotal();
+  var sub = mqPrice + fTotal + CONFIG.deliveryBase + CONFIG.setupBase;
+  var gst = sub * CONFIG.gstRate;
+  var total = sub + gst;
+  document.getElementById('furnitureSubtotal').textContent = '$' + sub.toFixed(2);
+  document.getElementById('sbTotal').textContent = '$' + Math.round(total);
+}
+
+// ── QUOTE BUILDER ────────────────────────────────────────────
+function buildQuote() {
+  var mq = state.selectedMarquee || { name: '—', w:0, d:0, area:0, price:0 };
+  var fItems = FURNITURE.filter(function(f){ return f.qty > 0; });
+  var fTotal = getFurnitureTotal();
+  var mqPrice = mq.price || 0;
+  var sub = mqPrice + fTotal + CONFIG.deliveryBase + CONFIG.setupBase;
+  var gst = sub * CONFIG.gstRate;
+  var total = sub + gst;
+  var client = document.getElementById('clientName').value || 'Client';
+  var html = '<div class="quote-section">' +
+    '<div class="quote-section-title">Client Details</div>' +
+    '<div class="quote-row"><span class="lbl">Client</span><span class="val">' + client + '</span></div>' +
+    '<div class="quote-row"><span class="lbl">Phone</span><span class="val">' + (document.getElementById('clientPhone').value || '—') + '</span></div>' +
+    '<div class="quote-row"><span class="lbl">Event Date</span><span class="val">' + (document.getElementById('eventDate').value || '—') + '</span></div>' +
+    '<div class="quote-row"><span class="lbl">Event Type</span><span class="val">' + (document.getElementById('eventType').value || '—') + '</span></div>' +
+    '<div class="quote-row"><span class="lbl">Property</span><span class="val" style="font-size:10px">' + state.address.split(',').slice(0,2).join(',') + '</span></div>' +
+    '<div class="quote-row"><span class="lbl">Guests</span><span class="val">' + state.guests + ' (' + state.layoutType + ')</span></div>' +
+    '</div>' +
+    '<div class="quote-section">' +
+    '<div class="quote-section-title">Marquee</div>' +
+    '<div class="quote-row"><span class="lbl">' + mq.name + '</span><span class="val">$' + mqPrice.toFixed(2) + '</span></div>' +
+    (state.totalArea > 0 ? '<div class="quote-row"><span class="lbl">Zone Area</span><span class="val">' + state.totalArea + ' m²</span></div>' : '') +
+    '</div>';
+  if (fItems.length) {
+    html += '<div class="quote-section"><div class="quote-section-title">Furniture &amp; Extras</div>' +
+      fItems.map(function(f){ return '<div class="quote-row"><span class="lbl">' + f.name + ' × ' + f.qty + '</span><span class="val">$' + (f.qty * f.price).toFixed(2) + '</span></div>'; }).join('') +
+      '</div>';
+  }
+  html += '<div class="quote-section">' +
+    '<div class="quote-section-title">Charges</div>' +
+    '<div class="quote-row"><span class="lbl">Delivery</span><span class="val">$' + CONFIG.deliveryBase.toFixed(2) + '</span></div>' +
+    '<div class="quote-row"><span class="lbl">Setup &amp; Pack-down</span><span class="val">$' + CONFIG.setupBase.toFixed(2) + '</span></div>' +
+    '<div class="quote-row"><span class="lbl">Subtotal (excl. GST)</span><span class="val">$' + sub.toFixed(2) + '</span></div>' +
+    '<div class="quote-row"><span class="lbl">GST (15%)</span><span class="val">$' + gst.toFixed(2) + '</span></div>' +
+    '</div>' +
+    '<div class="quote-total-row"><span class="lbl">TOTAL (incl. GST)</span><span class="val">$' + total.toFixed(2) + '</span></div>' +
+    '<div style="margin-top:12px"><div class="field"><label>Internal Notes</label><textarea id="quoteNotes" placeholder="Delivery instructions, access notes, special requirements…" style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--font);font-size:13px;padding:9px 12px;width:100%;min-height:60px;resize:vertical;outline:none"></textarea></div></div>';
+  document.getElementById('quoteSummary').innerHTML = html;
+  document.getElementById('sbTotal').textContent = '$' + Math.round(total);
+}
+
+// ── PDF EXPORT ────────────────────────────────────────────────
+function openPreviewModal() {
+  buildPreviewHTML();
+  openModal('previewModal');
+}
+
+function buildPreviewHTML() {
+  var mq = state.selectedMarquee || { name: '—', w:0, d:0, area:0, price:0 };
+  var fItems = FURNITURE.filter(function(f){ return f.qty > 0; });
+  var fTotal = getFurnitureTotal();
+  var mqPrice = mq.price || 0;
+  var sub = mqPrice + fTotal + CONFIG.deliveryBase + CONFIG.setupBase;
+  var gst = sub * CONFIG.gstRate;
+  var total = sub + gst;
+  var client = document.getElementById('clientName').value || 'Valued Client';
+  var now = new Date();
+  var refNum = state.quoteRef;
+  // Build tent SVG visual
+  var w = mq.w || 6, d = mq.d || 9;
+  var svgW = Math.min(200, w * 12), svgH = Math.min(150, d * 10);
+  var tentSVG = '<svg width="' + (svgW + 40) + '" height="' + (svgH + 40) + '" class="qp-tent-svg">' +
+    '<rect x="20" y="20" width="' + svgW + '" height="' + svgH + '" fill="#e8f4ff" stroke="#00b4cc" stroke-width="2" rx="4"/>' +
+    '<line x1="20" y1="20" x2="' + (20+svgW/2) + '" y2="8" stroke="#00b4cc" stroke-width="1.5"/>' +
+    '<line x1="' + (20+svgW) + '" y1="20" x2="' + (20+svgW/2) + '" y2="8" stroke="#00b4cc" stroke-width="1.5"/>' +
+    '<text x="' + (20+svgW/2) + '" y="' + (20+svgH/2+5) + '" text-anchor="middle" fill="#1a1a2e" font-size="11" font-weight="bold">' + w + 'm × ' + d + 'm</text>' +
+    '<text x="' + (20+svgW/2) + '" y="' + (20+svgH/2+20) + '" text-anchor="middle" fill="#888" font-size="9">' + mq.area + 'm²</text>' +
+    '</svg>';
+  var html = '<div id="quotePreview">' +
+    '<div class="qp-header">' +
+      '<div><div class="qp-logo">Events<span>Pro</span> Hire</div><div style="font-size:11px;color:#888;margin-top:4px">' + CONFIG.companyAddress + '<br>' + CONFIG.companyEmail + '</div></div>' +
+      '<div class="qp-ref"><div style="font-size:10px;color:#888">QUOTE REFERENCE</div><strong>' + refNum + '</strong><div style="font-size:10px;color:#888;margin-top:4px">' + now.toLocaleDateString('en-NZ',{day:'numeric',month:'long',year:'numeric'}) + '</div></div>' +
+    '</div>' +
+    '<div style="display:flex;gap:24px">' +
+      '<div style="flex:1"><div class="qp-section"><div class="qp-section-title">Prepared For</div>' +
+        '<div style="font-size:16px;font-weight:900;color:#1a1a2e;margin-bottom:6px">' + client + '</div>' +
+        '<div style="font-size:11px;color:#888">' + (document.getElementById('clientPhone').value||'') + '<br>' + (document.getElementById('clientEmail').value||'') + '</div>' +
+      '</div></div>' +
+      '<div style="flex:1"><div class="qp-section"><div class="qp-section-title">Event Details</div>' +
+        '<div class="qp-row"><span class="l">Type</span><span class="r">' + (document.getElementById('eventType').value||'—') + '</span></div>' +
+        '<div class="qp-row"><span class="l">Date</span><span class="r">' + (document.getElementById('eventDate').value||'—') + '</span></div>' +
+        '<div class="qp-row"><span class="l">Guests</span><span class="r">' + state.guests + '</span></div>' +
+        '<div class="qp-row"><span class="l">Layout</span><span class="r">' + state.layoutType.charAt(0).toUpperCase() + state.layoutType.slice(1) + '</span></div>' +
+      '</div></div>' +
+    '</div>' +
+    '<div class="qp-section"><div class="qp-section-title">Property</div>' +
+      '<div class="qp-row"><span class="l">Address</span><span class="r">' + state.address.split(',').slice(0,3).join(',') + '</span></div>' +
+      (state.totalArea ? '<div class="qp-row"><span class="l">Available Area</span><span class="r">' + state.totalArea + ' m² measured</span></div>' : '') +
+    '</div>' +
+    '<div class="qp-marquee-vis">' + tentSVG + '</div>' +
+    '<div class="qp-section"><div class="qp-section-title">Marquee &amp; Equipment</div>' +
+      '<div class="qp-row"><span class="l"><strong>' + mq.name + '</strong></span><span class="r"><strong>$' + mqPrice.toFixed(2) + '</strong></span></div>' +
+      fItems.map(function(f){ return '<div class="qp-row"><span class="l">' + f.name + ' × ' + f.qty + '</span><span class="r">$' + (f.qty*f.price).toFixed(2) + '</span></div>'; }).join('') +
+      '<div class="qp-row"><span class="l">Delivery</span><span class="r">$' + CONFIG.deliveryBase.toFixed(2) + '</span></div>' +
+      '<div class="qp-row"><span class="l">Setup &amp; Pack-down</span><span class="r">$' + CONFIG.setupBase.toFixed(2) + '</span></div>' +
+    '</div>' +
+    '<div class="qp-total"><span class="l">TOTAL (incl. 15% GST)</span><span class="r">$' + total.toFixed(2) + '</span></div>' +
+    '<div class="qp-footer">Quote valid for 30 days · ' + CONFIG.companyName + ' · ' + CONFIG.companyEmail + '<br>Powered by EventSpace Pro · Whetū Digital Ltd · whetudigital.co.nz</div>' +
+    '</div>';
+  document.getElementById('quotePreview').innerHTML = html;
+}
+
+function exportPDF() {
+  buildPreviewHTML();
+  var el = document.getElementById('quotePreview');
+  var { jsPDF } = window.jspdf;
+  var doc = new jsPDF({ format: 'a4', unit: 'mm' });
+  doc.html(el, {
+    callback: function(pdf) {
+      pdf.save('EventSpacePro_Quote_' + state.quoteRef + '.pdf');
+    },
+    x: 8, y: 8, width: 194, windowWidth: 700, autoPaging: 'text'
+  });
+}
+
+// ── SAVE / LOAD QUOTES ───────────────────────────────────────
+function saveQuote() {
+  var quotes = JSON.parse(localStorage.getItem('esp_quotes') || '[]');
+  var q = {
+    ref: state.quoteRef,
+    client: document.getElementById('clientName').value || 'Unknown',
+    date: document.getElementById('eventDate').value || '',
+    address: state.address,
+    marquee: state.selectedMarquee ? state.selectedMarquee.name : '—',
+    total: document.getElementById('sbTotal').textContent,
+    saved: new Date().toISOString()
+  };
+  var existing = quotes.findIndex(function(x){ return x.ref === q.ref; });
+  if (existing >= 0) quotes[existing] = q; else quotes.unshift(q);
+  localStorage.setItem('esp_quotes', JSON.stringify(quotes.slice(0, 50)));
+  var btn = event.target;
+  var orig = btn.textContent;
+  btn.textContent = '✅ Saved!';
+  setTimeout(function(){ btn.textContent = orig; }, 2000);
+}
+
+function openSavedModal() {
+  var quotes = JSON.parse(localStorage.getItem('esp_quotes') || '[]');
+  var el = document.getElementById('savedList');
+  if (!quotes.length) {
+    el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:12px">No saved quotes yet.</div>';
+  } else {
+    el.innerHTML = quotes.map(function(q) {
+      return '<div class="info-card" style="margin-bottom:8px;cursor:pointer" onclick="loadQuoteRef(\'' + q.ref + '\')">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center">' +
+          '<div><div style="font-weight:700;margin-bottom:2px">' + q.client + '</div><div style="font-size:10px;color:var(--muted)">' + q.address.split(',').slice(0,2).join(',') + ' · ' + (q.date||'No date') + '</div></div>' +
+          '<div style="text-align:right"><div style="font-size:15px;font-weight:800;color:var(--gold)">' + q.total + '</div><div style="font-size:9px;color:var(--muted)">' + q.ref + '</div></div>' +
+        '</div></div>';
+    }).join('');
+  }
+  openModal('savedModal');
+}
+
+function clearAllSaved() {
+  if (confirm('Clear all saved quotes?')) {
+    localStorage.removeItem('esp_quotes');
+    openSavedModal();
+  }
+}
+
+function sendWhatsApp() {
+  var mq = state.selectedMarquee;
+  var client = document.getElementById('clientName').value || 'Hi';
+  var total = document.getElementById('sbTotal').textContent;
+  var msg = 'Hi ' + client + ', here is your quote from Events Pro Hire Group:\n\n' +
+    '📋 Quote Ref: ' + state.quoteRef + '\n' +
+    '📍 Property: ' + state.address.split(',').slice(0,2).join(',') + '\n' +
+    (mq ? '⛺ Marquee: ' + mq.name + '\n' : '') +
+    '👥 Guests: ' + state.guests + '\n' +
+    '💰 Total (incl. GST): ' + total + '\n\n' +
+    'Quote valid for 30 days. Please contact us to confirm your booking.';
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+}
+
+// ── STEP NAVIGATION ──────────────────────────────────────────
+function focusStep(n) {
+  state.step = n;
+  [1,2,3,4].forEach(function(i) {
+    var p = document.getElementById('step' + i);
+    var s = document.getElementById('sn' + i);
+    if (p) p.classList.toggle('active', i === n);
+    if (s) {
+      s.classList.toggle('active', i === n);
+      s.classList.toggle('done', i < n);
+    }
+  });
+  if (n === 3) { updateMarqueeRecs(); renderFurniture(); }
+  if (n === 4) buildQuote();
+  if (n === 2) map.addControl(drawControl);
+  else {
+    try { map.removeControl(drawControl); } catch(e) {}
+  }
+}
+
+// ── MODALS ────────────────────────────────────────────────────
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function openUploadModal() { openModal('uploadModal'); }
+function openVisitModal() {
+  // Populate slots with next 4 weekdays
+  var now = new Date();
+  var slots = [];
+  var d = new Date(now);
+  while (slots.length < 4) {
+    d.setDate(d.getDate() + 1);
+    if (d.getDay() !== 0 && d.getDay() !== 6) slots.push(new Date(d));
+  }
+  var opts = { weekday: 'short', month: 'short', day: 'numeric' };
+  ['slot1date','slot2date','slot3date','slot4date'].forEach(function(id, i) {
+    var el = document.getElementById(id);
+    if (el && slots[i]) el.textContent = slots[i].toLocaleDateString('en-NZ', opts);
+  });
+  if (document.getElementById('visitAddr')) document.getElementById('visitAddr').value = state.address.split(',').slice(0,3).join(',');
+  openModal('visitModal');
+}
+
+function selectSlot(el) {
+  document.querySelectorAll('.visit-slot').forEach(function(s){ s.classList.remove('selected'); });
+  el.classList.add('selected');
+}
+
+function confirmSiteVisit() {
+  closeModal('visitModal');
+  var badge = document.getElementById('mapBadge');
+  badge.style.display = 'block';
+  badge.textContent = '📅 Site Visit Scheduled';
+  badge.style.borderColor = 'rgba(255,215,0,.4)';
+  badge.style.color = 'var(--gold)';
+  setTimeout(function(){ badge.style.display = 'none'; }, 4000);
+}
+
+// ── PHOTO UPLOAD ──────────────────────────────────────────────
+function handlePhotoUpload(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var img = document.getElementById('uploadPreview');
+    img.src = e.target.result;
+    img.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── HEADER UPDATE ─────────────────────────────────────────────
+function updateClientHeader() {
+  var name = document.getElementById('clientName').value;
+  document.getElementById('hdrClientName').textContent = name || '— New Quote —';
+  document.getElementById('sbClient').textContent = name || '—';
+}
+
+// ── UTILS ─────────────────────────────────────────────────────
+function showMapBadge(msg) {
+  var badge = document.getElementById('mapBadge');
+  badge.textContent = msg;
+  badge.style.display = 'block';
+  badge.style.borderColor = 'rgba(0,230,255,.3)';
+  badge.style.color = 'var(--cyan)';
+}
+function showMapToolHint(show) {
+  document.getElementById('mapToolHint').style.display = show ? 'block' : 'none';
+}
+function generateRef() {
+  return 'EPH-' + new Date().getFullYear() + '-' + Math.random().toString(36).substr(2,5).toUpperCase();
+}
+function escQ(s) { return (s||'').replace(/'/g, "\\'"); }
+function newQuote() {
+  if (!confirm('Start a new quote? Current quote will not be saved.')) return;
+  state.quoteRef = generateRef();
+  state.selectedMarquee = null;
+  state.zones = [];
+  state.totalArea = 0;
+  state.usableArea = 0;
+  FURNITURE.forEach(function(f){ f.qty = 0; });
+  clearAllZones();
+  document.getElementById('clientName').value = '';
+  document.getElementById('clientPhone').value = '';
+  document.getElementById('clientEmail').value = '';
+  document.getElementById('eventDate').value = '';
+  document.getElementById('eventType').value = '';
+  document.getElementById('addrInput').value = '';
+  document.getElementById('propAnalysis').style.display = 'none';
+  document.getElementById('hdrClientName').textContent = '— New Quote —';
+  document.getElementById('sbClient').textContent = '—';
+  document.getElementById('sbMarquee').textContent = '—';
+  document.getElementById('sbTotal').textContent = '$0';
+  document.getElementById('sbArea').textContent = '— m²';
+  focusStep(1);
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+(function init() {
+  // Pre-load demo: 14 Beaumont Street
+  setTimeout(searchAddress, 800);
+  // Render furniture
+  renderFurniture();
+  // Set default event date to next Saturday
+  var d = new Date();
+  while (d.getDay() !== 6) d.setDate(d.getDate() + 1);
+  document.getElementById('eventDate').value = d.toISOString().split('T')[0];
+})();
+</script>
+
+<!-- Whetū Digital watermark -->
+<div class="whetu-credit">© WHETŪ DIGITAL 2026</div>
+
+</body>
+</html>
