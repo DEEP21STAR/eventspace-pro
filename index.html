@@ -23,7 +23,7 @@
   --red:#ff4466;--purple:#c060ff;--orange:#ff8c00;
   --text:#e0f0ff;--muted:#5a7a90;--border:#1a2a40;
   --font:'Segoe UI',system-ui,sans-serif;
-  --sidebar:400px;--header:58px;--steps:46px;--status:38px;
+  --sidebar:400px;--header:58px;--steps:46px;--status:38px;--footer:46px;
 }
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font)}
 
@@ -85,7 +85,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 /* ── MAIN LAYOUT ── */
 .main{
   display:flex;
-  height:calc(100vh - var(--header) - var(--steps) - var(--status))}
+  height:calc(100vh - var(--header) - var(--steps) - var(--status) - var(--footer))}
 
 /* ── SIDEBAR ── */
 .sidebar{
@@ -430,10 +430,164 @@ input[type=range]{
 @keyframes spin{to{transform:rotate(360deg)}}
 .hidden{display:none !important}
 
-/* ── WHETŪ WATERMARK ── */
-.whetu-credit{
-  position:fixed;bottom:var(--status);right:14px;z-index:300;
-  font-size:9px;color:rgba(0,230,255,.15);letter-spacing:2px;pointer-events:none}
+/* ── AURORA BACKGROUND ── */
+.aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.aurora-blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.10;animation:auroraFloat 14s ease-in-out infinite}
+.aurora-blob:nth-child(1){width:700px;height:700px;background:radial-gradient(circle,#00e6ff,transparent);top:-250px;left:-150px;animation-delay:0s}
+.aurora-blob:nth-child(2){width:600px;height:600px;background:radial-gradient(circle,#c060ff,transparent);top:40%;right:-150px;animation-delay:-5s}
+.aurora-blob:nth-child(3){width:450px;height:450px;background:radial-gradient(circle,#00ff88,transparent);bottom:-120px;left:25%;animation-delay:-9s}
+@keyframes auroraFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,-30px) scale(1.06)}66%{transform:translate(-25px,35px) scale(.94)}}
+
+/* ── STEP SLIDE ANIMATION ── */
+.step-panel.active{display:flex;animation:slidePanel .22s ease-out}
+@keyframes slidePanel{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:translateX(0)}}
+
+/* ── GLASSMORPHISM CARDS ── */
+.glass-card{background:rgba(255,255,255,.035);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.07);box-shadow:0 8px 32px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.05)}
+
+/* ── PACKAGE BUNDLES ── */
+.pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.pkg-card{border-radius:12px;padding:10px 8px;cursor:pointer;text-align:center;transition:all .25s;border:1px solid var(--border);position:relative;overflow:hidden}
+.pkg-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .25s}
+.pkg-card:hover{transform:translateY(-3px)}
+.pkg-card.active{transform:translateY(-3px)}
+.pkg-silver{background:linear-gradient(135deg,rgba(192,192,192,.08),rgba(150,150,150,.03))}
+.pkg-silver.active,.pkg-silver:hover{border-color:rgba(180,180,180,.5);box-shadow:0 0 20px rgba(180,180,180,.15)}
+.pkg-gold-card{background:linear-gradient(135deg,rgba(255,215,0,.1),rgba(255,140,0,.04))}
+.pkg-gold-card.active,.pkg-gold-card:hover{border-color:rgba(255,215,0,.5);box-shadow:0 0 24px rgba(255,215,0,.2)}
+.pkg-plat{background:linear-gradient(135deg,rgba(192,96,255,.1),rgba(0,230,255,.04))}
+.pkg-plat.active,.pkg-plat:hover{border-color:rgba(192,96,255,.5);box-shadow:0 0 24px rgba(192,96,255,.2)}
+.pkg-icon{font-size:20px;margin-bottom:4px}
+.pkg-name{font-size:9px;font-weight:800;letter-spacing:2px;margin-bottom:3px}
+.pkg-price{font-size:16px;font-weight:900;line-height:1.2}
+.pkg-desc{font-size:8px;color:var(--muted);line-height:1.5;margin-top:3px}
+
+/* ── SEASONAL PRICING ── */
+.season-bar{display:flex;gap:5px;margin-bottom:12px}
+.season-btn{flex:1;padding:5px 4px;border-radius:7px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--muted);cursor:pointer;font-size:9px;font-weight:700;letter-spacing:.5px;transition:all .2s;font-family:var(--font)}
+.season-btn.active-summer{background:rgba(255,140,0,.15);border-color:rgba(255,140,0,.45);color:var(--orange)}
+.season-btn.active-winter{background:rgba(0,230,255,.12);border-color:rgba(0,230,255,.4);color:var(--cyan)}
+.season-btn.active-peak{background:rgba(255,215,0,.12);border-color:rgba(255,215,0,.4);color:var(--gold)}
+
+/* ── COST PER GUEST BADGE ── */
+.cpg-wrap{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.cpg-badge{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,rgba(0,255,136,.08),rgba(0,200,100,.03));border:1px solid rgba(0,255,136,.3);border-radius:20px;padding:4px 12px;font-size:10px}
+.cpg-val{font-size:15px;font-weight:900;color:var(--green)}
+.cpg-lbl{color:var(--muted)}
+
+/* ── WEATHER STRIP ── */
+.wx-strip{margin-bottom:12px;display:none}
+.wx-title-row{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
+.wx-cells{display:flex;gap:5px;overflow-x:auto;padding-bottom:2px}
+.wx-cells::-webkit-scrollbar{height:2px}
+.wx-cells::-webkit-scrollbar-thumb{background:rgba(0,230,255,.2)}
+.wx-cell{min-width:72px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:7px;text-align:center;flex-shrink:0;transition:border-color .2s}
+.wx-cell:hover{border-color:rgba(0,230,255,.25)}
+.wx-date{font-size:8px;color:var(--muted);margin-bottom:2px}
+.wx-icon{font-size:16px;line-height:1.3}
+.wx-temp{font-size:13px;font-weight:800;color:var(--cyan)}
+.wx-desc{font-size:7px;color:var(--muted);margin-top:1px}
+
+/* ── SMART SUGGESTIONS ── */
+.suggest-strip{margin-bottom:12px;display:none}
+.suggest-title{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
+.suggest-chip{display:inline-flex;align-items:center;gap:5px;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.25);border-radius:20px;padding:4px 10px;font-size:10px;color:var(--gold);margin:3px 3px 0 0;cursor:pointer;transition:all .15s}
+.suggest-chip:hover{background:rgba(255,215,0,.18);border-color:rgba(255,215,0,.5)}
+.suggest-chip .add-icon{font-size:10px;opacity:.6}
+
+/* ── MARQUEE HERO MOMENT ── */
+@keyframes mqHero{0%{box-shadow:0 0 0 rgba(0,230,255,0);transform:scale(1)}50%{box-shadow:0 0 30px rgba(0,230,255,.4),0 0 60px rgba(0,230,255,.15);transform:scale(1.01)}100%{box-shadow:0 0 0 1px rgba(0,230,255,.3);transform:scale(1)}}
+.marquee-card.hero-flash{animation:mqHero .5s ease-out forwards}
+
+/* ── COVERAGE RING ── */
+.coverage-badge{position:absolute;top:14px;left:14px;z-index:210;background:rgba(4,5,15,.9);border:1px solid rgba(0,255,136,.3);border-radius:12px;padding:8px 12px;text-align:center;backdrop-filter:blur(8px);display:none}
+.cov-ring-wrap{position:relative;width:48px;height:48px;margin:0 auto 4px}
+.cov-ring-svg{transform:rotate(-90deg)}
+.cov-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:var(--green)}
+.cov-lbl{font-size:8px;color:var(--muted);letter-spacing:1px}
+
+/* ── NZ COMPLIANCE CHECKLIST ── */
+.compliance-list{margin-bottom:12px}
+.ci{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:7px;border:1px solid var(--border);margin-bottom:4px;background:rgba(255,255,255,.02);cursor:pointer;transition:all .15s;user-select:none}
+.ci:hover{background:rgba(0,230,255,.04);border-color:rgba(0,230,255,.2)}
+.ci.checked{border-color:rgba(0,255,136,.3);background:rgba(0,255,136,.05)}
+.ci-box{width:15px;height:15px;border-radius:3px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0;transition:all .15s}
+.ci.checked .ci-box{background:var(--green);border-color:var(--green);color:#000}
+.ci-text{font-size:10px;flex:1;line-height:1.4}
+.ci-req{font-size:7px;padding:1px 5px;border-radius:8px;background:rgba(255,68,102,.1);border:1px solid rgba(255,68,102,.2);color:var(--red);flex-shrink:0}
+.ci-opt{font-size:7px;padding:1px 5px;border-radius:8px;background:rgba(0,230,255,.08);border:1px solid rgba(0,230,255,.15);color:var(--muted);flex-shrink:0}
+.compliance-score{text-align:center;font-size:10px;color:var(--muted);margin-top:6px}
+.compliance-score span{font-weight:800;color:var(--green)}
+
+/* ── DIGITAL SIGNATURE ── */
+.sig-wrap{margin-bottom:12px}
+.sig-label{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:5px}
+.sig-canvas{width:100%;height:100px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,.03);cursor:crosshair;display:block;touch-action:none}
+.sig-bar{display:flex;gap:6px;margin-top:5px}
+.sig-status{font-size:9px;color:var(--muted);align-self:center;flex:1}
+
+/* ── SETUP TIMELINE ── */
+.tl-strip{display:flex;position:relative;margin:14px 0 8px}
+.tl-strip::before{content:'';position:absolute;top:18px;left:8%;right:8%;height:2px;background:linear-gradient(90deg,var(--green),var(--cyan),var(--gold))}
+.tl-node{flex:1;text-align:center;position:relative}
+.tl-dot{width:14px;height:14px;border-radius:50%;border:2px solid;margin:12px auto 6px;background:var(--bg)}
+.tl-dot.green{border-color:var(--green);box-shadow:0 0 8px rgba(0,255,136,.4)}
+.tl-dot.cyan{border-color:var(--cyan);box-shadow:0 0 8px rgba(0,230,255,.4)}
+.tl-dot.gold{border-color:var(--gold);box-shadow:0 0 8px rgba(255,215,0,.4)}
+.tl-lbl{font-size:8px;color:var(--muted);letter-spacing:1px}
+.tl-date{font-size:10px;font-weight:700;color:var(--text)}
+
+/* ── PAST EVENTS GALLERY ── */
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.gal-item{border-radius:8px;overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:all .2s;position:relative}
+.gal-item:hover{border-color:rgba(0,230,255,.4);transform:scale(1.03)}
+.gal-thumb{height:100px;display:flex;align-items:center;justify-content:center;font-size:36px}
+.gal-cap{font-size:8px;color:var(--muted);padding:5px 7px;letter-spacing:.5px;background:rgba(0,0,0,.4)}
+
+/* ── COMPARE MODAL ── */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.cmp-col{border-radius:10px;border:1px solid var(--border);padding:12px}
+.cmp-col.sel{border-color:rgba(0,230,255,.4);background:rgba(0,230,255,.04)}
+.cmp-row{display:flex;justify-content:space-between;padding:4px 0;font-size:11px;border-bottom:1px solid rgba(255,255,255,.04)}
+.cmp-row:last-child{border-bottom:none}
+.cmp-k{color:var(--muted)}
+.cmp-v{font-weight:700}
+.cmp-select{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+
+/* ── FLOOR PLAN MODAL ── */
+.fp-canvas-wrap{background:rgba(0,230,255,.03);border:1px solid rgba(0,230,255,.15);border-radius:10px;padding:10px;overflow:auto;text-align:center;margin-top:10px}
+#fpCanvas{border-radius:6px}
+.fp-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;font-size:9px;color:var(--muted)}
+.fp-leg-item{display:flex;align-items:center;gap:4px}
+.fp-leg-dot{width:10px;height:10px;border-radius:2px}
+
+/* ── PRESENTATION MODE ── */
+.pres-overlay{position:fixed;inset:0;z-index:5000;background:linear-gradient(135deg,#04050f,#06081e,#04050f);display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px}
+.pres-overlay.open{display:flex}
+.pres-close-btn{position:fixed;top:20px;right:20px;width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.06);color:var(--muted);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;font-family:var(--font);z-index:5001}
+.pres-close-btn:hover{background:rgba(255,68,102,.2);color:var(--red)}
+.pres-card{max-width:560px;width:100%;background:rgba(8,12,30,.97);border:1px solid rgba(0,230,255,.2);border-radius:24px;padding:36px;box-shadow:0 40px 120px rgba(0,0,0,.8),0 0 80px rgba(0,230,255,.06);text-align:center}
+.pres-logo{font-size:13px;letter-spacing:3px;color:rgba(255,255,255,.3);margin-bottom:8px}
+.pres-client{font-size:28px;font-weight:900;color:var(--cyan);margin-bottom:4px}
+.pres-event{font-size:13px;color:var(--muted);letter-spacing:2px;margin-bottom:24px}
+.pres-marquee{display:inline-block;padding:10px 20px;background:rgba(0,230,255,.08);border:1px solid rgba(0,230,255,.25);border-radius:12px;font-size:16px;font-weight:800;color:var(--text);margin-bottom:20px}
+.pres-total{font-size:64px;font-weight:900;color:var(--gold);text-shadow:0 0 40px rgba(255,215,0,.35);line-height:1;margin-bottom:8px}
+.pres-total-lbl{font-size:11px;color:var(--muted);letter-spacing:3px;margin-bottom:24px}
+.pres-meta{display:flex;justify-content:center;gap:24px;font-size:11px;color:var(--muted)}
+.pres-meta strong{color:var(--text);display:block;font-size:14px}
+.pres-ref{font-size:9px;color:rgba(255,255,255,.15);letter-spacing:2px;margin-top:20px}
+
+/* ── WHETŪ FOOTER ── */
+.whetu-footer{background:linear-gradient(180deg,#04050f,#060820);border-top:1px solid rgba(0,230,255,.18);padding:14px 20px;text-align:center;flex-shrink:0;position:relative;z-index:100}
+.wf-inner{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
+.wf-logo-row{display:flex;align-items:center;gap:8px}
+.wf-star{font-size:16px;filter:drop-shadow(0 0 6px rgba(0,230,255,.7))}
+.wf-brand{font-size:12px;font-weight:900;letter-spacing:4px;background:linear-gradient(90deg,#00e6ff,#c060ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:wfGlow 2.5s ease-in-out infinite alternate}
+@keyframes wfGlow{from{filter:drop-shadow(0 0 3px rgba(0,230,255,.3))}to{filter:drop-shadow(0 0 10px rgba(0,230,255,.7))}}
+.wf-divider{width:1px;height:16px;background:rgba(255,255,255,.1)}
+.wf-link{font-size:9px;color:rgba(0,230,255,.35);letter-spacing:2px;text-decoration:none;transition:color .2s}
+.wf-link:hover{color:var(--cyan)}
+.wf-copy{font-size:8px;color:rgba(255,255,255,.12);letter-spacing:2px}
 
 /* ── RESPONSIVE ── */
 @media(max-width:768px){
@@ -446,6 +600,13 @@ input[type=range]{
 </style>
 </head>
 <body>
+
+<!-- AURORA -->
+<div class="aurora" aria-hidden="true">
+  <div class="aurora-blob"></div>
+  <div class="aurora-blob"></div>
+  <div class="aurora-blob"></div>
+</div>
 
 <!-- ═══════════════════ HEADER ═══════════════════ -->
 <header class="hdr">
@@ -461,10 +622,13 @@ input[type=range]{
     <div class="hdr-client-name" id="hdrClientName">— New Quote —</div>
   </div>
   <div class="hdr-btns">
+    <button class="hdr-btn" onclick="openModal('galleryModal')" title="Past Events Gallery">🖼 Gallery</button>
+    <button class="hdr-btn" onclick="openModal('compareModal')" title="Compare Marquee Sizes">⚖ Compare</button>
     <button class="hdr-btn" onclick="openSavedModal()">📂 Saved</button>
-    <button class="hdr-btn" onclick="openUploadModal()">📸 Upload Photo</button>
-    <button class="hdr-btn" onclick="openVisitModal()">📅 Site Visit</button>
-    <button class="hdr-btn primary" onclick="newQuote()">+ New Quote</button>
+    <button class="hdr-btn" onclick="openUploadModal()">📸 Photo</button>
+    <button class="hdr-btn" onclick="openVisitModal()">📅 Visit</button>
+    <button class="hdr-btn primary" onclick="openPresentation()">🖥 Present</button>
+    <button class="hdr-btn" onclick="newQuote()">+ New</button>
   </div>
 </header>
 
@@ -553,8 +717,13 @@ input[type=range]{
             <div class="pa-item"><div class="pa-val" id="paMqFit">—</div><div class="pa-lbl">Max Marquee</div></div>
           </div>
         </div>
+        <!-- WEATHER STRIP -->
+        <div class="wx-strip" id="wxStrip">
+          <div class="wx-title-row">🌤 EVENT DAY FORECAST</div>
+          <div class="wx-cells" id="wxCells"></div>
+        </div>
         <div class="info-card cyan" style="font-size:11px;color:var(--muted);line-height:1.8;margin-top:6px">
-          <strong style="color:var(--cyan)">💡 Tip:</strong> The satellite map will centre on the property. Use Step 2 to draw the available outdoor zones — grass, patio, driveway.
+          <strong style="color:var(--cyan)">💡 Tip:</strong> The satellite map will centre on the property. Use Step 2 to draw available outdoor zones — grass, patio, driveway.
         </div>
       </div>
       <div class="panel-foot">
@@ -593,12 +762,18 @@ input[type=range]{
         <div class="consent-warning" id="consentWarning">
           ⚠ <strong>NZ Consent Notice:</strong> Total area exceeds 100m². Marquees over 100m² may require a building consent or PS1 Engineer's Statement. Check with your local council before hire.
         </div>
-        <div class="info-card" style="font-size:11px;color:var(--muted);line-height:1.8">
-          <strong style="color:var(--cyan)">🔧 Rules:</strong><br>
-          · Leave 2m clearance around all marquee sides<br>
-          · Avoid powerlines, drains, slopes >5°<br>
-          · Check boundary setbacks with council
+        <div class="divider"></div>
+        <div style="font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px">◈ NZ Compliance Checklist</div>
+        <div class="compliance-list" id="complianceList">
+          <div class="ci" onclick="toggleCI(this)"><div class="ci-box"></div><div class="ci-text">2m clearance around all marquee sides</div><span class="ci-req">Required</span></div>
+          <div class="ci" onclick="toggleCI(this)"><div class="ci-box"></div><div class="ci-text">No overhead powerlines within footprint</div><span class="ci-req">Required</span></div>
+          <div class="ci" onclick="toggleCI(this)"><div class="ci-box"></div><div class="ci-text">Ground slope less than 5°</div><span class="ci-req">Required</span></div>
+          <div class="ci" onclick="toggleCI(this)"><div class="ci-box"></div><div class="ci-text">Building consent checked (if &gt;100m²)</div><span class="ci-req">Required</span></div>
+          <div class="ci" onclick="toggleCI(this)"><div class="ci-box"></div><div class="ci-text">Neighbour notification given</div><span class="ci-opt">Optional</span></div>
+          <div class="ci" onclick="toggleCI(this)"><div class="ci-box"></div><div class="ci-text">Power source confirmed (15A within 20m)</div><span class="ci-opt">Optional</span></div>
+          <div class="ci" onclick="toggleCI(this)"><div class="ci-box"></div><div class="ci-text">Emergency exit paths unobstructed</div><span class="ci-opt">Optional</span></div>
         </div>
+        <div class="compliance-score" id="compScore">Checklist: <span>0/7</span> complete</div>
       </div>
       <div class="panel-foot">
         <button class="btn btn-primary" onclick="focusStep(3)">Select Marquee →</button>
@@ -612,6 +787,45 @@ input[type=range]{
         <div class="panel-sub">Set guest count, choose your marquee, and configure the furniture package.</div>
       </div>
       <div class="panel-body">
+        <!-- PACKAGE BUNDLES -->
+        <div style="font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase">◈ Quick Packages</div>
+        <div class="pkg-grid">
+          <div class="pkg-card pkg-silver" id="pkgSilver" onclick="applyPackage('silver')">
+            <div class="pkg-icon">🥈</div>
+            <div class="pkg-name" style="color:silver">SILVER</div>
+            <div class="pkg-price" style="color:silver">$950</div>
+            <div class="pkg-desc">Up to 30 guests · 6×9m · Chairs + Tables</div>
+          </div>
+          <div class="pkg-card pkg-gold-card" id="pkgGold" onclick="applyPackage('gold')">
+            <div class="pkg-icon">🥇</div>
+            <div class="pkg-name" style="color:var(--gold)">GOLD</div>
+            <div class="pkg-price" style="color:var(--gold)">$1,650</div>
+            <div class="pkg-desc">Up to 60 guests · 9×12m · Full setup + Lights</div>
+          </div>
+          <div class="pkg-card pkg-plat" id="pkgPlat" onclick="applyPackage('platinum')">
+            <div class="pkg-icon">💎</div>
+            <div class="pkg-name" style="color:var(--purple)">PLATINUM</div>
+            <div class="pkg-price" style="color:var(--purple)">$2,980</div>
+            <div class="pkg-desc">Up to 120 guests · 12×15m · Full premium</div>
+          </div>
+        </div>
+
+        <!-- SEASONAL PRICING -->
+        <div style="font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:6px;text-transform:uppercase">◈ Seasonal Pricing</div>
+        <div class="season-bar" id="seasonBar">
+          <button class="season-btn" id="sznStd" onclick="setSeason('standard')">⛅ Standard</button>
+          <button class="season-btn" id="sznWinter" onclick="setSeason('winter')">❄ Winter +10%</button>
+          <button class="season-btn" id="sznPeak" onclick="setSeason('peak')">🌟 Peak +15%</button>
+        </div>
+
+        <!-- SMART SUGGESTIONS -->
+        <div class="suggest-strip" id="suggestStrip">
+          <div class="suggest-title">⚡ Smart Suggestions</div>
+          <div id="suggestChips"></div>
+        </div>
+
+        <div class="divider"></div>
+
         <!-- Guest count -->
         <div class="guest-slider-wrap">
           <div class="guest-count-display" id="guestDisplay">50</div>
@@ -637,10 +851,16 @@ input[type=range]{
         <div id="marqueeRecommendations" class="marquee-grid"></div>
 
         <div class="divider"></div>
-        <div style="font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase">◈ Furniture &amp; Extras</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase">◈ Furniture &amp; Extras</div>
+          <button class="btn-sm btn-primary" style="padding:4px 10px;font-size:9px" onclick="openModal('floorPlanModal');renderFloorPlan()">📐 Floor Plan</button>
+        </div>
         <div id="furnitureList"></div>
       </div>
       <div class="panel-foot">
+        <div class="cpg-wrap">
+          <div class="cpg-badge"><span class="cpg-val" id="cpgVal">—</span><span class="cpg-lbl">per guest (incl. GST)</span></div>
+        </div>
         <div class="info-card gold" style="margin-bottom:10px">
           <div class="ic-title">Package Subtotal (excl. GST)</div>
           <div class="ic-val gold" id="furnitureSubtotal" style="color:var(--gold)">$0.00</div>
@@ -661,13 +881,24 @@ input[type=range]{
         </div>
       </div>
       <div class="panel-foot">
-        <div class="btn-row" style="margin-bottom:8px">
-          <button class="btn-sm btn-gold" style="flex:1;padding:9px" onclick="exportPDF()">📄 Export PDF</button>
-          <button class="btn-sm btn-primary" style="flex:1;padding:9px" onclick="openPreviewModal()">👁 Preview</button>
+        <!-- Digital Signature -->
+        <div class="sig-wrap">
+          <div class="sig-label">Client Signature</div>
+          <canvas class="sig-canvas" id="sigCanvas" width="360" height="100"></canvas>
+          <div class="sig-bar">
+            <span class="sig-status" id="sigStatus">Sign above to accept quote</span>
+            <button class="btn-sm" style="background:rgba(255,68,102,.1);border:1px solid rgba(255,68,102,.25);color:var(--red);font-family:var(--font);font-size:9px;border-radius:6px;cursor:pointer;padding:4px 10px" onclick="clearSignature()">Clear</button>
+          </div>
         </div>
-        <div class="btn-row">
-          <button class="btn-sm btn-green" style="flex:1;padding:9px" onclick="saveQuote()">💾 Save Quote</button>
+        <div class="btn-row" style="margin-bottom:8px">
+          <button class="btn-sm btn-gold" style="flex:1;padding:9px" onclick="exportPDF()">📄 PDF</button>
+          <button class="btn-sm btn-primary" style="flex:1;padding:9px" onclick="openPresentation()">🖥 Present</button>
+          <button class="btn-sm" style="flex:1;padding:9px;background:rgba(0,230,255,.08);border:1px solid rgba(0,230,255,.25);color:var(--cyan);font-family:var(--font);font-weight:700;border-radius:7px;cursor:pointer" onclick="emailQuote()">📧 Email</button>
+        </div>
+        <div class="btn-row" style="margin-bottom:8px">
+          <button class="btn-sm btn-green" style="flex:1;padding:9px" onclick="saveQuote()">💾 Save</button>
           <button class="btn-sm" style="flex:1;padding:9px;background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.3);color:#25d366;font-family:var(--font);font-weight:700;border-radius:7px;cursor:pointer" onclick="sendWhatsApp()">💬 WhatsApp</button>
+          <button class="btn-sm" style="flex:1;padding:9px;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.25);color:var(--gold);font-family:var(--font);font-weight:700;border-radius:7px;cursor:pointer" onclick="openModal('timelineModal');buildTimeline()">📅 Timeline</button>
         </div>
       </div>
     </div>
@@ -678,6 +909,17 @@ input[type=range]{
   <div class="map-wrap">
     <div id="map"></div>
     <div class="map-badge" id="mapBadge">📍 Searching…</div>
+    <!-- Coverage Ring -->
+    <div class="coverage-badge" id="coverageBadge">
+      <div class="cov-ring-wrap">
+        <svg class="cov-ring-svg" width="48" height="48" viewBox="0 0 48 48">
+          <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(0,255,136,.15)" stroke-width="4"/>
+          <circle id="covArc" cx="24" cy="24" r="20" fill="none" stroke="#00ff88" stroke-width="4" stroke-linecap="round" stroke-dasharray="125.6" stroke-dashoffset="125.6"/>
+        </svg>
+        <div class="cov-pct" id="covPct">0%</div>
+      </div>
+      <div class="cov-lbl">COVERAGE</div>
+    </div>
     <div class="map-area-badge" id="mapAreaBadge">
       <div class="mab-item">
         <div class="mab-val" id="badgeArea">0</div>
@@ -816,6 +1058,95 @@ input[type=range]{
     <div id="savedList"></div>
     <br>
     <button class="btn btn-danger" onclick="clearAllSaved()" style="margin-top:8px">🗑 Clear All Saved</button>
+  </div>
+</div>
+
+<!-- FLOOR PLAN MODAL -->
+<div class="modal" id="floorPlanModal">
+  <div class="modal-box" style="max-width:680px">
+    <button class="modal-close" onclick="closeModal('floorPlanModal')">✕</button>
+    <h2>📐 FLOOR PLAN</h2>
+    <p>To-scale layout showing your furniture arrangement inside the selected marquee.</p>
+    <div class="fp-canvas-wrap">
+      <canvas id="fpCanvas" width="580" height="320"></canvas>
+    </div>
+    <div class="fp-legend">
+      <div class="fp-leg-item"><div class="fp-leg-dot" style="background:#ffd700;opacity:.6"></div>Marquee</div>
+      <div class="fp-leg-item"><div class="fp-leg-dot" style="background:#00e6ff;opacity:.7;border-radius:50%"></div>Round Table</div>
+      <div class="fp-leg-item"><div class="fp-leg-dot" style="background:#00ff88;opacity:.6"></div>Trestle Table</div>
+      <div class="fp-leg-item"><div class="fp-leg-dot" style="background:#c060ff;opacity:.6;border-radius:50%"></div>Chair</div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARE MODAL -->
+<div class="modal" id="compareModal">
+  <div class="modal-box" style="max-width:660px">
+    <button class="modal-close" onclick="closeModal('compareModal')">✕</button>
+    <h2>⚖ COMPARE MARQUEE SIZES</h2>
+    <p>Select two sizes to compare side by side.</p>
+    <div class="cmp-select" id="cmpSelects">
+      <select id="cmpA" onchange="renderCompare()" style="flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--font);font-size:13px;padding:8px 10px;outline:none">
+        <option value="">— Select Size A —</option>
+      </select>
+      <select id="cmpB" onchange="renderCompare()" style="flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--font);font-size:13px;padding:8px 10px;outline:none">
+        <option value="">— Select Size B —</option>
+      </select>
+    </div>
+    <div class="compare-grid" id="compareGrid">
+      <div class="cmp-col" style="text-align:center;padding:30px;color:var(--muted);font-size:12px">Select a size above</div>
+      <div class="cmp-col" style="text-align:center;padding:30px;color:var(--muted);font-size:12px">Select a size above</div>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY MODAL -->
+<div class="modal" id="galleryModal">
+  <div class="modal-box" style="max-width:700px">
+    <button class="modal-close" onclick="closeModal('galleryModal')">✕</button>
+    <h2>🖼 PAST EVENTS GALLERY</h2>
+    <p>Recent events by Events Pro Hire Group — showcasing our setups across the Waikato.</p>
+    <div class="gallery-grid">
+      <div class="gal-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#0a1a2e,#0c2240)">⛺</div><div class="gal-cap">Wedding · Hamilton · 9×12m Gold</div></div>
+      <div class="gal-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#1a0a2e,#2a0c40)">🎉</div><div class="gal-cap">Birthday · Cambridge · 6×9m Silver</div></div>
+      <div class="gal-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#0a2e0a,#0c400c)">🏢</div><div class="gal-cap">Corporate · Te Rapa · 12×15m</div></div>
+      <div class="gal-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#2e1a0a,#401c0c)">🌸</div><div class="gal-cap">Garden Party · Raglan · 6×12m</div></div>
+      <div class="gal-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#0a2a2e,#0c3040)">🎓</div><div class="gal-cap">Graduation · Morrinsville · 9×15m</div></div>
+      <div class="gal-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#2e0a1a,#400c20)">🎪</div><div class="gal-cap">Market Expo · Mystery Creek · 12×18m</div></div>
+    </div>
+    <br>
+    <div style="text-align:center;font-size:10px;color:var(--muted)">📸 Upload your own photos to showcase — contact hello@whetudigital.co.nz</div>
+  </div>
+</div>
+
+<!-- SETUP TIMELINE MODAL -->
+<div class="modal" id="timelineModal">
+  <div class="modal-box" style="max-width:600px">
+    <button class="modal-close" onclick="closeModal('timelineModal')">✕</button>
+    <h2>📅 EVENT TIMELINE</h2>
+    <p>Recommended schedule for your event setup, based on your event date.</p>
+    <div id="timelineContent">
+      <div style="text-align:center;padding:20px;color:var(--muted);font-size:12px">Set an event date in Step 1 to generate your timeline.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRESENTATION OVERLAY -->
+<div class="pres-overlay" id="presOverlay">
+  <button class="pres-close-btn" onclick="closePresentation()">✕</button>
+  <div class="pres-card">
+    <div class="pres-logo">EVENTS PRO HIRE GROUP</div>
+    <div class="pres-client" id="presClient">—</div>
+    <div class="pres-event" id="presEvent">—</div>
+    <div class="pres-marquee" id="presMarquee">Select a marquee</div>
+    <div class="pres-total" id="presTotal">$0</div>
+    <div class="pres-total-lbl">TOTAL INCLUDING GST</div>
+    <div class="pres-meta">
+      <div><strong id="presGuests">—</strong>Guests</div>
+      <div><strong id="presDate">—</strong>Event Date</div>
+      <div><strong id="presArea">—</strong>Area Mapped</div>
+    </div>
+    <div class="pres-ref" id="presRef"></div>
   </div>
 </div>
 
@@ -1522,19 +1853,404 @@ function newQuote() {
 
 // ── INIT ──────────────────────────────────────────────────────
 (function init() {
-  // Pre-load demo: 14 Beaumont Street
   setTimeout(searchAddress, 800);
-  // Render furniture
   renderFurniture();
-  // Set default event date to next Saturday
   var d = new Date();
   while (d.getDay() !== 6) d.setDate(d.getDate() + 1);
   document.getElementById('eventDate').value = d.toISOString().split('T')[0];
+  initSignaturePad();
+  initCompareSelects();
+  setSeason('standard');
 })();
+
+// ════════════════════════════════════════════════════════════
+// NEW FEATURES — EventSpace Pro v2
+// ════════════════════════════════════════════════════════════
+
+// ── ANIMATED VALUE COUNTER ───────────────────────────────────
+function animateVal(el, from, to, prefix, suffix, dur) {
+  prefix = prefix || ''; suffix = suffix || ''; dur = dur || 600;
+  var start = null;
+  function step(ts) {
+    if (!start) start = ts;
+    var p = Math.min((ts - start) / dur, 1);
+    var ease = 1 - Math.pow(1 - p, 3);
+    var cur = Math.round(from + (to - from) * ease);
+    el.textContent = prefix + cur.toLocaleString() + suffix;
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// ── UPDATED updateTotal WITH ANIMATION + CPG ────────────────
+var _lastTotal = 0;
+var _seasonMult = 1;
+function updateTotal() {
+  var mqPrice = state.selectedMarquee ? state.selectedMarquee.price : 0;
+  var fTotal = getFurnitureTotal();
+  var sub = (mqPrice + fTotal + CONFIG.deliveryBase + CONFIG.setupBase) * _seasonMult;
+  var gst = sub * CONFIG.gstRate;
+  var total = sub + gst;
+  var sbTotalEl = document.getElementById('sbTotal');
+  animateVal(sbTotalEl, _lastTotal, Math.round(total), '$', '', 500);
+  _lastTotal = Math.round(total);
+  document.getElementById('furnitureSubtotal').textContent = '$' + sub.toFixed(2);
+  // Cost per guest
+  var cpg = document.getElementById('cpgVal');
+  if (cpg && state.guests > 0) {
+    cpg.textContent = total > 0 ? '$' + Math.round(total / state.guests) : '—';
+  }
+  // Update coverage badge
+  updateCoverageBadge();
+  // Smart suggestions
+  updateSuggestions();
+}
+
+// ── SEASON PRICING ───────────────────────────────────────────
+function setSeason(s) {
+  _seasonMult = s === 'winter' ? 1.10 : s === 'peak' ? 1.15 : 1.0;
+  document.querySelectorAll('.season-btn').forEach(function(b){ b.className = 'season-btn'; });
+  var map2 = { standard:'sznStd', winter:'sznWinter', peak:'sznPeak' };
+  var map3 = { standard:'', winter:'active-winter', peak:'active-peak' };
+  var el = document.getElementById(map2[s]);
+  if (el) el.classList.add(map3[s] || '');
+  updateTotal();
+}
+
+// ── PACKAGE BUNDLES ──────────────────────────────────────────
+var PACKAGES = {
+  silver:   { marquee:'st6x9',  furniture:{ chair:40, t_round:5, carpet:1 } },
+  gold:     { marquee:'xl9x12', furniture:{ chair:80, t_round:10, lights:2, carpet:1, linen:10 } },
+  platinum: { marquee:'g12x15', furniture:{ chair:150, t_round:18, lights:4, sidewall:6, dance:20, heater:4, carpet:1, linen:18 } }
+};
+function applyPackage(name) {
+  var pkg = PACKAGES[name];
+  if (!pkg) return;
+  // Reset furniture
+  FURNITURE.forEach(function(f){ f.qty = 0; });
+  // Apply furniture
+  Object.keys(pkg.furniture).forEach(function(id) {
+    var f = FURNITURE.find(function(x){ return x.id === id; });
+    if (f) f.qty = pkg.furniture[id];
+  });
+  // Select marquee
+  selectMarquee(pkg.marquee);
+  renderFurniture();
+  updateTotal();
+  // Highlight active package
+  ['pkgSilver','pkgGold','pkgPlat'].forEach(function(id){ var el=document.getElementById(id); if(el) el.classList.remove('active'); });
+  var activeId = name === 'silver' ? 'pkgSilver' : name === 'gold' ? 'pkgGold' : 'pkgPlat';
+  var activeEl = document.getElementById(activeId);
+  if (activeEl) activeEl.classList.add('active');
+}
+
+// ── MARQUEE HERO MOMENT ──────────────────────────────────────
+var _origSelectMarquee = selectMarquee;
+selectMarquee = function(id) {
+  _origSelectMarquee(id);
+  var cards = document.querySelectorAll('.marquee-card');
+  cards.forEach(function(c) {
+    if (c.getAttribute('onclick') && c.getAttribute('onclick').indexOf(id) !== -1) {
+      c.classList.remove('hero-flash');
+      void c.offsetWidth; // force reflow
+      c.classList.add('hero-flash');
+    }
+  });
+};
+
+// ── WEATHER FORECAST (Open-Meteo) ───────────────────────────
+function fetchWeather() {
+  var dateStr = document.getElementById('eventDate').value;
+  if (!dateStr || !state.lat) return;
+  var lat = state.lat.toFixed(4), lng = state.lng.toFixed(4);
+  var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lng +
+    '&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Pacific%2FAuckland&forecast_days=7';
+  fetch(url).then(function(r){ return r.json(); }).then(function(data) {
+    var strip = document.getElementById('wxStrip');
+    var cells = document.getElementById('wxCells');
+    if (!data.daily) return;
+    var days = data.daily;
+    var eventIdx = days.time.indexOf(dateStr);
+    var start = Math.max(0, eventIdx - 1);
+    var end = Math.min(days.time.length, start + 5);
+    var html = '';
+    for (var i = start; i < end; i++) {
+      var wc = days.weathercode[i];
+      var icon = wc <= 1 ? '☀️' : wc <= 3 ? '⛅' : wc <= 45 ? '🌫' : wc <= 67 ? '🌧' : wc <= 77 ? '❄️' : '⛈';
+      var isEvent = days.time[i] === dateStr;
+      var d = new Date(days.time[i] + 'T00:00:00');
+      var dStr = d.toLocaleDateString('en-NZ', { weekday:'short', day:'numeric', month:'short' });
+      html += '<div class="wx-cell" style="' + (isEvent ? 'border-color:rgba(0,230,255,.5);background:rgba(0,230,255,.06)' : '') + '">' +
+        '<div class="wx-date">' + (isEvent ? '⭐ EVENT' : dStr) + '</div>' +
+        '<div class="wx-icon">' + icon + '</div>' +
+        '<div class="wx-temp">' + Math.round(days.temperature_2m_max[i]) + '°</div>' +
+        '<div class="wx-desc">' + Math.round(days.temperature_2m_min[i]) + '° low</div>' +
+        '</div>';
+    }
+    cells.innerHTML = html || '<div style="font-size:10px;color:var(--muted);padding:8px">Forecast not available for this date</div>';
+    strip.style.display = 'block';
+  }).catch(function(){ /* silent fail */ });
+}
+
+// Trigger weather fetch when address is found or date changes
+var _origShowPropertyAnalysis = showPropertyAnalysis;
+showPropertyAnalysis = function() {
+  _origShowPropertyAnalysis();
+  fetchWeather();
+};
+document.getElementById('eventDate').addEventListener('change', fetchWeather);
+
+// ── SMART SUGGESTIONS ────────────────────────────────────────
+function updateSuggestions() {
+  var strip = document.getElementById('suggestStrip');
+  var chips = document.getElementById('suggestChips');
+  var suggestions = [];
+  var month = new Date().getMonth(); // 0-11
+  var isWinter = month >= 4 && month <= 8; // May-Sep NZ winter
+  var isPeak = month === 11 || month <= 1; // Dec-Feb NZ peak
+  var heater = FURNITURE.find(function(f){ return f.id === 'heater'; });
+  var lights = FURNITURE.find(function(f){ return f.id === 'lights'; });
+  var sidewall = FURNITURE.find(function(f){ return f.id === 'sidewall'; });
+  var carpet = FURNITURE.find(function(f){ return f.id === 'carpet'; });
+  if (isWinter && heater && heater.qty === 0) suggestions.push({ text:'Add heaters — NZ winter', action: function(){ adjFurniture('heater', 2); } });
+  if (isWinter && sidewall && sidewall.qty === 0) suggestions.push({ text:'Sidewalls for warmth', action: function(){ adjFurniture('sidewall', 4); } });
+  if (isPeak && lights && lights.qty === 0) suggestions.push({ text:'String lights for summer evenings', action: function(){ adjFurniture('lights', 2); } });
+  if (state.guests > 60 && lights && lights.qty < 2) suggestions.push({ text:'Extra lighting (60+ guests)', action: function(){ adjFurniture('lights', 3); } });
+  if (state.guests > 40 && carpet && carpet.qty === 0) suggestions.push({ text:'Add carpet for comfort', action: function(){ adjFurniture('carpet', 1); } });
+  if (!suggestions.length) { strip.style.display = 'none'; return; }
+  strip.style.display = 'block';
+  chips.innerHTML = suggestions.map(function(s, i) {
+    return '<div class="suggest-chip" onclick="applySuggestion(' + i + ')"><span class="add-icon">+</span>' + s.text + '</div>';
+  }).join('');
+  window._suggestions = suggestions;
+}
+function applySuggestion(i) {
+  if (window._suggestions && window._suggestions[i]) window._suggestions[i].action();
+}
+function adjFurniture(id, qty) {
+  var f = FURNITURE.find(function(x){ return x.id === id; });
+  if (!f) return;
+  f.qty = qty;
+  renderFurniture();
+  updateTotal();
+}
+
+// ── COVERAGE BADGE ────────────────────────────────────────────
+function updateCoverageBadge() {
+  var badge = document.getElementById('coverageBadge');
+  var arc = document.getElementById('covArc');
+  var pctEl = document.getElementById('covPct');
+  if (!state.selectedMarquee || !state.usableArea) { badge.style.display = 'none'; return; }
+  var pct = Math.min(100, Math.round((state.selectedMarquee.area / state.usableArea) * 100));
+  var circ = 125.6;
+  var offset = circ - (pct / 100) * circ;
+  arc.style.strokeDashoffset = offset;
+  pctEl.textContent = pct + '%';
+  arc.style.stroke = pct > 80 ? '#ff4466' : pct > 60 ? '#ffd700' : '#00ff88';
+  badge.style.display = 'block';
+}
+
+// ── NZ COMPLIANCE CHECKLIST ─────────────────────────────────
+function toggleCI(el) {
+  el.classList.toggle('checked');
+  var done = document.querySelectorAll('.ci.checked').length;
+  var total = document.querySelectorAll('.ci').length;
+  var score = document.getElementById('compScore');
+  if (score) score.innerHTML = 'Checklist: <span>' + done + '/' + total + '</span> complete';
+}
+
+// ── DIGITAL SIGNATURE PAD ────────────────────────────────────
+var _sig = { drawing: false, hasData: false };
+function initSignaturePad() {
+  var canvas = document.getElementById('sigCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  ctx.strokeStyle = '#00e6ff';
+  ctx.lineWidth = 2;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  function getPos(e) {
+    var r = canvas.getBoundingClientRect();
+    var t = e.touches ? e.touches[0] : e;
+    return { x: (t.clientX - r.left) * (canvas.width / r.width), y: (t.clientY - r.top) * (canvas.height / r.height) };
+  }
+  function start(e) { e.preventDefault(); _sig.drawing = true; var p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); }
+  function draw(e)  { e.preventDefault(); if (!_sig.drawing) return; var p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); _sig.hasData = true; document.getElementById('sigStatus').textContent = '✓ Signature captured'; }
+  function end()    { _sig.drawing = false; }
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', end);
+  canvas.addEventListener('touchstart', start, { passive: false });
+  canvas.addEventListener('touchmove', draw, { passive: false });
+  canvas.addEventListener('touchend', end);
+}
+function clearSignature() {
+  var canvas = document.getElementById('sigCanvas');
+  var ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  _sig.hasData = false;
+  document.getElementById('sigStatus').textContent = 'Sign above to accept quote';
+}
+
+// ── EMAIL QUOTE ───────────────────────────────────────────────
+function emailQuote() {
+  var mq = state.selectedMarquee;
+  var client = document.getElementById('clientName').value || 'Valued Client';
+  var email = document.getElementById('clientEmail').value || '';
+  var total = document.getElementById('sbTotal').textContent;
+  var subject = 'Your Quote from Events Pro Hire Group — ' + state.quoteRef;
+  var body = 'Hi ' + client + ',\n\nPlease find your quote details below:\n\n' +
+    'Quote Reference: ' + state.quoteRef + '\n' +
+    'Property: ' + state.address.split(',').slice(0,2).join(',') + '\n' +
+    (mq ? 'Marquee: ' + mq.name + '\n' : '') +
+    'Guests: ' + state.guests + '\n' +
+    'Total (incl. GST): ' + total + '\n\n' +
+    'Quote valid for 30 days.\n\n' +
+    'Kind regards,\nEvents Pro Hire Group\n' + CONFIG.companyEmail + '\nPowered by EventSpace Pro · Whetū Digital';
+  window.location.href = 'mailto:' + encodeURIComponent(email) + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+}
+
+// ── SETUP TIMELINE ────────────────────────────────────────────
+function buildTimeline() {
+  var dateStr = document.getElementById('eventDate').value;
+  var el = document.getElementById('timelineContent');
+  if (!dateStr) { el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:12px">Set an event date in Step 1 to generate your timeline.</div>'; return; }
+  var evt = new Date(dateStr + 'T00:00:00');
+  var setup = new Date(evt); setup.setDate(setup.getDate() - 1);
+  var pack = new Date(evt); pack.setDate(pack.getDate() + 1);
+  var fmt = function(d) { return d.toLocaleDateString('en-NZ', { weekday:'long', day:'numeric', month:'long' }); };
+  var mq = state.selectedMarquee ? state.selectedMarquee.name : 'marquee';
+  el.innerHTML =
+    '<div class="tl-strip">' +
+      '<div class="tl-node"><div class="tl-dot green"></div><div class="tl-date">' + fmt(setup) + '</div><div class="tl-lbl">DELIVERY & SETUP</div></div>' +
+      '<div class="tl-node"><div class="tl-dot cyan"></div><div class="tl-date">' + fmt(evt) + '</div><div class="tl-lbl">EVENT DAY</div></div>' +
+      '<div class="tl-node"><div class="tl-dot gold"></div><div class="tl-date">' + fmt(pack) + '</div><div class="tl-lbl">PACK-DOWN</div></div>' +
+    '</div>' +
+    '<div class="info-card green" style="margin-top:12px"><div class="ic-title">Delivery Day</div><div style="font-size:12px;color:var(--muted);margin-top:4px">· 8am–12pm: Delivery of ' + mq + '<br>· 12pm–4pm: Marquee erection + furniture setup<br>· 4pm: Handover to client</div></div>' +
+    '<div class="info-card cyan" style="margin-top:8px"><div class="ic-title">Event Day</div><div style="font-size:12px;color:var(--muted);margin-top:4px">· Marquee ready from handover<br>· ' + state.guests + ' guests · Layout: ' + (state.layoutType||'seated') + '<br>· Contact Events Pro if anything needs adjusting</div></div>' +
+    '<div class="info-card gold" style="margin-top:8px"><div class="ic-title">Pack-Down Day</div><div style="font-size:12px;color:var(--muted);margin-top:4px">· 8am–2pm: Furniture removal + marquee disassembly<br>· Site cleared and returned to original condition</div></div>';
+}
+
+// ── FLOOR PLAN RENDERER ───────────────────────────────────────
+function renderFloorPlan() {
+  var canvas = document.getElementById('fpCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+  var mq = state.selectedMarquee || { w: 6, d: 9, name: 'Select a marquee first' };
+  var pad = 30;
+  var scale = Math.min((W - pad*2) / mq.w, (H - pad*2) / mq.d);
+  var mW = mq.w * scale, mH = mq.d * scale;
+  var ox = (W - mW) / 2, oy = (H - mH) / 2;
+  // Marquee shell
+  ctx.fillStyle = 'rgba(255,215,0,.06)';
+  ctx.strokeStyle = 'rgba(255,215,0,.7)';
+  ctx.lineWidth = 2;
+  ctx.fillRect(ox, oy, mW, mH);
+  ctx.strokeRect(ox, oy, mW, mH);
+  // Label
+  ctx.fillStyle = 'rgba(255,215,0,.5)';
+  ctx.font = '11px Segoe UI';
+  ctx.textAlign = 'center';
+  ctx.fillText(mq.w + 'm × ' + mq.d + 'm', W/2, oy - 8);
+  // Round tables (80px diameter at scale ~10px/m)
+  var rt = FURNITURE.find(function(f){ return f.id === 't_round'; });
+  var tRect = FURNITURE.find(function(f){ return f.id === 't_rect'; });
+  var chairs = FURNITURE.find(function(f){ return f.id === 'chair'; });
+  var tR = 28, spacing = 8;
+  var cols = Math.max(1, Math.floor(mW / (tR*2 + spacing)));
+  var rtQty = rt ? Math.min(rt.qty, 12) : 0;
+  for (var i = 0; i < rtQty; i++) {
+    var col = i % cols, row = Math.floor(i / cols);
+    var tx = ox + tR + spacing + col * (tR*2 + spacing);
+    var ty = oy + tR + spacing + row * (tR*2 + spacing + 20);
+    ctx.beginPath(); ctx.arc(tx, ty, tR, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(0,230,255,.12)'; ctx.fill();
+    ctx.strokeStyle = 'rgba(0,230,255,.5)'; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.fillStyle = 'rgba(0,230,255,.7)'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
+    ctx.fillText('Round', tx, ty - 3); ctx.fillText('8 seats', tx, ty + 9);
+    // Chairs around table
+    for (var c = 0; c < 8; c++) {
+      var a = (c / 8) * Math.PI * 2;
+      var cx2 = tx + Math.cos(a) * (tR + 7), cy2 = ty + Math.sin(a) * (tR + 7);
+      ctx.beginPath(); ctx.arc(cx2, cy2, 4, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(192,96,255,.5)'; ctx.fill();
+    }
+  }
+  // Trestle tables
+  var trQty = tRect ? Math.min(tRect.qty, 6) : 0;
+  for (var j = 0; j < trQty; j++) {
+    var tx2 = ox + spacing + j * (70 + spacing);
+    var ty2 = oy + mH - 40;
+    if (tx2 + 60 > ox + mW) break;
+    ctx.fillStyle = 'rgba(0,255,136,.1)'; ctx.strokeStyle = 'rgba(0,255,136,.5)'; ctx.lineWidth = 1.5;
+    ctx.fillRect(tx2, ty2, 60, 20); ctx.strokeRect(tx2, ty2, 60, 20);
+    ctx.fillStyle = 'rgba(0,255,136,.6)'; ctx.font = '8px Segoe UI'; ctx.textAlign = 'center';
+    ctx.fillText('Trestle', tx2 + 30, ty2 + 13);
+  }
+  ctx.textAlign = 'left';
+}
+
+// ── COMPARE MARQUEES ──────────────────────────────────────────
+function initCompareSelects() {
+  var optHtml = MARQUEES.map(function(m){ return '<option value="' + m.id + '">' + m.name + ' — $' + m.price + '</option>'; }).join('');
+  ['cmpA','cmpB'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.innerHTML = '<option value="">— Select —</option>' + optHtml;
+  });
+}
+function renderCompare() {
+  var a = MARQUEES.find(function(m){ return m.id === document.getElementById('cmpA').value; });
+  var b = MARQUEES.find(function(m){ return m.id === document.getElementById('cmpB').value; });
+  var grid = document.getElementById('compareGrid');
+  function col(m, cls) {
+    if (!m) return '<div class="cmp-col" style="text-align:center;padding:30px;color:var(--muted);font-size:12px">Select a size</div>';
+    return '<div class="cmp-col ' + cls + '">' +
+      '<div style="font-size:16px;font-weight:900;color:var(--cyan);margin-bottom:10px">' + m.name + '</div>' +
+      '<div class="cmp-row"><span class="cmp-k">Size</span><span class="cmp-v">' + m.w + 'm × ' + m.d + 'm</span></div>' +
+      '<div class="cmp-row"><span class="cmp-k">Area</span><span class="cmp-v">' + m.area + ' m²</span></div>' +
+      '<div class="cmp-row"><span class="cmp-k">Max Guests</span><span class="cmp-v">' + m.maxG + '</span></div>' +
+      '<div class="cmp-row"><span class="cmp-k">Hire Price</span><span class="cmp-v" style="color:var(--gold)">$' + m.price + '</span></div>' +
+      '<div class="cmp-row"><span class="cmp-k">Consent Risk</span><span class="cmp-v" style="color:' + (m.area > 100 ? 'var(--orange)' : 'var(--green)') + '">' + (m.area > 100 ? '⚠ Check council' : '✓ Likely exempt') + '</span></div>' +
+      '<div style="margin-top:10px;font-size:10px;color:var(--muted)">' + m.desc + '</div>' +
+      '</div>';
+  }
+  grid.innerHTML = col(a, a ? 'sel' : '') + col(b, b ? 'sel' : '');
+}
+
+// ── PRESENTATION MODE ─────────────────────────────────────────
+function openPresentation() {
+  var overlay = document.getElementById('presOverlay');
+  var mq = state.selectedMarquee;
+  document.getElementById('presClient').textContent = document.getElementById('clientName').value || 'Valued Client';
+  document.getElementById('presEvent').textContent = (document.getElementById('eventType').value || 'Event') + (document.getElementById('eventDate').value ? ' · ' + document.getElementById('eventDate').value : '');
+  document.getElementById('presMarquee').textContent = mq ? mq.name + ' · ' + mq.w + 'm × ' + mq.d + 'm' : 'No marquee selected';
+  document.getElementById('presTotal').textContent = document.getElementById('sbTotal').textContent;
+  document.getElementById('presGuests').textContent = state.guests;
+  document.getElementById('presDate').textContent = document.getElementById('eventDate').value || '—';
+  document.getElementById('presArea').textContent = state.totalArea ? state.totalArea + ' m²' : '—';
+  document.getElementById('presRef').textContent = 'Ref: ' + state.quoteRef + ' · Valid 30 days';
+  overlay.classList.add('open');
+}
+function closePresentation() {
+  document.getElementById('presOverlay').classList.remove('open');
+}
 </script>
 
-<!-- Whetū Digital watermark -->
-<div class="whetu-credit">© WHETŪ DIGITAL 2026</div>
+<!-- ═══════════════════ WHETŪ FOOTER ═══════════════════ -->
+<footer class="whetu-footer">
+  <div class="wf-inner">
+    <div class="wf-logo-row">
+      <span class="wf-star">✦</span>
+      <span class="wf-brand">WHETŪ DIGITAL</span>
+    </div>
+    <div class="wf-divider"></div>
+    <a class="wf-link" href="https://whetudigital.co.nz" target="_blank">whetudigital.co.nz</a>
+    <div class="wf-divider"></div>
+    <span class="wf-copy">© 2026 · EventSpace Pro · Licensed to Events Pro Hire Group</span>
+  </div>
+</footer>
 
 </body>
 </html>
