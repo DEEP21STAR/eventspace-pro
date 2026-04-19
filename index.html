@@ -1604,7 +1604,13 @@ document.addEventListener('click', function(e) {
 
 // ── ZONE DRAWING ─────────────────────────────────────────────
 function startDrawing() {
-  var handler = new L.Draw.Polygon(map, drawControl.options.draw.polygon);
+  // Ensure control is attached before enabling handler
+  try { map.addControl(drawControl); } catch(e) {}
+  var handler = new L.Draw.Polygon(map, {
+    allowIntersection: false,
+    shapeOptions: { color: '#00ff88', fillColor: '#00ff88', fillOpacity: 0.25, weight: 2 },
+    showArea: true,
+  });
   handler.enable();
 }
 
