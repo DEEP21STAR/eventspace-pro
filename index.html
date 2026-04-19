@@ -682,6 +682,113 @@ input[type=range]{
 .pres-meta strong{color:var(--text);display:block;font-size:14px}
 .pres-ref{font-size:9px;color:rgba(255,255,255,.15);letter-spacing:2px;margin-top:20px}
 
+/* ── EQUIPMENT CATALOGUE MODAL ── */
+.cat-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.cat-tab{
+  padding:7px 16px;border-radius:8px;border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.04);color:var(--muted);cursor:pointer;
+  font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-family:var(--font);
+  transition:all .2s}
+.cat-tab.active{
+  background:linear-gradient(135deg,rgba(0,230,255,.18),rgba(192,96,255,.1));
+  border-color:rgba(0,230,255,.4);color:var(--cyan)}
+.cat-tab:hover:not(.active){background:rgba(255,255,255,.08);color:var(--text)}
+.cat-section{display:none}
+.cat-section.active{display:block}
+.cat-table{width:100%;border-collapse:collapse}
+.cat-table th{
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);
+  padding:6px 10px;text-align:left;border-bottom:1px solid var(--border)}
+.cat-table td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px}
+.cat-table tr:hover td{background:rgba(0,230,255,.03)}
+.cat-price-input{
+  width:80px;background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.25);
+  border-radius:6px;color:var(--gold);font-size:12px;font-weight:700;
+  padding:4px 8px;text-align:right;font-family:var(--font);outline:none;transition:border-color .2s}
+.cat-price-input:focus{border-color:rgba(255,215,0,.6);box-shadow:0 0 8px rgba(255,215,0,.15)}
+.cat-badge{
+  display:inline-block;padding:2px 8px;border-radius:4px;font-size:9px;
+  letter-spacing:1px;font-weight:700;text-transform:uppercase}
+.cat-badge-consent{background:rgba(255,140,0,.12);border:1px solid rgba(255,140,0,.3);color:var(--orange)}
+.cat-badge-ok{background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.25);color:var(--green)}
+.cat-save-row{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-top:14px;border-top:1px solid var(--border)}
+.cat-save-note{font-size:10px;color:var(--muted)}
+.cat-save-btn{
+  padding:9px 22px;border-radius:9px;border:1px solid rgba(0,255,136,.4);
+  background:linear-gradient(135deg,rgba(0,255,136,.18),rgba(0,200,100,.1));
+  color:var(--green);font-weight:700;font-size:11px;cursor:pointer;font-family:var(--font);
+  transition:all .2s}
+.cat-save-btn:hover{box-shadow:0 4px 20px rgba(0,255,136,.3);border-color:rgba(0,255,136,.7)}
+.cat-reset-btn{
+  padding:9px 16px;border-radius:9px;border:1px solid rgba(255,68,102,.25);
+  background:rgba(255,68,102,.06);color:var(--red);font-weight:600;font-size:10px;
+  cursor:pointer;font-family:var(--font);transition:all .2s;margin-right:8px}
+
+/* ── MANUAL QUOTE CALCULATOR ── */
+.mq-section{
+  background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.15);
+  border-radius:12px;padding:14px;margin-top:14px}
+.mq-title{
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);
+  margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.mq-toggle{
+  background:none;border:1px solid rgba(255,215,0,.25);border-radius:6px;
+  color:var(--gold);font-size:9px;cursor:pointer;padding:3px 10px;font-family:var(--font);
+  transition:all .2s}
+.mq-toggle:hover{background:rgba(255,215,0,.1)}
+.mq-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.mq-row-label{flex:1;font-size:11px;color:var(--text)}
+.mq-row-input{
+  width:90px;background:rgba(255,255,255,.05);border:1px solid var(--border);
+  border-radius:6px;color:var(--text);font-size:11px;padding:5px 8px;
+  text-align:right;font-family:var(--font);outline:none;transition:border-color .2s}
+.mq-row-input:focus{border-color:rgba(0,230,255,.4)}
+.mq-custom-line{
+  display:flex;align-items:center;gap:6px;margin-bottom:5px;
+  animation:fadeIn .2s ease}
+.mq-line-desc{
+  flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);
+  border-radius:6px;color:var(--text);font-size:11px;padding:5px 9px;
+  font-family:var(--font);outline:none;min-width:0}
+.mq-line-desc:focus{border-color:rgba(0,230,255,.3)}
+.mq-line-price{
+  width:80px;background:rgba(255,255,255,.04);border:1px solid var(--border);
+  border-radius:6px;color:var(--gold);font-size:11px;font-weight:700;
+  padding:5px 7px;text-align:right;font-family:var(--font);outline:none}
+.mq-line-price:focus{border-color:rgba(255,215,0,.4)}
+.mq-line-del{
+  width:22px;height:22px;border-radius:5px;border:none;
+  background:rgba(255,68,102,.12);color:var(--red);cursor:pointer;
+  font-size:13px;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:background .2s}
+.mq-line-del:hover{background:rgba(255,68,102,.25)}
+.mq-add-btn{
+  background:none;border:1px dashed rgba(0,230,255,.25);border-radius:7px;
+  color:var(--muted);font-size:10px;cursor:pointer;padding:5px 12px;
+  width:100%;font-family:var(--font);margin:6px 0;transition:all .2s}
+.mq-add-btn:hover{border-color:rgba(0,230,255,.5);color:var(--cyan)}
+.mq-discount-row{
+  display:flex;align-items:center;gap:8px;padding:8px 0;
+  border-top:1px solid rgba(255,255,255,.06);margin-top:6px}
+.mq-discount-label{flex:1;font-size:11px;color:var(--muted)}
+.mq-discount-type{
+  background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;
+  color:var(--text);font-size:10px;padding:5px 6px;font-family:var(--font);outline:none;cursor:pointer}
+.mq-total-override{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 12px;border-radius:9px;margin-top:10px;
+  background:linear-gradient(135deg,rgba(255,215,0,.1),rgba(255,140,0,.06));
+  border:1px solid rgba(255,215,0,.25)}
+.mq-total-lbl{font-size:10px;color:var(--muted);letter-spacing:1px}
+.mq-total-val{font-size:20px;font-weight:900;color:var(--gold)}
+.mq-apply-btn{
+  width:100%;margin-top:10px;padding:10px;border-radius:9px;
+  background:linear-gradient(135deg,rgba(255,215,0,.2),rgba(255,140,0,.12));
+  border:1px solid rgba(255,215,0,.4);color:var(--gold);font-weight:700;
+  font-size:11px;cursor:pointer;font-family:var(--font);letter-spacing:1px;
+  transition:all .2s}
+.mq-apply-btn:hover{box-shadow:0 4px 20px rgba(255,215,0,.3);border-color:rgba(255,215,0,.7)}
+
 /* ── WHETŪ FOOTER ── */
 .whetu-footer{background:linear-gradient(180deg,#04050f,#060820);border-top:1px solid rgba(0,230,255,.18);padding:14px 20px;text-align:center;flex-shrink:0;position:relative;z-index:100}
 .wf-inner{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
@@ -728,6 +835,7 @@ input[type=range]{
   </div>
   <div class="hdr-btns">
     <button class="hdr-btn btn-cyan" onclick="openModal('galleryModal')">🖼 Gallery</button>
+    <button class="hdr-btn" onclick="openCatalogue()" style="background:linear-gradient(135deg,rgba(0,255,136,.12),rgba(0,200,100,.06));border-color:rgba(0,255,136,.3);color:var(--green)">📋 Catalogue</button>
     <button class="hdr-btn btn-purple" onclick="openModal('compareModal')">⚖ Compare</button>
     <button class="hdr-btn" onclick="openSavedModal()">📂 Saved</button>
     <button class="hdr-btn" onclick="openUploadModal()">📸 Photo</button>
@@ -1282,31 +1390,49 @@ var CONFIG = {
   clearanceM: 2, // metres clearance around marquee
 };
 
-// ── MARQUEE SIZES ────────────────────────────────────────────
+// ── MARQUEE SIZES — Events Pro Hire Group full stock ─────────
 var MARQUEES = [
-  { id:'g3x3',   name:'Gazebo 3×3m',    w:3,  d:3,  area:9,   maxG:8,   price:150,  desc:'Ideal for small gatherings or extra sheltered area' },
-  { id:'s3x6',   name:'Small 3×6m',     w:3,  d:6,  area:18,  maxG:16,  price:280,  desc:'Perfect for intimate parties, outdoor dining' },
-  { id:'m4x8',   name:'Medium 4×8m',    w:4,  d:8,  area:32,  maxG:28,  price:420,  desc:'Great for birthday parties and small receptions' },
-  { id:'st6x9',  name:'Standard 6×9m',  w:6,  d:9,  area:54,  maxG:45,  price:650,  desc:'Most popular size — suits most residential events' },
-  { id:'l6x12',  name:'Large 6×12m',    w:6,  d:12, area:72,  maxG:60,  price:820,  desc:'Generous space for seated dining with dance floor' },
-  { id:'xl9x12', name:'XL 9×12m',       w:9,  d:12, area:108, maxG:90,  price:1100, desc:'Ideal for weddings and corporate events' },
-  { id:'xxl9x15',name:'XXL 9×15m',      w:9,  d:15, area:135, maxG:112, price:1380, desc:'Substantial venue — requires large open section' },
-  { id:'g12x15', name:'Grand 12×15m',   w:12, d:15, area:180, maxG:150, price:1750, desc:'Large-scale events, requires site assessment' },
-  { id:'m12x18', name:'Mega 12×18m',    w:12, d:18, area:216, maxG:180, price:2100, desc:'Maximum size — always requires site visit' },
+  { id:'g3x3',   name:'3×3m Gazebo',        w:3,  d:3,  area:9,   maxG:10,  price:180,  desc:'Small sheltered area, entry canopy or extra cover' },
+  { id:'s6x6',   name:'6×6m Standard',      w:6,  d:6,  area:36,  maxG:30,  price:480,  desc:'Intimate gatherings, small birthday parties' },
+  { id:'m6x9',   name:'6×9m Medium',        w:6,  d:9,  area:54,  maxG:45,  price:650,  desc:'Most popular — suits most residential events' },
+  { id:'l6x12',  name:'6×12m Large',        w:6,  d:12, area:72,  maxG:65,  price:820,  desc:'Generous space for seated dining with dance floor' },
+  { id:'n9x6',   name:'9×6m',               w:9,  d:6,  area:54,  maxG:45,  price:680,  desc:'Wider footprint — great for markets or long layouts' },
+  { id:'n9x9',   name:'9×9m',               w:9,  d:9,  area:81,  maxG:65,  price:880,  desc:'Versatile square format — weddings, corporate' },
+  { id:'xl9x12', name:'9×12m XL',           w:9,  d:12, area:108, maxG:90,  price:1100, desc:'Ideal for weddings and corporate events (>100m² check consent)' },
+  { id:'x9x18',  name:'9×18m',              w:9,  d:18, area:162, maxG:135, price:1480, desc:'Large scale — building consent required (>100m²)' },
+  { id:'x9x21',  name:'9×21m',              w:9,  d:21, area:189, maxG:160, price:1680, desc:'Large events — site visit required' },
+  { id:'x9x24',  name:'9×24m',              w:9,  d:24, area:216, maxG:180, price:1900, desc:'Maximum 9m series — building consent required' },
+  { id:'t10x10', name:'10×10m',             w:10, d:10, area:100, maxG:80,  price:1150, desc:'Versatile corporate or celebration format' },
+  { id:'t10x15', name:'10×15m',             w:10, d:15, area:150, maxG:125, price:1450, desc:'Large corporate or community events' },
+  { id:'t10x20', name:'10×20m',             w:10, d:20, area:200, maxG:165, price:1820, desc:'Requires building consent · site visit required' },
+  { id:'t10x25', name:'10×25m',             w:10, d:25, area:250, maxG:210, price:2200, desc:'Maximum scale — full site assessment required' },
+  { id:'g12x15', name:'12×15m Grand',       w:12, d:15, area:180, maxG:150, price:1900, desc:'Grand scale events — site assessment required' },
+  { id:'mega15', name:'15m Wide (Custom)',   w:15, d:15, area:225, maxG:190, price:2500, desc:'Custom configuration — contact for final pricing' },
 ];
 
-// ── FURNITURE ────────────────────────────────────────────────
+// ── FURNITURE & EQUIPMENT — Events Pro Hire Group full catalogue
 var FURNITURE = [
-  { id:'chair',    name:'Chiavari Chairs',          icon:'🪑', unit:'each',   price:5,   qty:0 },
-  { id:'t_round',  name:'Round Tables (seats 8)',   icon:'⭕', unit:'each',   price:28,  qty:0 },
-  { id:'t_rect',   name:'Trestle Tables (6 seats)', icon:'📋', unit:'each',   price:22,  qty:0 },
-  { id:'heater',   name:'Patio Heaters',            icon:'🔥', unit:'each',   price:65,  qty:0 },
-  { id:'lights',   name:'String Lights (10m set)',  icon:'✨', unit:'set',    price:85,  qty:0 },
-  { id:'sidewall', name:'Sidewall Panels',          icon:'🧱', unit:'panel',  price:18,  qty:0 },
-  { id:'dance',    name:'Dance Floor (per m²)',     icon:'🕺', unit:'m²',     price:14,  qty:0 },
-  { id:'linen',    name:'Table Linen',              icon:'🎀', unit:'each',   price:9,   qty:0 },
-  { id:'carpet',   name:'Marquee Carpet',           icon:'🟥', unit:'marquee',price:130, qty:0 },
-  { id:'power',    name:'Power Board + Extension',  icon:'🔌', unit:'each',   price:25,  qty:0 },
+  // CHAIRS
+  { id:'chair_resin',    name:'Resin Stacker Chairs',       icon:'🪑', unit:'each',    price:3,   qty:0, cat:'Chairs' },
+  { id:'chair_chiavari', name:'White Chiavari Chairs',      icon:'🪑', unit:'each',    price:6,   qty:0, cat:'Chairs' },
+  { id:'chair_banquet',  name:'Black & Chrome Banquet',     icon:'🪑', unit:'each',    price:5,   qty:0, cat:'Chairs' },
+  { id:'chair_bentwood', name:'Bentwood Chairs',            icon:'🪑', unit:'each',    price:6,   qty:0, cat:'Chairs' },
+  { id:'chair_kids',     name:"Children's Chairs",          icon:'🪑', unit:'each',    price:2,   qty:0, cat:'Chairs' },
+  // TABLES
+  { id:'t_trestle24',   name:'Trestle Table 2.4m (8-10p)', icon:'📋', unit:'each',    price:28,  qty:0, cat:'Tables' },
+  { id:'t_trestle18',   name:'Trestle Table 1.8m (6-8p)',  icon:'📋', unit:'each',    price:22,  qty:0, cat:'Tables' },
+  { id:'t_round18',     name:'Round Table 1.8m (10p)',      icon:'⭕', unit:'each',    price:32,  qty:0, cat:'Tables' },
+  { id:'t_round15',     name:'Round Table 1.5m (8p)',       icon:'⭕', unit:'each',    price:28,  qty:0, cat:'Tables' },
+  { id:'t_round12',     name:'Round Table 1.2m (5-6p)',     icon:'⭕', unit:'each',    price:22,  qty:0, cat:'Tables' },
+  { id:'t_leaner',      name:'Bar Leaners 120×60cm',        icon:'🍸', unit:'each',    price:35,  qty:0, cat:'Tables' },
+  // EXTRAS
+  { id:'heater',        name:'Patio Heaters',               icon:'🔥', unit:'each',    price:65,  qty:0, cat:'Extras' },
+  { id:'lights',        name:'String Lights (10m set)',     icon:'✨', unit:'set',     price:85,  qty:0, cat:'Extras' },
+  { id:'sidewall',      name:'Sidewall Panels',             icon:'🧱', unit:'panel',   price:18,  qty:0, cat:'Extras' },
+  { id:'dance',         name:'Dance Floor (per m²)',        icon:'🕺', unit:'m²',      price:14,  qty:0, cat:'Extras' },
+  { id:'linen',         name:'Table Linen',                 icon:'🎀', unit:'each',    price:9,   qty:0, cat:'Extras' },
+  { id:'carpet',        name:'Marquee Carpet',              icon:'🟥', unit:'marquee', price:130, qty:0, cat:'Extras' },
+  { id:'power',         name:'Power Board + Extension',    icon:'🔌', unit:'each',    price:25,  qty:0, cat:'Extras' },
 ];
 
 // ── STATE ────────────────────────────────────────────────────
@@ -1633,18 +1759,26 @@ function drawMarqueeOnMap() {
 // ── FURNITURE ────────────────────────────────────────────────
 function renderFurniture() {
   var el = document.getElementById('furnitureList');
-  el.innerHTML = FURNITURE.map(function(f, i) {
-    return '<div class="furniture-item">' +
-      '<div class="fi-icon">' + f.icon + '</div>' +
-      '<div class="fi-info"><div class="fi-name">' + f.name + '</div><div class="fi-price">$' + f.price + ' per ' + f.unit + '</div></div>' +
-      '<div class="fi-qty">' +
-        '<button class="qty-btn" onclick="adjQty(' + i + ',-1)">−</button>' +
-        '<div class="qty-val" id="qty_' + f.id + '">' + f.qty + '</div>' +
-        '<button class="qty-btn" onclick="adjQty(' + i + ',1)">+</button>' +
-      '</div>' +
-      '<div class="fi-total" id="ftotal_' + f.id + '">$' + (f.qty * f.price) + '</div>' +
-      '</div>';
-  }).join('');
+  var cats = ['Chairs', 'Tables', 'Extras'];
+  var html = '';
+  cats.forEach(function(cat) {
+    var items = FURNITURE.filter(function(f){ return f.cat === cat; });
+    html += '<div style="font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin:10px 0 5px;padding-top:4px;border-top:1px solid var(--border)">' + cat + '</div>';
+    items.forEach(function(f) {
+      var i = FURNITURE.indexOf(f);
+      html += '<div class="furniture-item">' +
+        '<div class="fi-icon">' + f.icon + '</div>' +
+        '<div class="fi-info"><div class="fi-name">' + f.name + '</div><div class="fi-price">$' + f.price + ' per ' + f.unit + '</div></div>' +
+        '<div class="fi-qty">' +
+          '<button class="qty-btn" onclick="adjQty(' + i + ',-1)">−</button>' +
+          '<div class="qty-val" id="qty_' + f.id + '">' + f.qty + '</div>' +
+          '<button class="qty-btn" onclick="adjQty(' + i + ',1)">+</button>' +
+        '</div>' +
+        '<div class="fi-total" id="ftotal_' + f.id + '">$' + (f.qty * f.price) + '</div>' +
+        '</div>';
+    });
+  });
+  el.innerHTML = html;
 }
 
 function adjQty(idx, delta) {
@@ -1699,15 +1833,53 @@ function buildQuote() {
   }
   html += '<div class="quote-section">' +
     '<div class="quote-section-title">Charges</div>' +
-    '<div class="quote-row"><span class="lbl">Delivery</span><span class="val">$' + CONFIG.deliveryBase.toFixed(2) + '</span></div>' +
-    '<div class="quote-row"><span class="lbl">Setup &amp; Pack-down</span><span class="val">$' + CONFIG.setupBase.toFixed(2) + '</span></div>' +
-    '<div class="quote-row"><span class="lbl">Subtotal (excl. GST)</span><span class="val">$' + sub.toFixed(2) + '</span></div>' +
-    '<div class="quote-row"><span class="lbl">GST (15%)</span><span class="val">$' + gst.toFixed(2) + '</span></div>' +
+    '<div class="quote-row"><span class="lbl">Delivery</span><span class="val" id="qDeliveryDisplay">$' + CONFIG.deliveryBase.toFixed(2) + '</span></div>' +
+    '<div class="quote-row"><span class="lbl">Setup &amp; Pack-down</span><span class="val" id="qSetupDisplay">$' + CONFIG.setupBase.toFixed(2) + '</span></div>' +
+    '<div class="quote-row"><span class="lbl">Subtotal (excl. GST)</span><span class="val" id="qSubDisplay">$' + sub.toFixed(2) + '</span></div>' +
+    '<div class="quote-row"><span class="lbl">GST (15%)</span><span class="val" id="qGstDisplay">$' + gst.toFixed(2) + '</span></div>' +
     '</div>' +
-    '<div class="quote-total-row"><span class="lbl">TOTAL (incl. GST)</span><span class="val">$' + total.toFixed(2) + '</span></div>' +
+    '<div class="quote-total-row"><span class="lbl">TOTAL (incl. GST)</span><span class="val" id="qTotalDisplay">$' + total.toFixed(2) + '</span></div>' +
     '<div style="margin-top:12px"><div class="field"><label>Internal Notes</label><textarea id="quoteNotes" placeholder="Delivery instructions, access notes, special requirements…" style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--font);font-size:13px;padding:9px 12px;width:100%;min-height:60px;resize:vertical;outline:none"></textarea></div></div>';
+
+  // Manual Quote Calculator section
+  html += '<div class="mq-section" id="mqSection">' +
+    '<div class="mq-title">🧮 MANUAL ADJUSTMENTS' +
+      '<button class="mq-toggle" onclick="toggleMqSection()">▾ Show</button>' +
+    '</div>' +
+    '<div id="mqBody" style="display:none">' +
+      '<div style="font-size:10px;color:var(--muted);margin-bottom:10px">Override delivery/setup fees, add custom charges, or apply a discount. Live total updates below.</div>' +
+      '<div class="mq-row">' +
+        '<span class="mq-row-label">📦 Delivery Fee</span>' +
+        '<input class="mq-row-input" id="mqDelivery" type="number" value="' + CONFIG.deliveryBase + '" min="0" step="10" oninput="recalcManual()">' +
+      '</div>' +
+      '<div class="mq-row">' +
+        '<span class="mq-row-label">🔧 Setup & Pack-down</span>' +
+        '<input class="mq-row-input" id="mqSetup" type="number" value="' + CONFIG.setupBase + '" min="0" step="10" oninput="recalcManual()">' +
+      '</div>' +
+      '<div style="font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin:10px 0 6px">Custom Line Items</div>' +
+      '<div id="mqCustomLines"></div>' +
+      '<button class="mq-add-btn" onclick="addCustomLine()">+ Add Custom Item</button>' +
+      '<div class="mq-discount-row">' +
+        '<span class="mq-discount-label">🏷 Discount</span>' +
+        '<select class="mq-discount-type" id="mqDiscountType" onchange="recalcManual()">' +
+          '<option value="pct">%</option>' +
+          '<option value="fixed">$</option>' +
+        '</select>' +
+        '<input class="mq-row-input" id="mqDiscount" type="number" value="0" min="0" step="1" oninput="recalcManual()" style="width:80px">' +
+      '</div>' +
+      '<div class="mq-total-override">' +
+        '<div><div class="mq-total-lbl">ADJUSTED TOTAL (incl. GST)</div><div style="font-size:10px;color:var(--muted);margin-top:2px" id="mqBreakdown"></div></div>' +
+        '<div class="mq-total-val" id="mqTotalVal">$' + Math.round(total) + '</div>' +
+      '</div>' +
+      '<button class="mq-apply-btn" onclick="applyManualTotal()">✓ Apply to Quote</button>' +
+    '</div>' +
+  '</div>';
+
   document.getElementById('quoteSummary').innerHTML = html;
   document.getElementById('sbTotal').textContent = '$' + Math.round(total);
+  // Store base values for recalc
+  window._mqBase = { mqPrice: mqPrice, fTotal: fTotal };
+  recalcManual();
 }
 
 // ── PDF EXPORT ────────────────────────────────────────────────
@@ -1961,6 +2133,7 @@ function newQuote() {
 
 // ── INIT ──────────────────────────────────────────────────────
 (function init() {
+  loadCataloguePrices(); // load saved prices before rendering
   setTimeout(searchAddress, 800);
   renderFurniture();
   var d = new Date();
@@ -2382,9 +2555,9 @@ function renderFloorPlan() {
   ctx.textAlign = 'center';
   ctx.fillText(mq.w + 'm × ' + mq.d + 'm', W/2, oy - 8);
   // Round tables (80px diameter at scale ~10px/m)
-  var rt = FURNITURE.find(function(f){ return f.id === 't_round'; });
-  var tRect = FURNITURE.find(function(f){ return f.id === 't_rect'; });
-  var chairs = FURNITURE.find(function(f){ return f.id === 'chair'; });
+  var rt = FURNITURE.find(function(f){ return f.id === 't_round18'; });
+  var tRect = FURNITURE.find(function(f){ return f.id === 't_trestle24'; });
+  var chairs = FURNITURE.find(function(f){ return f.id === 'chair_resin'; });
   var tR = 28, spacing = 8;
   var cols = Math.max(1, Math.floor(mW / (tR*2 + spacing)));
   var rtQty = rt ? Math.min(rt.qty, 12) : 0;
@@ -2417,6 +2590,246 @@ function renderFloorPlan() {
     ctx.fillText('Trestle', tx2 + 30, ty2 + 13);
   }
   ctx.textAlign = 'left';
+}
+
+// ── EQUIPMENT CATALOGUE ──────────────────────────────────────
+var _defaultMarqueePrices = MARQUEES.map(function(m){ return { id: m.id, price: m.price }; });
+var _defaultFurniturePrices = FURNITURE.map(function(f){ return { id: f.id, price: f.price }; });
+
+function loadCataloguePrices() {
+  try {
+    var saved = JSON.parse(localStorage.getItem('esp_prices') || '{}');
+    if (saved.marquees) {
+      saved.marquees.forEach(function(s) {
+        var m = MARQUEES.find(function(x){ return x.id === s.id; });
+        if (m) m.price = s.price;
+      });
+    }
+    if (saved.furniture) {
+      saved.furniture.forEach(function(s) {
+        var f = FURNITURE.find(function(x){ return x.id === s.id; });
+        if (f) f.price = s.price;
+      });
+    }
+  } catch(e) {}
+}
+
+function saveCataloguePrices() {
+  // Read marquee prices from inputs
+  MARQUEES.forEach(function(m) {
+    var inp = document.getElementById('cmprice_' + m.id);
+    if (inp) m.price = parseFloat(inp.value) || m.price;
+  });
+  // Read furniture prices from inputs
+  FURNITURE.forEach(function(f) {
+    var inp = document.getElementById('cmprice_' + f.id);
+    if (inp) f.price = parseFloat(inp.value) || f.price;
+  });
+  localStorage.setItem('esp_prices', JSON.stringify({
+    marquees: MARQUEES.map(function(m){ return { id: m.id, price: m.price }; }),
+    furniture: FURNITURE.map(function(f){ return { id: f.id, price: f.price }; })
+  }));
+  renderFurniture();
+  updateTotal();
+  closeModal('catalogueModal');
+  // Flash success
+  var btn = document.querySelector('.cat-save-btn');
+  if (btn) { var orig = btn.textContent; btn.textContent = '✓ Saved!'; setTimeout(function(){ btn.textContent = orig; }, 1500); }
+}
+
+function resetCataloguePrices() {
+  _defaultMarqueePrices.forEach(function(d) {
+    var m = MARQUEES.find(function(x){ return x.id === d.id; });
+    if (m) { m.price = d.price; var inp = document.getElementById('cmprice_' + d.id); if (inp) inp.value = d.price; }
+  });
+  _defaultFurniturePrices.forEach(function(d) {
+    var f = FURNITURE.find(function(x){ return x.id === d.id; });
+    if (f) { f.price = d.price; var inp = document.getElementById('cmprice_' + d.id); if (inp) inp.value = d.price; }
+  });
+}
+
+function openCatalogue() {
+  // Build marquees table
+  var mBody = document.getElementById('catMarqueeBody');
+  if (mBody) {
+    mBody.innerHTML = MARQUEES.map(function(m) {
+      var consent = m.area > 100;
+      var badge = consent
+        ? '<span class="cat-badge cat-badge-consent">⚠ Consent</span>'
+        : '<span class="cat-badge cat-badge-ok">✓ Exempt</span>';
+      return '<tr>' +
+        '<td style="font-weight:700;color:var(--cyan)">' + m.name + '</td>' +
+        '<td>' + m.area + ' m²</td>' +
+        '<td>Up to ' + m.maxG + ' guests</td>' +
+        '<td style="font-size:10px;color:var(--muted);max-width:180px">' + m.desc + '</td>' +
+        '<td>' + badge + '</td>' +
+        '<td style="text-align:right"><input class="cat-price-input" id="cmprice_' + m.id + '" type="number" value="' + m.price + '" min="0" step="10" oninput="catLiveUpdate()"></td>' +
+        '</tr>';
+    }).join('');
+  }
+  // Build tables
+  var tBody = document.getElementById('catTableBody');
+  var tableDefs = [
+    { id:'t_trestle24', name:'Trestle Table 2.4m', dims:'2400×760mm', seats:'8-10 pax' },
+    { id:'t_trestle18', name:'Trestle Table 1.8m', dims:'1800×750mm', seats:'6-8 pax' },
+    { id:'t_round18',   name:'Round Table 1.8m',   dims:'Ø 1800mm',   seats:'10 pax' },
+    { id:'t_round15',   name:'Round Table 1.5m',   dims:'Ø 1500mm',   seats:'8 pax' },
+    { id:'t_round12',   name:'Round Table 1.2m',   dims:'Ø 1200mm',   seats:'5-6 pax' },
+    { id:'t_leaner',    name:'Bar Leaner',          dims:'1200×600mm', seats:'Standing / cocktail' },
+  ];
+  if (tBody) {
+    tBody.innerHTML = tableDefs.map(function(td) {
+      var f = FURNITURE.find(function(x){ return x.id === td.id; });
+      var price = f ? f.price : 0;
+      return '<tr>' +
+        '<td style="font-weight:700;color:var(--text)">' + td.name + '</td>' +
+        '<td style="color:var(--muted);font-size:11px">' + td.dims + '</td>' +
+        '<td style="color:var(--muted);font-size:11px">' + td.seats + '</td>' +
+        '<td style="text-align:right"><input class="cat-price-input" id="cmprice_' + td.id + '" type="number" value="' + price + '" min="0" step="1" oninput="catLiveUpdate()"></td>' +
+        '</tr>';
+    }).join('');
+  }
+  // Build chairs
+  var cBody = document.getElementById('catChairBody');
+  var chairDefs = [
+    { id:'chair_resin',    name:'Resin Stacker',          notes:'Durable, stackable — general use' },
+    { id:'chair_chiavari', name:'White Chiavari',         notes:'Elegant — weddings, formal events' },
+    { id:'chair_banquet',  name:'Black & Chrome Banquet', notes:'Corporate, gala events' },
+    { id:'chair_bentwood', name:'Bentwood',               notes:'Classic café style — versatile' },
+    { id:'chair_kids',     name:"Children's Chair",       notes:'Smaller size — kids events' },
+  ];
+  if (cBody) {
+    cBody.innerHTML = chairDefs.map(function(cd) {
+      var f = FURNITURE.find(function(x){ return x.id === cd.id; });
+      var price = f ? f.price : 0;
+      return '<tr>' +
+        '<td style="font-weight:700;color:var(--text)">' + cd.name + '</td>' +
+        '<td style="color:var(--muted);font-size:11px">' + cd.notes + '</td>' +
+        '<td style="text-align:right"><input class="cat-price-input" id="cmprice_' + cd.id + '" type="number" value="' + price + '" min="0" step="1" oninput="catLiveUpdate()"></td>' +
+        '</tr>';
+    }).join('');
+  }
+  // Build extras
+  var eBody = document.getElementById('catExtrasBody');
+  if (eBody) {
+    var extras = FURNITURE.filter(function(f){ return f.cat === 'Extras'; });
+    eBody.innerHTML = extras.map(function(f) {
+      return '<tr>' +
+        '<td style="font-weight:700;color:var(--text)">' + f.icon + ' ' + f.name + '</td>' +
+        '<td style="color:var(--muted);font-size:11px">Per ' + f.unit + '</td>' +
+        '<td style="text-align:right"><input class="cat-price-input" id="cmprice_' + f.id + '" type="number" value="' + f.price + '" min="0" step="1" oninput="catLiveUpdate()"></td>' +
+        '</tr>';
+    }).join('');
+  }
+  openModal('catalogueModal');
+}
+
+function catLiveUpdate() {
+  // Live preview: do nothing special — prices update on save
+}
+
+function switchCatTab(tabId, btn) {
+  document.querySelectorAll('.cat-section').forEach(function(s){ s.classList.remove('active'); });
+  document.querySelectorAll('.cat-tab').forEach(function(b){ b.classList.remove('active'); });
+  var tab = document.getElementById(tabId);
+  if (tab) tab.classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── MANUAL QUOTE CALCULATOR ──────────────────────────────────
+var _mqCustomLines = [];
+var _mqLineId = 0;
+
+function toggleMqSection() {
+  var body = document.getElementById('mqBody');
+  var btn = document.querySelector('.mq-toggle');
+  if (!body) return;
+  var open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : 'block';
+  if (btn) btn.textContent = open ? '▾ Show' : '▴ Hide';
+}
+
+function addCustomLine() {
+  var id = ++_mqLineId;
+  _mqCustomLines.push({ id: id, desc: '', price: 0 });
+  var container = document.getElementById('mqCustomLines');
+  if (!container) return;
+  var div = document.createElement('div');
+  div.className = 'mq-custom-line';
+  div.id = 'mqline_' + id;
+  div.innerHTML =
+    '<input class="mq-line-desc" placeholder="Description (e.g. Generator hire)" oninput="mqLineUpdate(' + id + ', this.value, null)">' +
+    '<input class="mq-line-price" type="number" value="0" min="0" step="5" placeholder="0" oninput="mqLineUpdate(' + id + ', null, this.value)">' +
+    '<button class="mq-line-del" onclick="removeCustomLine(' + id + ')">×</button>';
+  container.appendChild(div);
+}
+
+function mqLineUpdate(id, desc, price) {
+  var line = _mqCustomLines.find(function(l){ return l.id === id; });
+  if (!line) return;
+  if (desc !== null) line.desc = desc;
+  if (price !== null) line.price = parseFloat(price) || 0;
+  recalcManual();
+}
+
+function removeCustomLine(id) {
+  _mqCustomLines = _mqCustomLines.filter(function(l){ return l.id !== id; });
+  var el = document.getElementById('mqline_' + id);
+  if (el) el.parentNode.removeChild(el);
+  recalcManual();
+}
+
+function recalcManual() {
+  var base = window._mqBase || { mqPrice: 0, fTotal: 0 };
+  var delivery = parseFloat(document.getElementById('mqDelivery') ? document.getElementById('mqDelivery').value : CONFIG.deliveryBase) || 0;
+  var setup = parseFloat(document.getElementById('mqSetup') ? document.getElementById('mqSetup').value : CONFIG.setupBase) || 0;
+  var customTotal = _mqCustomLines.reduce(function(s, l){ return s + (l.price || 0); }, 0);
+  var sub = base.mqPrice + base.fTotal + delivery + setup + customTotal;
+  var gst = sub * CONFIG.gstRate;
+  var discountVal = parseFloat(document.getElementById('mqDiscount') ? document.getElementById('mqDiscount').value : 0) || 0;
+  var discountType = document.getElementById('mqDiscountType') ? document.getElementById('mqDiscountType').value : 'pct';
+  var discount = discountType === 'pct' ? (sub + gst) * (discountVal / 100) : discountVal;
+  var total = sub + gst - discount;
+  var mqTotalEl = document.getElementById('mqTotalVal');
+  if (mqTotalEl) mqTotalEl.textContent = '$' + Math.round(Math.max(0, total));
+  var breakEl = document.getElementById('mqBreakdown');
+  if (breakEl) {
+    var parts = [];
+    if (delivery !== CONFIG.deliveryBase) parts.push('Delivery: $' + delivery);
+    if (setup !== CONFIG.setupBase) parts.push('Setup: $' + setup);
+    if (customTotal > 0) parts.push('Custom: $' + customTotal);
+    if (discount > 0) parts.push('Discount: −$' + Math.round(discount));
+    breakEl.textContent = parts.join(' · ');
+  }
+  window._mqAdjustedTotal = Math.max(0, total);
+  window._mqDelivery = delivery;
+  window._mqSetup = setup;
+}
+
+function applyManualTotal() {
+  recalcManual();
+  var total = window._mqAdjustedTotal || 0;
+  var delivery = window._mqDelivery || CONFIG.deliveryBase;
+  var setup = window._mqSetup || CONFIG.setupBase;
+  // Update visible quote display
+  if (document.getElementById('qDeliveryDisplay')) document.getElementById('qDeliveryDisplay').textContent = '$' + delivery.toFixed(2);
+  if (document.getElementById('qSetupDisplay')) document.getElementById('qSetupDisplay').textContent = '$' + setup.toFixed(2);
+  var customTotal = _mqCustomLines.reduce(function(s, l){ return s + (l.price || 0); }, 0);
+  var base = window._mqBase || { mqPrice: 0, fTotal: 0 };
+  var sub = base.mqPrice + base.fTotal + delivery + setup + customTotal;
+  var gst = sub * CONFIG.gstRate;
+  var discountVal = parseFloat(document.getElementById('mqDiscount') ? document.getElementById('mqDiscount').value : 0) || 0;
+  var discountType = document.getElementById('mqDiscountType') ? document.getElementById('mqDiscountType').value : 'pct';
+  var discount = discountType === 'pct' ? (sub + gst) * (discountVal / 100) : discountVal;
+  if (document.getElementById('qSubDisplay')) document.getElementById('qSubDisplay').textContent = '$' + sub.toFixed(2);
+  if (document.getElementById('qGstDisplay')) document.getElementById('qGstDisplay').textContent = '$' + gst.toFixed(2);
+  if (document.getElementById('qTotalDisplay')) document.getElementById('qTotalDisplay').textContent = '$' + total.toFixed(2);
+  document.getElementById('sbTotal').textContent = '$' + Math.round(total);
+  // Flash the status bar
+  var sb = document.getElementById('sbTotal');
+  if (sb) { sb.style.color = 'var(--gold)'; sb.style.textShadow = '0 0 20px rgba(255,215,0,.8)'; setTimeout(function(){ sb.style.color = ''; sb.style.textShadow = ''; }, 1500); }
+  // Toggle back
+  toggleMqSection();
 }
 
 // ── COMPARE MARQUEES ──────────────────────────────────────────
@@ -2464,6 +2877,69 @@ function closePresentation() {
   document.getElementById('presOverlay').classList.remove('open');
 }
 </script>
+
+<!-- EQUIPMENT CATALOGUE MODAL -->
+<div class="modal" id="catalogueModal">
+  <div class="modal-box" style="max-width:760px">
+    <button class="modal-close" onclick="closeModal('catalogueModal')">✕</button>
+    <h2>📋 EQUIPMENT CATALOGUE</h2>
+    <p>Full hire inventory for Events Pro Hire Group. Edit prices here — changes apply immediately to all quotes and are saved to this device.</p>
+    <div class="cat-tabs">
+      <button class="cat-tab active" onclick="switchCatTab('cat-marquees',this)">⛺ Marquees</button>
+      <button class="cat-tab" onclick="switchCatTab('cat-tables',this)">📋 Tables</button>
+      <button class="cat-tab" onclick="switchCatTab('cat-chairs',this)">🪑 Chairs</button>
+      <button class="cat-tab" onclick="switchCatTab('cat-extras',this)">✨ Extras</button>
+    </div>
+
+    <!-- MARQUEES TAB -->
+    <div class="cat-section active" id="cat-marquees">
+      <table class="cat-table">
+        <thead><tr>
+          <th>Size</th><th>Area</th><th>Capacity</th><th>Description</th><th>Consent</th><th style="text-align:right">Hire Price $</th>
+        </tr></thead>
+        <tbody id="catMarqueeBody"></tbody>
+      </table>
+    </div>
+
+    <!-- TABLES TAB -->
+    <div class="cat-section" id="cat-tables">
+      <table class="cat-table">
+        <thead><tr>
+          <th>Table</th><th>Dimensions</th><th>Seats</th><th style="text-align:right">Hire Price $</th>
+        </tr></thead>
+        <tbody id="catTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- CHAIRS TAB -->
+    <div class="cat-section" id="cat-chairs">
+      <table class="cat-table">
+        <thead><tr>
+          <th>Chair Style</th><th>Notes</th><th style="text-align:right">Hire Price $</th>
+        </tr></thead>
+        <tbody id="catChairBody"></tbody>
+      </table>
+    </div>
+
+    <!-- EXTRAS TAB -->
+    <div class="cat-section" id="cat-extras">
+      <table class="cat-table">
+        <thead><tr>
+          <th>Item</th><th>Unit</th><th style="text-align:right">Hire Price $</th>
+        </tr></thead>
+        <tbody id="catExtrasBody"></tbody>
+      </table>
+    </div>
+
+    <div class="cat-save-row">
+      <span class="cat-save-note">💾 Prices are saved to this device and apply to all new quotes</span>
+      <div>
+        <button class="cat-reset-btn" onclick="resetCataloguePrices()">↺ Reset Defaults</button>
+        <button class="cat-save-btn" onclick="saveCataloguePrices()">✓ Save Prices</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ═══════════════════ WHETŪ FOOTER ═══════════════════ -->
 <footer class="whetu-footer">
