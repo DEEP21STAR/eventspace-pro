@@ -6,13 +6,14 @@
 <title>EventSpace Pro — Marquee Sizing Wizard</title>
 <!--
   © 2026 Whetū Digital Ltd. All rights reserved.
-  Licenced to Events Pro Hire Group.
+  Licenced to Events Pro Hire Company.
   Unauthorised copying or redistribution is prohibited.
   Contact: hello@whetudigital.co.nz
 -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css">
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 /* ═══════════════════════════════════════════════════════════
    EVENTSPACE PRO — Whetū Digital · 2026
    ═══════════════════════════════════════════════════════════ */
@@ -22,8 +23,8 @@
   --cyan:#00e6ff;--gold:#ffd700;--green:#00ff88;
   --red:#ff4466;--purple:#c060ff;--orange:#ff8c00;
   --text:#e0f0ff;--muted:#5a7a90;--border:#1a2a40;
-  --font:'Segoe UI',system-ui,sans-serif;
-  --sidebar:400px;--header:58px;--steps:46px;--status:38px;--footer:46px;
+  --font:'Inter','Segoe UI',system-ui,sans-serif;
+  --sidebar:400px;--header:58px;--steps:46px;--status:38px;--footer:52px;
 }
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font)}
 
@@ -76,6 +77,91 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .hdr-btn.primary:hover{
   background:linear-gradient(135deg,rgba(0,230,255,.45),rgba(192,96,255,.38));
   box-shadow:0 4px 32px rgba(0,230,255,.5),0 0 20px rgba(0,230,255,.3)}
+
+/* ── HELP BUTTON NEON PULSE ── */
+.hdr-btn.btn-help{
+  background:linear-gradient(135deg,rgba(0,230,255,.2),rgba(192,96,255,.15));
+  border-color:rgba(0,230,255,.5);color:var(--cyan);font-weight:800;
+  animation:helpPulse 2s ease-in-out infinite}
+@keyframes helpPulse{
+  0%,100%{box-shadow:0 0 8px rgba(0,230,255,.3),0 0 0 0 rgba(0,230,255,.4)}
+  50%{box-shadow:0 0 20px rgba(0,230,255,.8),0 0 12px 4px rgba(0,230,255,.25),
+      0 0 32px rgba(192,96,255,.3)}}
+.hdr-btn.btn-help:hover{animation:none;box-shadow:0 4px 28px rgba(0,230,255,.6)}
+
+/* ── FULLSCREEN BUTTON ── */
+.hdr-btn.btn-fs{
+  background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+  border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.5);
+  padding:7px 10px;font-size:13px}
+.hdr-btn.btn-fs:hover{color:var(--cyan);border-color:rgba(0,230,255,.4)}
+
+/* ── HELP GUIDE MODAL ── */
+#helpModal{
+  display:none;position:fixed;inset:0;z-index:2000;
+  background:rgba(0,0,0,.92);backdrop-filter:blur(12px);
+  align-items:center;justify-content:center}
+#helpModal.open{display:flex}
+.help-wrap{
+  width:min(680px,96vw);max-height:90vh;overflow:hidden;
+  background:linear-gradient(160deg,rgba(12,14,30,.98),rgba(8,10,24,.98));
+  border:1px solid rgba(0,230,255,.25);border-radius:20px;
+  box-shadow:0 0 60px rgba(0,230,255,.15),0 0 120px rgba(192,96,255,.08)}
+.help-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 24px 16px;border-bottom:1px solid rgba(0,230,255,.12)}
+.help-title{
+  font-size:1rem;font-weight:800;letter-spacing:2px;color:var(--cyan);
+  text-shadow:0 0 16px rgba(0,230,255,.5)}
+.help-close{
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  color:rgba(255,255,255,.6);border-radius:8px;padding:6px 14px;
+  cursor:pointer;font-size:.9rem;font-family:var(--font)}
+.help-slides{
+  position:relative;overflow:hidden;height:340px}
+.help-slide{
+  position:absolute;inset:0;padding:28px 28px 20px;
+  display:flex;flex-direction:column;gap:14px;
+  opacity:0;transform:translateX(40px);transition:all .45s cubic-bezier(.4,0,.2,1);
+  pointer-events:none}
+.help-slide.active{opacity:1;transform:translateX(0);pointer-events:auto}
+.help-slide.exit{opacity:0;transform:translateX(-40px)}
+.help-step-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,230,255,.12);border:1px solid rgba(0,230,255,.3);
+  border-radius:20px;padding:5px 14px;width:fit-content}
+.help-step-num{
+  width:22px;height:22px;border-radius:50%;background:var(--cyan);
+  color:#000;font-size:.75rem;font-weight:900;
+  display:flex;align-items:center;justify-content:center}
+.help-step-label{font-size:.72rem;letter-spacing:2px;color:var(--cyan);font-weight:700}
+.help-slide-title{font-size:1.15rem;font-weight:800;color:var(--text)}
+.help-slide-body{font-size:.88rem;color:rgba(255,255,255,.7);line-height:1.75}
+.help-tips{
+  background:rgba(0,230,255,.05);border:1px solid rgba(0,230,255,.12);
+  border-radius:10px;padding:12px 14px}
+.help-tips li{font-size:.82rem;color:rgba(255,255,255,.65);margin-bottom:5px;padding-left:4px}
+.help-tips li::marker{color:var(--cyan)}
+.help-nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 24px 20px;border-top:1px solid rgba(255,255,255,.06)}
+.help-dots{display:flex;gap:7px;align-items:center}
+.help-dot{
+  width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.15);
+  cursor:pointer;transition:all .25s}
+.help-dot.active{background:var(--cyan);box-shadow:0 0 8px rgba(0,230,255,.6);width:20px;border-radius:4px}
+.help-btn{
+  background:rgba(0,230,255,.12);border:1px solid rgba(0,230,255,.3);
+  color:var(--cyan);border-radius:8px;padding:8px 18px;
+  font-size:.82rem;font-weight:700;cursor:pointer;font-family:var(--font);
+  transition:all .2s;letter-spacing:.5px}
+.help-btn:hover{background:rgba(0,230,255,.22);box-shadow:0 0 12px rgba(0,230,255,.3)}
+.help-btn:disabled{opacity:.3;cursor:default}
+.help-progress{height:2px;background:rgba(255,255,255,.05)}
+.help-progress-fill{
+  height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));
+  transition:width .45s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 0 8px rgba(0,230,255,.5)}
 
 /* ── STEP NAV ── */
 .step-nav{
@@ -317,6 +403,16 @@ input[type=range]{
 .quote-row:last-child{border-bottom:none}
 .quote-row .lbl{color:var(--muted)}
 .quote-row .val{font-weight:600;color:var(--text)}
+/* ── INLINE EDIT ── */
+.qe-val{display:flex;align-items:center;gap:5px;cursor:pointer;
+  border-radius:4px;padding:2px 5px;margin:-2px -5px;transition:background .15s}
+.qe-val:hover{background:rgba(0,230,255,.08)}
+.qe-pencil{font-size:9px;color:var(--cyan);opacity:0;transition:opacity .15s;flex-shrink:0}
+.qe-val:hover .qe-pencil{opacity:.8}
+.qe-input{background:rgba(0,230,255,.05);border:none;border-bottom:1px solid rgba(0,230,255,.45);
+  border-radius:3px 3px 0 0;color:var(--text);font-weight:600;font-family:var(--font);
+  font-size:12px;text-align:right;outline:none;width:150px;padding:2px 4px;
+  box-shadow:0 2px 8px rgba(0,230,255,.1)}
 .quote-total-row{
   display:flex;justify-content:space-between;align-items:center;
   padding:10px 0;margin-top:8px;border-top:2px solid rgba(0,230,255,.3)}
@@ -818,13 +914,51 @@ input[type=range]{
   0%{box-shadow:0 0 0 0 rgba(0,230,255,.6);background:rgba(0,230,255,.18)}
   60%{box-shadow:0 0 0 10px rgba(0,230,255,0);background:rgba(0,230,255,.35)}
   100%{box-shadow:0 0 0 0 rgba(0,230,255,0);background:rgba(0,230,255,.18)}}
-.sn-arrow{
-  color:var(--cyan);font-size:11px;flex-shrink:0;
-  animation:arrowPulse .6s ease-in-out infinite alternate;
-  filter:drop-shadow(0 0 6px rgba(0,230,255,1));pointer-events:none}
-@keyframes arrowPulse{
-  from{opacity:.2;transform:translateX(-2px)}
-  to{opacity:1;transform:translateX(4px)}}
+.sn-arrow{display:none!important}
+
+/* ── STEP CONNECTORS — extended arrow ── */
+.sn-beam-wrap{
+  flex:0 0 64px;display:flex;align-items:center;
+  pointer-events:none;
+  animation:arrowNudge .7s ease-in-out infinite alternate}
+@keyframes arrowNudge{
+  from{transform:translateX(-3px);opacity:.6;filter:drop-shadow(0 0 3px rgba(0,230,255,.3))}
+  to{transform:translateX(3px);opacity:1;filter:drop-shadow(0 0 7px rgba(0,230,255,.7))}}
+.sn-beam-track{
+  flex:1;height:1.5px;border-radius:1px 0 0 1px;position:relative;overflow:hidden;
+  background:linear-gradient(90deg,rgba(0,230,255,.08),rgba(0,230,255,.75));
+  box-shadow:0 0 5px rgba(0,230,255,.3)}
+.sn-beam-track::after{
+  content:'';position:absolute;top:0;left:-40%;width:40%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.85),transparent)}
+.sn-beam-wrap.active-wire .sn-beam-track::after{
+  animation:wireShimmer 1.6s ease-in-out infinite}
+@keyframes wireShimmer{0%{left:-40%}100%{left:140%}}
+.sn-beam-wrap.done-wire .sn-beam-track{
+  background:linear-gradient(90deg,rgba(0,255,136,.15),rgba(0,255,136,.65));
+  box-shadow:0 0 5px rgba(0,255,136,.3)}
+/* Arrowhead */
+.sn-beam-head{
+  width:0;height:0;flex-shrink:0;
+  border-top:5px solid transparent;
+  border-bottom:5px solid transparent;
+  border-left:9px solid rgba(0,230,255,.85)}
+.sn-beam-wrap.done-wire .sn-beam-head{
+  border-left-color:rgba(0,255,136,.75)}
+
+/* Impact burst on arrival */
+@keyframes beamImpact{
+  0%{transform:scale(1.4);box-shadow:0 0 0 0 rgba(0,230,255,1),0 0 28px rgba(0,230,255,.9)}
+  45%{transform:scale(1.12);box-shadow:0 0 0 18px rgba(0,230,255,0),0 0 36px rgba(0,230,255,.5)}
+  100%{transform:scale(1);box-shadow:0 0 0 0 rgba(0,230,255,0)}}
+.sn-step.beam-impact .sn-num{
+  animation:beamImpact .55s cubic-bezier(.2,0,.35,1) forwards,
+            sonarPing 2s ease-out .58s infinite!important}
+
+/* Next-step waiting dim pulse */
+@keyframes waitPulse{
+  0%,100%{opacity:.32}50%{opacity:.65;box-shadow:0 0 10px rgba(0,230,255,.18)}}
+.sn-step.next-waiting .sn-num{animation:waitPulse 2.6s ease-in-out infinite}
 .btn-guide-pulse{
   animation:ctaPulse 1.4s ease-in-out infinite!important;
   border-color:rgba(0,230,255,.8)!important}
@@ -840,37 +974,39 @@ input[type=range]{
   animation:fadeIn .35s ease;line-height:1.5}
 .step-hint strong{color:var(--cyan)}
 
-/* ── WHETŪ FOOTER ── */
+/* ── WHETŪ FOOTER (unified single bar) ── */
 .whetu-footer{
-  background:linear-gradient(180deg,#04050f,#060820);
+  background:linear-gradient(90deg,#030412 0%,#060820 50%,#030412 100%);
   border-top:1px solid rgba(0,230,255,.18);
-  padding:12px 20px 10px;text-align:center;flex-shrink:0;
-  position:relative;z-index:100}
-.wf-biz-row{
-  display:flex;align-items:center;justify-content:center;gap:14px;
-  flex-wrap:wrap;margin-bottom:8px;padding-bottom:8px;
-  border-bottom:1px solid rgba(255,255,255,.06)}
+  padding:0 24px;height:var(--footer);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;position:relative;z-index:100;gap:8px}
+/* Left column — business identity */
+.wf-col-biz{display:flex;align-items:center;gap:8px;flex-shrink:0}
 .wf-biz-name{
-  font-size:10px;font-weight:800;letter-spacing:3px;color:rgba(255,255,255,.7);
-  text-transform:uppercase}
-.wf-biz-contacts{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.wf-biz-contacts a,.wf-biz-contacts span{
-  font-size:10px;color:rgba(255,255,255,.35);text-decoration:none;
-  letter-spacing:.5px;transition:color .2s}
-.wf-biz-contacts a:hover{color:var(--cyan)}
-.wf-inner{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
-.wf-logo-row{display:flex;align-items:center;gap:8px;position:relative}
-.wf-star{font-size:15px;filter:drop-shadow(0 0 6px rgba(0,230,255,.8));animation:wfStarSpin 6s linear infinite}
+  font-size:12px;font-weight:900;letter-spacing:2px;
+  color:rgba(255,255,255,.92);text-transform:uppercase;white-space:nowrap;
+  text-shadow:0 0 12px rgba(0,230,255,.2)}
+/* Centre column — contact strip */
+.wf-col-contact{display:flex;align-items:center;gap:10px;flex:1;justify-content:center}
+.wf-col-contact a,.wf-col-contact span:not(.wf-divider){
+  font-size:9.5px;color:rgba(255,255,255,.55);text-decoration:none;
+  letter-spacing:.4px;transition:color .2s;white-space:nowrap}
+.wf-col-contact a:hover{color:var(--cyan)}
+/* Right column — Whetū attribution */
+.wf-col-brand{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.wf-logo-row{display:flex;align-items:center;gap:6px;position:relative;overflow:visible;perspective:1200px}
+.wf-star{font-size:13px;filter:drop-shadow(0 0 6px rgba(0,230,255,.8));animation:wfStarSpin 6s linear infinite}
 @keyframes wfStarSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 .wf-brand{
-  font-size:12px;font-weight:900;letter-spacing:4px;position:relative;
+  font-size:13px;font-weight:900;letter-spacing:4px;position:relative;
   background:linear-gradient(90deg,#fff 0%,#10d8ff 22%,#c040ff 50%,#fff 72%,#10d8ff 100%);
   background-size:300% 100%;
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   animation:wfTextSwing 8.5s ease-in-out infinite,wfAuroraText 7s ease-in-out infinite,wfTextGlow 9s ease-in-out infinite;
   transform-style:preserve-3d}
 .wf-brand::after{
-  content:'';position:absolute;top:0;bottom:0;width:45px;left:0;
+  content:'';position:absolute;top:0;bottom:0;width:40px;left:0;
   background:linear-gradient(90deg,transparent,rgba(16,216,255,.55),rgba(192,64,255,.28),transparent);
   animation:wfShimmerLine 6s ease-in-out infinite;pointer-events:none;filter:blur(2px)}
 @keyframes wfTextSwing{
@@ -887,10 +1023,176 @@ input[type=range]{
   95%{filter:drop-shadow(0 0 12px rgba(16,216,255,.5)) drop-shadow(0 0 30px rgba(192,64,255,.25))}}
 @keyframes wfAuroraText{0%{background-position:100% 50%}50%{background-position:0% 50%}100%{background-position:100% 50%}}
 @keyframes wfShimmerLine{0%{left:-120%;opacity:0}10%{opacity:.6}90%{opacity:.5}100%{left:120%;opacity:0}}
-.wf-divider{width:1px;height:14px;background:rgba(255,255,255,.1)}
-.wf-link{font-size:9px;color:rgba(0,230,255,.35);letter-spacing:2px;text-decoration:none;transition:color .2s}
-.wf-link:hover{color:var(--cyan)}
-.wf-copy{font-size:8px;color:rgba(255,255,255,.12);letter-spacing:2px}
+/* whetudigital.co.nz — neon right-to-left sweep */
+.wf-link{
+  font-size:9px;letter-spacing:1.5px;text-decoration:none;white-space:nowrap;
+  background:linear-gradient(90deg,rgba(0,230,255,.25) 0%,#00e6ff 35%,#c040ff 55%,#00e6ff 75%,rgba(0,230,255,.25) 100%);
+  background-size:300% 100%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:wfLinkSweep 3s linear infinite;will-change:background-position}
+@keyframes wfLinkSweep{
+  0%  {background-position:200% center}
+  100%{background-position:-100% center}}
+.wf-divider{width:1px;height:14px;background:rgba(255,255,255,.1);flex-shrink:0}
+.wf-copy{font-size:8px;color:rgba(255,255,255,.18);letter-spacing:1px;white-space:nowrap}
+
+/* ── MAP DARK TREATMENT ── */
+.leaflet-tile-pane{filter:brightness(.86) saturate(.88) contrast(1.06)}
+.map-wrap::after{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:10;
+  box-shadow:inset 0 0 80px rgba(4,5,15,.75),inset 0 0 30px rgba(4,5,15,.4)}
+.leaflet-control-attribution{
+  background:rgba(4,5,15,.72)!important;color:rgba(255,255,255,.55)!important;
+  font-size:9px!important;border-radius:6px 0 0 0!important;
+  padding:3px 8px!important;border-top:1px solid rgba(0,230,255,.1)!important}
+.leaflet-control-attribution a{color:rgba(0,230,255,.55)!important}
+
+/* ── STATUS BAR CLICKABLE ── */
+.sb-seg{cursor:pointer;display:flex;align-items:center;gap:6px;
+  border-radius:6px;padding:2px 6px;margin:-2px -6px;transition:background .15s}
+.sb-seg:hover{background:rgba(0,230,255,.08)}
+.sb-seg:hover .sb-lbl{color:rgba(255,255,255,.5)}
+.sb-seg title-attr{display:none}
+
+/* ── QUOTE SECTION CARDS ── */
+.qs-card{
+  background:rgba(255,255,255,.025);border:1px solid rgba(0,230,255,.08);
+  border-radius:10px;padding:12px 14px;margin-bottom:12px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 2px 8px rgba(0,0,0,.2)}
+.qs-card .quote-section-title{
+  border-bottom:1px solid rgba(0,230,255,.1);
+  border-left:2px solid var(--cyan);padding-left:8px;margin-bottom:8px}
+.quote-total-punch{
+  background:linear-gradient(135deg,rgba(0,230,255,.08),rgba(192,96,255,.06));
+  border:1px solid rgba(0,230,255,.2);border-radius:12px;
+  padding:14px 16px;margin-top:10px;
+  box-shadow:0 0 30px rgba(0,230,255,.1),inset 0 1px 0 rgba(0,230,255,.15)}
+.quote-total-punch .lbl{font-size:14px;font-weight:800;color:var(--cyan);letter-spacing:1px}
+.quote-total-punch .val{font-size:26px;font-weight:900;color:var(--gold);
+  text-shadow:0 0 20px rgba(255,215,0,.4);letter-spacing:1px}
+.quote-valid{font-size:10px;color:rgba(255,255,255,.3);letter-spacing:1px;
+  text-align:right;margin-top:4px}
+
+/* ── STEP PROGRESS LINE ── */
+.sn-progress-track{
+  position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:rgba(255,255,255,.05)}
+.sn-progress-fill{
+  height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));
+  transition:width .4s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 0 8px var(--cyan)}
+
+/* ── GENERATE QUOTE CTA ── */
+.btn-generate-cta{
+  background:linear-gradient(135deg,rgba(0,230,255,.25),rgba(192,96,255,.2))!important;
+  border:1px solid rgba(0,230,255,.5)!important;color:var(--cyan)!important;
+  font-weight:800!important;font-size:12px!important;letter-spacing:.5px!important;
+  box-shadow:0 0 20px rgba(0,230,255,.2),inset 0 1px 0 rgba(255,255,255,.1)!important;
+  animation:ctaPulse 3s ease-in-out infinite}
+.btn-generate-cta:hover{
+  background:linear-gradient(135deg,rgba(0,230,255,.4),rgba(192,96,255,.35))!important;
+  box-shadow:0 0 30px rgba(0,230,255,.45),0 4px 20px rgba(0,230,255,.3)!important;
+  transform:translateY(-2px) scale(1.03)!important}
+@keyframes ctaPulse{
+  0%,100%{box-shadow:0 0 20px rgba(0,230,255,.2),inset 0 1px 0 rgba(255,255,255,.1)}
+  50%{box-shadow:0 0 35px rgba(0,230,255,.45),0 0 15px rgba(192,96,255,.2),inset 0 1px 0 rgba(255,255,255,.15)}}
+
+/* ── SPLASH SCREEN ── */
+#ep-splash{
+  position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:0;
+  background:radial-gradient(ellipse at 30% 40%,#0a0428 0%,#040510 55%,#02030d 100%);
+  transition:opacity .5s ease}
+.ep-splash-aurora{
+  position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.ep-splash-blob{
+  position:absolute;border-radius:50%;filter:blur(80px);opacity:.35}
+.ep-splash-blob:nth-child(1){
+  width:500px;height:500px;top:-100px;left:-100px;
+  background:radial-gradient(circle,rgba(0,180,255,.6),transparent 70%);
+  animation:epBlobDrift1 8s ease-in-out infinite alternate}
+.ep-splash-blob:nth-child(2){
+  width:400px;height:400px;bottom:-80px;right:-80px;
+  background:radial-gradient(circle,rgba(180,50,255,.5),transparent 70%);
+  animation:epBlobDrift2 10s ease-in-out infinite alternate}
+@keyframes epBlobDrift1{0%{transform:translate(0,0)}100%{transform:translate(60px,40px)}}
+@keyframes epBlobDrift2{0%{transform:translate(0,0)}100%{transform:translate(-50px,-30px)}}
+/* Corner bracket frame */
+.ep-splash-frame{
+  position:relative;text-align:center;padding:40px 56px 36px;
+  background:rgba(8,5,28,.5);backdrop-filter:blur(8px);
+  border:1px solid rgba(0,230,255,.15);border-radius:20px;
+  animation:epFramePulse 3s ease-in-out infinite alternate}
+.ep-splash-frame::before,.ep-splash-frame::after{
+  content:'';position:absolute;width:24px;height:24px;
+  border-color:rgba(0,230,255,.8);border-style:solid}
+.ep-splash-frame::before{top:-2px;left:-2px;border-width:3px 0 0 3px;border-radius:6px 0 0 0}
+.ep-splash-frame::after{top:-2px;right:-2px;border-width:3px 3px 0 0;border-radius:0 6px 0 0}
+.ep-splash-bl,.ep-splash-br{position:absolute;width:24px;height:24px;border-color:rgba(0,230,255,.8);border-style:solid}
+.ep-splash-bl{bottom:-2px;left:-2px;border-width:0 0 3px 3px;border-radius:0 0 0 6px}
+.ep-splash-br{bottom:-2px;right:-2px;border-width:0 3px 3px 0;border-radius:0 0 6px 0}
+@keyframes epFramePulse{
+  0%{box-shadow:0 0 20px rgba(0,230,255,.15),0 0 60px rgba(180,50,255,.08)}
+  100%{box-shadow:0 0 50px rgba(0,230,255,.35),0 0 100px rgba(180,50,255,.18)}}
+.ep-splash-icon{font-size:56px;margin-bottom:16px;
+  animation:epIconFloat 3s ease-in-out infinite alternate;display:block}
+@keyframes epIconFloat{0%{transform:translateY(0) scale(1)}100%{transform:translateY(-8px) scale(1.05)}}
+.ep-splash-company{
+  font-size:11px;font-weight:700;letter-spacing:5px;
+  color:rgba(255,255,255,.55);text-transform:uppercase;margin-bottom:6px}
+.ep-splash-name{
+  font-size:32px;font-weight:900;letter-spacing:3px;color:#fff;
+  text-shadow:0 0 40px rgba(0,230,255,.6);line-height:1.15;
+  animation:epNameGlow 2s ease-in-out infinite alternate}
+@keyframes epNameGlow{
+  0%{text-shadow:0 0 20px rgba(0,230,255,.4)}
+  100%{text-shadow:0 0 50px rgba(0,230,255,.9),0 0 90px rgba(0,200,255,.4)}}
+.ep-splash-tagline{
+  font-size:12px;color:rgba(255,255,255,.35);letter-spacing:3px;
+  text-transform:uppercase;margin-top:10px}
+.ep-splash-tap{
+  font-size:12px;color:rgba(0,230,255,.5);letter-spacing:3px;
+  text-transform:uppercase;margin-top:32px;
+  animation:epTapBlink 1.8s ease-in-out infinite;cursor:pointer}
+@keyframes epTapBlink{0%,100%{opacity:.3}50%{opacity:1}}
+.ep-splash-badge{
+  position:absolute;bottom:28px;
+  font-size:9px;color:rgba(255,255,255,.2);letter-spacing:2px;text-transform:uppercase}
+
+/* ── PIN GATE ── */
+#ep-pin{
+  position:fixed;inset:0;z-index:9998;display:none;flex-direction:column;
+  align-items:center;justify-content:center;gap:20px;
+  background:var(--bg);opacity:0;transition:opacity .4s ease}
+.ep-pin-icon{font-size:40px;margin-bottom:4px}
+.ep-pin-logo{
+  font-size:20px;font-weight:900;letter-spacing:4px;
+  color:var(--cyan);text-shadow:0 0 20px var(--cyan);text-align:center;
+  text-transform:uppercase;line-height:1.3}
+.ep-pin-company{
+  font-size:10px;color:rgba(255,255,255,.35);letter-spacing:3px;
+  text-transform:uppercase;margin-top:2px;text-align:center}
+.ep-pin-sub{font-size:13px;color:var(--muted);letter-spacing:3px;text-transform:uppercase}
+.ep-pin-dots{display:flex;gap:16px;margin:6px 0;animation:none}
+@keyframes epShake{0%,100%{transform:translateX(0)}15%{transform:translateX(-8px)}35%{transform:translateX(8px)}55%{transform:translateX(-6px)}75%{transform:translateX(6px)}90%{transform:translateX(-3px)}}
+.ep-pin-dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--cyan);background:transparent;transition:.2s}
+.ep-pin-dot.filled{background:var(--cyan);box-shadow:0 0 14px var(--cyan)}
+.ep-pin-pad{display:grid;grid-template-columns:repeat(3,80px);gap:12px}
+.ep-pin-btn{
+  height:80px;border-radius:14px;border:1px solid var(--border);
+  background:var(--card);color:var(--text);font-size:1.8rem;font-weight:600;
+  cursor:pointer;transition:.15s;font-family:var(--font)}
+.ep-pin-btn:hover,.ep-pin-btn:active{
+  background:rgba(0,230,255,.15);border-color:var(--cyan);
+  box-shadow:0 0 18px rgba(0,230,255,.35)}
+.ep-pin-error{color:var(--red);font-size:14px;min-height:20px;text-align:center;letter-spacing:1px}
+.ep-pin-hint{font-size:12px;color:var(--muted);text-align:center;max-width:280px;line-height:1.7}
+@keyframes epPinShake{
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-8px)}
+  40%{transform:translateX(8px)}
+  60%{transform:translateX(-6px)}
+  80%{transform:translateX(6px)}}
 
 /* ── RESPONSIVE ── */
 @media(max-width:768px){
@@ -899,10 +1201,71 @@ input[type=range]{
   .sidebar{width:100%;height:50vh;border-right:none;border-bottom:1px solid var(--border)}
   .map-wrap{height:50vh}
   .sn-lbl{display:none}
+  .hdr-desktop{display:none!important}
+  #hdrMenuBtn{display:flex!important}
+  .sn-beam-wrap{flex:0 0 40px}
+}
+@media(min-width:769px){
+  #hdrMenuBtn{display:none!important}
+  .hdr-mobile-menu{display:none!important}
 }
 </style>
 </head>
 <body>
+
+<!-- ══════════════════════════════════════════════════════
+     SPLASH SCREEN
+══════════════════════════════════════════════════════ -->
+<div id="ep-splash" onclick="epShowPin()">
+  <div class="ep-splash-aurora">
+    <div class="ep-splash-blob"></div>
+    <div class="ep-splash-blob"></div>
+  </div>
+  <div class="ep-splash-frame">
+    <div class="ep-splash-bl"></div>
+    <div class="ep-splash-br"></div>
+    <span class="ep-splash-icon">⛺</span>
+    <div class="ep-splash-company">Waikato · New Zealand</div>
+    <div class="ep-splash-name">EVENTS PRO<br>HIRE COMPANY</div>
+    <div class="ep-splash-tagline">Marquee &amp; Event Hire Specialists</div>
+  </div>
+  <div class="ep-splash-tap">Tap to continue →</div>
+  <div class="ep-splash-badge">Powered by EventSpace Pro · Whetū Digital</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     PIN GATE
+══════════════════════════════════════════════════════ -->
+<div id="ep-pin">
+  <div class="ep-pin-icon">⛺</div>
+  <div>
+    <div class="ep-pin-logo">EVENTS PRO<br>HIRE COMPANY</div>
+    <div class="ep-pin-company">Staff Access · EventSpace Pro</div>
+  </div>
+  <div class="ep-pin-sub">Enter your PIN</div>
+  <div class="ep-pin-dots" id="ep-pin-dots">
+    <div class="ep-pin-dot" id="ep-dot0"></div>
+    <div class="ep-pin-dot" id="ep-dot1"></div>
+    <div class="ep-pin-dot" id="ep-dot2"></div>
+    <div class="ep-pin-dot" id="ep-dot3"></div>
+  </div>
+  <div class="ep-pin-pad">
+    <button class="ep-pin-btn" onclick="epPinPress('1')">1</button>
+    <button class="ep-pin-btn" onclick="epPinPress('2')">2</button>
+    <button class="ep-pin-btn" onclick="epPinPress('3')">3</button>
+    <button class="ep-pin-btn" onclick="epPinPress('4')">4</button>
+    <button class="ep-pin-btn" onclick="epPinPress('5')">5</button>
+    <button class="ep-pin-btn" onclick="epPinPress('6')">6</button>
+    <button class="ep-pin-btn" onclick="epPinPress('7')">7</button>
+    <button class="ep-pin-btn" onclick="epPinPress('8')">8</button>
+    <button class="ep-pin-btn" onclick="epPinPress('9')">9</button>
+    <button class="ep-pin-btn" onclick="epPinPress('back')" style="font-size:1.2rem">⌫</button>
+    <button class="ep-pin-btn" onclick="epPinPress('0')">0</button>
+    <button class="ep-pin-btn" onclick="epPinPress('back')" style="font-size:1rem;color:var(--muted)">CLR</button>
+  </div>
+  <div class="ep-pin-error" id="ep-pin-error"></div>
+  <div class="ep-pin-hint">Contact Inaal on 021 146 1766 for access</div>
+</div>
 
 <!-- AURORA -->
 <div class="aurora" aria-hidden="true">
@@ -925,15 +1288,19 @@ input[type=range]{
     <div class="hdr-client-name" id="hdrClientName">— New Quote —</div>
   </div>
   <div class="hdr-btns">
-    <button class="hdr-btn btn-cyan" onclick="openModal('galleryModal')">🖼 Gallery</button>
-    <button class="hdr-btn" onclick="openCatalogue()" style="background:linear-gradient(135deg,rgba(0,255,136,.12),rgba(0,200,100,.06));border-color:rgba(0,255,136,.3);color:var(--green)">📋 Catalogue</button>
-    <button class="hdr-btn btn-purple" onclick="openModal('compareModal')">⚖ Compare</button>
-    <button class="hdr-btn" onclick="openSavedModal()">📂 Saved</button>
-    <button class="hdr-btn" onclick="openUploadModal()">📸 Photo</button>
-    <button class="hdr-btn" onclick="openVisitModal()">📅 Visit</button>
-    <button class="hdr-btn btn-gold-hdr" onclick="openPresentation()">🖥 Present</button>
+    <button class="hdr-btn btn-cyan hdr-desktop" onclick="openModal('galleryModal')">🖼 Gallery</button>
+    <button class="hdr-btn hdr-desktop" onclick="openCatalogue()" style="background:linear-gradient(135deg,rgba(0,255,136,.12),rgba(0,200,100,.06));border-color:rgba(0,255,136,.3);color:var(--green)">📋 Catalogue</button>
+    <button class="hdr-btn btn-purple hdr-desktop" onclick="openModal('compareModal')">⚖ Compare</button>
+    <button class="hdr-btn hdr-desktop" onclick="openSavedModal()">📂 Saved</button>
+    <button class="hdr-btn hdr-desktop" onclick="openUploadModal()">📸 Photo</button>
+    <button class="hdr-btn hdr-desktop" onclick="openVisitModal()">📅 Visit</button>
+    <button class="hdr-btn btn-gold-hdr hdr-desktop" onclick="openPresentation()">🖥 Present</button>
+    <button class="hdr-btn btn-help" onclick="openHelpGuide()">? Help</button>
+    <button class="hdr-btn btn-fs" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
     <button class="hdr-btn btn-green-hdr" onclick="newQuote()">+ New</button>
   </div>
+  <!-- Mobile menu button -->
+  <button class="hdr-btn hdr-mobile-menu" id="hdrMenuBtn" onclick="toggleMobileMenu()" style="display:none">☰ Menu</button>
 </header>
 
 <!-- ═══════════════════ STEP NAV ═══════════════════ -->
@@ -942,20 +1309,33 @@ input[type=range]{
     <span class="sn-num">1</span>
     <span class="sn-lbl">Property &amp; Client</span>
   </div>
-  <span class="sn-arrow" id="sn-arrow-2" style="display:none">▶</span>
+  <div class="sn-beam-wrap" id="sn-beam-2">
+    <div class="sn-beam-track"></div>
+    <div class="sn-beam-head"></div>
+  </div>
   <div class="sn-step" id="sn2" onclick="focusStep(2)">
     <span class="sn-num">2</span>
     <span class="sn-lbl">Zone Mapping</span>
   </div>
-  <span class="sn-arrow" id="sn-arrow-3" style="display:none">▶</span>
+  <div class="sn-beam-wrap" id="sn-beam-3">
+    <div class="sn-beam-track"></div>
+    <div class="sn-beam-head"></div>
+  </div>
   <div class="sn-step" id="sn3" onclick="focusStep(3)">
     <span class="sn-num">3</span>
     <span class="sn-lbl">Marquee &amp; Furniture</span>
   </div>
-  <span class="sn-arrow" id="sn-arrow-4" style="display:none">▶</span>
+  <div class="sn-beam-wrap" id="sn-beam-4">
+    <div class="sn-beam-track"></div>
+    <div class="sn-beam-head"></div>
+  </div>
   <div class="sn-step" id="sn4" onclick="focusStep(4)">
     <span class="sn-num">4</span>
     <span class="sn-lbl">Quote &amp; Export</span>
+  </div>
+  <!-- Progress track -->
+  <div class="sn-progress-track" style="pointer-events:none">
+    <div class="sn-progress-fill" id="snProgressFill" style="width:25%"></div>
   </div>
 </nav>
 
@@ -1173,7 +1553,7 @@ input[type=range]{
           <div class="ic-title">Package Subtotal (excl. GST)</div>
           <div class="ic-val gold" id="furnitureSubtotal" style="color:var(--gold)">$0.00</div>
         </div>
-        <button class="btn btn-primary" onclick="buildQuote();focusStep(4)">Generate Quote →</button>
+        <button class="btn btn-primary btn-generate-cta" onclick="buildQuote();focusStep(4)">⚡ Generate Quote →</button>
       </div>
     </div>
 
@@ -1258,24 +1638,24 @@ input[type=range]{
 
 <!-- ═══════════════════ STATUS BAR ═══════════════════ -->
 <div class="status-bar">
-  <div class="sb-item">
+  <div class="sb-item sb-seg" onclick="focusStep(1)" title="Edit client details">
     <span class="sb-label">Client</span>
-    <span class="sb-val cyan" id="sbClient">—</span>
+    <span class="sb-val cyan" id="sbClient">Enter client ↑</span>
   </div>
-  <div class="sb-item">
+  <div class="sb-item sb-seg" onclick="focusStep(2)" title="Draw zone on map">
     <span class="sb-label">Area</span>
     <span class="sb-val green" id="sbArea">— m²</span>
   </div>
-  <div class="sb-item">
+  <div class="sb-item sb-seg" onclick="focusStep(3)" title="Select marquee">
     <span class="sb-label">Marquee</span>
     <span class="sb-val" id="sbMarquee">—</span>
   </div>
-  <div class="sb-item">
+  <div class="sb-item sb-seg" onclick="focusStep(1)" title="Adjust guests">
     <span class="sb-label">Guests</span>
     <span class="sb-val" id="sbGuests">50</span>
   </div>
   <div class="sb-spacer"></div>
-  <div class="sb-item">
+  <div class="sb-item sb-seg" onclick="focusStep(4)" title="View quote">
     <span class="sb-label">Est. Total</span>
     <span class="sb-val gold" id="sbTotal">$0</span>
   </div>
@@ -1410,12 +1790,87 @@ input[type=range]{
   </div>
 </div>
 
+<!-- MOBILE MENU DROPDOWN -->
+<div id="mobileMenuDropdown" style="display:none;position:fixed;top:var(--header);right:8px;z-index:1500;
+  background:rgba(8,10,24,.97);border:1px solid rgba(0,230,255,.2);border-radius:12px;
+  padding:8px;backdrop-filter:blur(16px);box-shadow:0 8px 40px rgba(0,0,0,.6);min-width:160px">
+  <button class="hdr-btn btn-cyan" onclick="openModal('galleryModal');toggleMobileMenu()" style="width:100%;margin-bottom:4px;text-align:left">🖼 Gallery</button>
+  <button class="hdr-btn" onclick="openCatalogue();toggleMobileMenu()" style="width:100%;margin-bottom:4px;text-align:left;background:linear-gradient(135deg,rgba(0,255,136,.12),rgba(0,200,100,.06));border-color:rgba(0,255,136,.3);color:var(--green)">📋 Catalogue</button>
+  <button class="hdr-btn btn-purple" onclick="openModal('compareModal');toggleMobileMenu()" style="width:100%;margin-bottom:4px;text-align:left">⚖ Compare</button>
+  <button class="hdr-btn" onclick="openSavedModal();toggleMobileMenu()" style="width:100%;margin-bottom:4px;text-align:left">📂 Saved</button>
+  <button class="hdr-btn" onclick="openUploadModal();toggleMobileMenu()" style="width:100%;margin-bottom:4px;text-align:left">📸 Photo</button>
+  <button class="hdr-btn" onclick="openVisitModal();toggleMobileMenu()" style="width:100%;margin-bottom:4px;text-align:left">📅 Visit</button>
+  <button class="hdr-btn btn-gold-hdr" onclick="openPresentation();toggleMobileMenu()" style="width:100%;text-align:left">🖥 Present</button>
+</div>
+
+<!-- HELP GUIDE MODAL -->
+<div id="helpModal" onclick="if(event.target===this)closeHelpGuide()">
+  <div class="help-wrap">
+    <div class="help-progress"><div class="help-progress-fill" id="helpProgressFill" style="width:25%"></div></div>
+    <div class="help-header">
+      <div class="help-title">⚡ HOW TO USE EVENTSPACE PRO</div>
+      <button class="help-close" onclick="closeHelpGuide()">✕ CLOSE</button>
+    </div>
+    <div class="help-slides">
+      <!-- Slide 1 -->
+      <div class="help-slide active" id="hslide-1">
+        <div class="help-step-badge"><div class="help-step-num">1</div><div class="help-step-label">PROPERTY &amp; CLIENT</div></div>
+        <div class="help-slide-title">Enter client details &amp; find the property</div>
+        <div class="help-slide-body">Fill in the client's name, phone, and email. Then type the event address and click <strong>Find Property</strong> — the satellite map will zoom to the exact location.</div>
+        <ul class="help-tips">
+          <li>Use the full street address for best map accuracy</li>
+          <li>Event date defaults to the next Saturday — tap to change</li>
+          <li>Guest count drives marquee recommendations in Step 3</li>
+        </ul>
+      </div>
+      <!-- Slide 2 -->
+      <div class="help-slide" id="hslide-2">
+        <div class="help-step-badge"><div class="help-step-num">2</div><div class="help-step-label">ZONE MAPPING</div></div>
+        <div class="help-slide-title">Draw the available outdoor space</div>
+        <div class="help-slide-body">Click <strong>Draw Zone</strong> then tap points around the usable area on the satellite map. Double-click to finish. The app calculates the exact square metres automatically.</div>
+        <ul class="help-tips">
+          <li>Exclude the house, driveway, and trees from your zone</li>
+          <li>Draw multiple zones if the space is split</li>
+          <li>Area updates instantly — aim for the marquee footprint + 2m clearance</li>
+        </ul>
+      </div>
+      <!-- Slide 3 -->
+      <div class="help-slide" id="hslide-3">
+        <div class="help-step-badge"><div class="help-step-num">3</div><div class="help-step-label">MARQUEE &amp; FURNITURE</div></div>
+        <div class="help-slide-title">Choose your marquee &amp; package</div>
+        <div class="help-slide-body">Select a <strong>Quick Package</strong> (Silver / Gold / Platinum) or build custom. Add individual furniture items using the + buttons. Smart suggestions appear based on guest count.</div>
+        <ul class="help-tips">
+          <li>Gold package covers up to 60 guests — most popular choice</li>
+          <li>Adjust seasonal pricing: Standard, Winter +10%, Peak +15%</li>
+          <li>Furniture quantities save automatically for the session</li>
+        </ul>
+      </div>
+      <!-- Slide 4 -->
+      <div class="help-slide" id="hslide-4">
+        <div class="help-step-badge"><div class="help-step-num">4</div><div class="help-step-label">QUOTE &amp; EXPORT</div></div>
+        <div class="help-slide-title">Review, adjust &amp; send the quote</div>
+        <div class="help-slide-body">Your professional quote is generated instantly. Click any field to edit inline. Send via <strong>WhatsApp</strong>, download as <strong>PDF</strong>, or email directly. Quote is valid for 30 days.</div>
+        <ul class="help-tips">
+          <li>Use the Manual Adjustments panel for discounts or extras</li>
+          <li>Tap Present for fullscreen client presentation mode</li>
+          <li>Hit Saved to store the quote and access it later</li>
+        </ul>
+      </div>
+    </div>
+    <div class="help-nav">
+      <button class="help-btn" id="helpPrevBtn" onclick="helpNav(-1)" disabled>← PREV</button>
+      <div class="help-dots" id="helpDots"></div>
+      <button class="help-btn" id="helpNextBtn" onclick="helpNav(1)">NEXT →</button>
+    </div>
+  </div>
+</div>
+
 <!-- GALLERY MODAL -->
 <div class="modal" id="galleryModal">
   <div class="modal-box" style="max-width:700px">
     <button class="modal-close" onclick="closeModal('galleryModal')">✕</button>
     <h2>🖼 PAST EVENTS GALLERY</h2>
-    <p>Recent events by Events Pro Hire Group — showcasing our setups across the Waikato.</p>
+    <p>Recent events by Events Pro Hire Company — showcasing our setups across the Waikato.</p>
     <div class="gallery-grid">
       <div class="gal-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#0a1a2e,#0c2240)">⛺</div><div class="gal-cap">Wedding · Hamilton · 9×12m Gold</div></div>
       <div class="gal-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#1a0a2e,#2a0c40)">🎉</div><div class="gal-cap">Birthday · Cambridge · 6×9m Silver</div></div>
@@ -1474,8 +1929,8 @@ input[type=range]{
 
 // ── CONFIG ──────────────────────────────────────────────────
 var CONFIG = {
-  companyName: 'Events Pro Hire Group',
-  companyPhone: '0800 XXX XXX',
+  companyName: 'Events Pro Hire Company',
+  companyPhone: '021 146 1766',
   companyEmail: 'hire@eventsprohire.co.nz',
   companyAddress: 'Hamilton, Waikato, New Zealand',
   gstRate: 0.15,
@@ -1484,7 +1939,7 @@ var CONFIG = {
   clearanceM: 2, // metres clearance around marquee
 };
 
-// ── MARQUEE SIZES — Events Pro Hire Group full stock ─────────
+// ── MARQUEE SIZES — Events Pro Hire Company full stock ─────────
 var MARQUEES = [
   { id:'g3x3',   name:'3×3m Gazebo',        w:3,  d:3,  area:9,   maxG:10,  price:180,  desc:'Small sheltered area, entry canopy or extra cover' },
   { id:'s6x6',   name:'6×6m Standard',      w:6,  d:6,  area:36,  maxG:30,  price:480,  desc:'Intimate gatherings, small birthday parties' },
@@ -1504,7 +1959,7 @@ var MARQUEES = [
   { id:'mega15', name:'15m Wide (Custom)',   w:15, d:15, area:225, maxG:190, price:2500, desc:'Custom configuration — contact for final pricing' },
 ];
 
-// ── FURNITURE & EQUIPMENT — Events Pro Hire Group full catalogue
+// ── FURNITURE & EQUIPMENT — Events Pro Hire Company full catalogue
 var FURNITURE = [
   // CHAIRS
   { id:'chair_resin',    name:'Resin Stacker Chairs',       icon:'🪑', unit:'each',    price:3,   qty:0, cat:'Chairs' },
@@ -1832,9 +2287,8 @@ function drawMarqueeOnMap() {
   if (state.marqueeRect) map.removeLayer(state.marqueeRect);
   var lat = state.lat, lng = state.lng;
   // Offset slightly to show near drawn zones
-  if (state.zones.length) {
-    var center = state.zones[0].layer.getBounds().getCenter();
-    lat = center.lat; lng = center.lng;
+  if (state.zones.length && state.zones[0].layer) {
+    try { var center = state.zones[0].layer.getBounds().getCenter(); lat = center.lat; lng = center.lng; } catch(e) {}
   }
   var mPerDegLat = 111319.5;
   var mPerDegLng = 111319.5 * Math.cos(lat * Math.PI / 180);
@@ -1914,16 +2368,6 @@ function getFurnitureTotal() {
   return FURNITURE.reduce(function(s, f){ return s + f.qty * f.price; }, 0);
 }
 
-function updateTotal() {
-  var mqPrice = state.selectedMarquee ? state.selectedMarquee.price : 0;
-  var fTotal = getFurnitureTotal();
-  var sub = mqPrice + fTotal + CONFIG.deliveryBase + CONFIG.setupBase;
-  var gst = sub * CONFIG.gstRate;
-  var total = sub + gst;
-  document.getElementById('furnitureSubtotal').textContent = '$' + sub.toFixed(2);
-  document.getElementById('sbTotal').textContent = '$' + Math.round(total);
-}
-
 // ── QUOTE BUILDER ────────────────────────────────────────────
 function buildQuote() {
   var mq = state.selectedMarquee || { name: '—', w:0, d:0, area:0, price:0 };
@@ -1933,34 +2377,40 @@ function buildQuote() {
   var sub = mqPrice + fTotal + CONFIG.deliveryBase + CONFIG.setupBase;
   var gst = sub * CONFIG.gstRate;
   var total = sub + gst;
-  var client = document.getElementById('clientName').value || 'Client';
-  var html = '<div class="quote-section">' +
-    '<div class="quote-section-title">Client Details</div>' +
-    '<div class="quote-row"><span class="lbl">Client</span><span class="val">' + client + '</span></div>' +
-    '<div class="quote-row"><span class="lbl">Phone</span><span class="val">' + (document.getElementById('clientPhone').value || '—') + '</span></div>' +
-    '<div class="quote-row"><span class="lbl">Event Date</span><span class="val">' + (document.getElementById('eventDate').value || '—') + '</span></div>' +
-    '<div class="quote-row"><span class="lbl">Event Type</span><span class="val">' + (document.getElementById('eventType').value || '—') + '</span></div>' +
-    '<div class="quote-row"><span class="lbl">Property</span><span class="val" style="font-size:10px">' + state.address.split(',').slice(0,2).join(',') + '</span></div>' +
+  var client = document.getElementById('clientName').value || '';
+  var html = '<div class="qs-card quote-section">' +
+    '<div class="quote-section-title" style="display:flex;justify-content:space-between;align-items:center">Client Details<span style="font-size:8px;color:var(--cyan);opacity:.6;letter-spacing:1px;font-weight:400;text-transform:none">✏ click any field to edit</span></div>' +
+    qEditRow('Client', client, 'clientName', 'text') +
+    qEditRow('Phone', document.getElementById('clientPhone').value, 'clientPhone', 'tel') +
+    qEditRow('Event Date', document.getElementById('eventDate').value, 'eventDate', 'date') +
+    qEditRow('Event Type', document.getElementById('eventType').value, 'eventType', 'text') +
+    '<div class="quote-row"><span class="lbl">Property</span><span class="val" style="font-size:10px">' + escH(state.address ? state.address.split(',').slice(0,2).join(',') : '—') + '</span></div>' +
     '<div class="quote-row"><span class="lbl">Guests</span><span class="val">' + state.guests + ' (' + state.layoutType + ')</span></div>' +
     '</div>' +
-    '<div class="quote-section">' +
+    '<div class="qs-card quote-section">' +
     '<div class="quote-section-title">Marquee</div>' +
     '<div class="quote-row"><span class="lbl">' + mq.name + '</span><span class="val">$' + mqPrice.toFixed(2) + '</span></div>' +
     (state.totalArea > 0 ? '<div class="quote-row"><span class="lbl">Zone Area</span><span class="val">' + state.totalArea + ' m²</span></div>' : '') +
     '</div>';
   if (fItems.length) {
-    html += '<div class="quote-section"><div class="quote-section-title">Furniture &amp; Extras</div>' +
+    html += '<div class="qs-card quote-section"><div class="quote-section-title">Furniture &amp; Extras</div>' +
       fItems.map(function(f){ return '<div class="quote-row"><span class="lbl">' + f.name + ' × ' + f.qty + '</span><span class="val">$' + (f.qty * f.price).toFixed(2) + '</span></div>'; }).join('') +
       '</div>';
   }
-  html += '<div class="quote-section">' +
+  html += '<div class="qs-card quote-section">' +
     '<div class="quote-section-title">Charges</div>' +
     '<div class="quote-row"><span class="lbl">Delivery</span><span class="val" id="qDeliveryDisplay">$' + CONFIG.deliveryBase.toFixed(2) + '</span></div>' +
     '<div class="quote-row"><span class="lbl">Setup &amp; Pack-down</span><span class="val" id="qSetupDisplay">$' + CONFIG.setupBase.toFixed(2) + '</span></div>' +
     '<div class="quote-row"><span class="lbl">Subtotal (excl. GST)</span><span class="val" id="qSubDisplay">$' + sub.toFixed(2) + '</span></div>' +
     '<div class="quote-row"><span class="lbl">GST (15%)</span><span class="val" id="qGstDisplay">$' + gst.toFixed(2) + '</span></div>' +
     '</div>' +
-    '<div class="quote-total-row"><span class="lbl">TOTAL (incl. GST)</span><span class="val" id="qTotalDisplay">$' + total.toFixed(2) + '</span></div>' +
+    '<div class="quote-total-punch">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center">' +
+        '<div><div style="font-size:10px;letter-spacing:3px;color:var(--cyan);text-transform:uppercase;margin-bottom:4px">Total (incl. GST)</div>' +
+        '<div class="val" id="qTotalDisplay">$' + total.toFixed(2) + '</div></div>' +
+        '<div style="text-align:right;font-size:9px;color:rgba(255,255,255,.4);line-height:1.6">Valid for 30 days<br>Ref: ' + state.quoteRef + '</div>' +
+      '</div>' +
+    '</div>' +
     '<div style="margin-top:12px"><div class="field"><label>Internal Notes</label><textarea id="quoteNotes" placeholder="Delivery instructions, access notes, special requirements…" style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--font);font-size:13px;padding:9px 12px;width:100%;min-height:60px;resize:vertical;outline:none"></textarea></div></div>';
 
   // Manual Quote Calculator section
@@ -2127,7 +2577,7 @@ function sendWhatsApp() {
   var mq = state.selectedMarquee;
   var client = document.getElementById('clientName').value || 'Hi';
   var total = document.getElementById('sbTotal').textContent;
-  var msg = 'Hi ' + client + ', here is your quote from Events Pro Hire Group:\n\n' +
+  var msg = 'Hi ' + client + ', here is your quote from Events Pro Hire Company:\n\n' +
     '📋 Quote Ref: ' + state.quoteRef + '\n' +
     '📍 Property: ' + state.address.split(',').slice(0,2).join(',') + '\n' +
     (mq ? '⛺ Marquee: ' + mq.name + '\n' : '') +
@@ -2139,16 +2589,48 @@ function sendWhatsApp() {
 
 // ── STEP NAVIGATION ──────────────────────────────────────────
 function focusStep(n) {
+  var _prevStep = state.step || 1;
   state.step = n;
+  if (!state.maxStep || n > state.maxStep) state.maxStep = n;
   [1,2,3,4].forEach(function(i) {
     var p = document.getElementById('step' + i);
     var s = document.getElementById('sn' + i);
     if (p) p.classList.toggle('active', i === n);
     if (s) {
       s.classList.toggle('active', i === n);
-      s.classList.toggle('done', i < n);
+      s.classList.toggle('done', i < state.maxStep || i < n);
     }
   });
+  // Progress bar
+  var fill = document.getElementById('snProgressFill');
+  if (fill) fill.style.width = (state.maxStep * 25) + '%';
+
+  // ── STEP TRANSITION: impact burst on target ──────────────────
+  document.querySelectorAll('.sn-step').forEach(function(s){
+    s.classList.remove('next-waiting','beam-impact');
+  });
+  if (n > _prevStep) {
+    var tgt = document.getElementById('sn' + n);
+    if (tgt) {
+      setTimeout(function() {
+        tgt.classList.add('beam-impact');
+      }, 80);
+    }
+  }
+
+  // Wire states: done / active-shimmer / idle
+  [2,3,4].forEach(function(k) {
+    var w = document.getElementById('sn-beam-' + k);
+    if (!w) return;
+    w.classList.remove('active-wire','done-wire');
+    if (k <= n) w.classList.add('done-wire');
+    else if (k === n + 1) w.classList.add('active-wire');
+  });
+
+  // Next-waiting dim pulse on the step ahead
+  var nextWait = document.getElementById('sn' + (n + 1));
+  if (nextWait) nextWait.classList.add('next-waiting');
+
   if (n === 3) { updateMarqueeRecs(); renderFurniture(); }
   if (n === 4) buildQuote();
   if (n === 2) map.addControl(drawControl);
@@ -2228,6 +2710,43 @@ function generateRef() {
   return 'EPH-' + new Date().getFullYear() + '-' + Math.random().toString(36).substr(2,5).toUpperCase();
 }
 function escQ(s) { return (s||'').replace(/'/g, "\\'"); }
+function escH(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ── INLINE EDITABLE QUOTE FIELD ──────────────────────────────
+function qEditRow(label, value, fieldId, inputType) {
+  var display = value || '—';
+  var editAttr = fieldId ? ' onclick="qStartEdit(this,\'' + fieldId + '\',\'' + (inputType||'text') + '\')" title="Click to edit"' : '';
+  var pencil = fieldId ? '<span class="qe-pencil">✏</span>' : '';
+  var valClass = fieldId ? 'qe-val' : '';
+  return '<div class="quote-row">' +
+    '<span class="lbl">' + label + '</span>' +
+    '<span class="' + valClass + '"' + editAttr + '>' + escH(display) + pencil + '</span>' +
+  '</div>';
+}
+function qStartEdit(el, fieldId, inputType) {
+  if (el.querySelector('input,select')) return;
+  var rawText = el.childNodes[0] ? el.childNodes[0].textContent.trim() : '';
+  var current = rawText === '—' ? '' : rawText;
+  el.innerHTML = '';
+  var inp = document.createElement('input');
+  inp.className = 'qe-input';
+  inp.type = inputType || 'text';
+  inp.value = current;
+  el.appendChild(inp);
+  inp.focus(); inp.select();
+  function save() {
+    var val = inp.value.trim();
+    var display = val || '—';
+    el.innerHTML = escH(display) + '<span class="qe-pencil">✏</span>';
+    var src = document.getElementById(fieldId);
+    if (src) src.value = val;
+  }
+  inp.addEventListener('blur', save);
+  inp.addEventListener('keydown', function(e){
+    if (e.key === 'Enter') inp.blur();
+    if (e.key === 'Escape') { el.innerHTML = escH(rawText || '—') + '<span class="qe-pencil">✏</span>'; }
+  });
+}
 function newQuote() {
   if (!confirm('Start a new quote? Current quote will not be saved.')) return;
   state.quoteRef = generateRef();
@@ -2331,13 +2850,29 @@ function burstParticles(el) {
 
 // ── VIEW TRANSITIONS API FOR STEP SWITCH ────────────────────
 var _origFocusStep = focusStep;
+var _vtInProgress = false;
 focusStep = function(n) {
-  if (document.startViewTransition) {
-    document.startViewTransition(function() { _origFocusStep(n); });
+  if (document.startViewTransition && !_vtInProgress) {
+    _vtInProgress = true;
+    var vt = document.startViewTransition(function() { _origFocusStep(n); });
+    vt.finished.then(function(){ _vtInProgress = false; }).catch(function(){ _vtInProgress = false; });
   } else {
     _origFocusStep(n);
   }
 };
+
+// ── BEAM WIRE INIT (set active-wire + next-waiting on load) ──
+(function() {
+  var s = state.step || 1;
+  [2,3,4].forEach(function(k) {
+    var w = document.getElementById('sn-beam-' + k);
+    if (!w) return;
+    if (k <= s) w.classList.add('done-wire');
+    else if (k === s + 1) w.classList.add('active-wire');
+  });
+  var nw = document.getElementById('sn' + (s + 1));
+  if (nw) nw.classList.add('next-waiting');
+})();
 
 // ── MAP CURSOR GLOW ──────────────────────────────────────────
 var mapWrap = document.getElementById('mapWrap');
@@ -2395,6 +2930,8 @@ updateClientHeader = function() {
 
 // ── ANIMATED VALUE COUNTER ───────────────────────────────────
 function animateVal(el, from, to, prefix, suffix, dur) {
+  if (!el) return;
+  from = isNaN(from) ? 0 : from; to = isNaN(to) ? 0 : to;
   prefix = prefix || ''; suffix = suffix || ''; dur = dur || 600;
   var start = null;
   function step(ts) {
@@ -2414,11 +2951,11 @@ var _seasonMult = 1;
 function updateTotal() {
   var mqPrice = state.selectedMarquee ? state.selectedMarquee.price : 0;
   var fTotal = getFurnitureTotal();
-  var sub = (mqPrice + fTotal + CONFIG.deliveryBase + CONFIG.setupBase) * _seasonMult;
+  var sub = (mqPrice + fTotal + CONFIG.deliveryBase + CONFIG.setupBase) * (_seasonMult || 1);
   var gst = sub * CONFIG.gstRate;
   var total = sub + gst;
   var sbTotalEl = document.getElementById('sbTotal');
-  animateVal(sbTotalEl, _lastTotal, Math.round(total), '$', '', 500);
+  animateVal(sbTotalEl, _lastTotal || 0, Math.round(total) || 0, '$', '', 500);
   _lastTotal = Math.round(total);
   document.getElementById('furnitureSubtotal').textContent = '$' + sub.toFixed(2);
   // Cost per guest
@@ -2624,7 +3161,7 @@ function emailQuote() {
   var client = document.getElementById('clientName').value || 'Valued Client';
   var email = document.getElementById('clientEmail').value || '';
   var total = document.getElementById('sbTotal').textContent;
-  var subject = 'Your Quote from Events Pro Hire Group — ' + state.quoteRef;
+  var subject = 'Your Quote from Events Pro Hire Company — ' + state.quoteRef;
   var body = 'Hi ' + client + ',\n\nPlease find your quote details below:\n\n' +
     'Quote Reference: ' + state.quoteRef + '\n' +
     'Property: ' + state.address.split(',').slice(0,2).join(',') + '\n' +
@@ -2632,7 +3169,7 @@ function emailQuote() {
     'Guests: ' + state.guests + '\n' +
     'Total (incl. GST): ' + total + '\n\n' +
     'Quote valid for 30 days.\n\n' +
-    'Kind regards,\nEvents Pro Hire Group\n' + CONFIG.companyEmail + '\nPowered by EventSpace Pro · Whetū Digital';
+    'Kind regards,\nEvents Pro Hire Company\n' + CONFIG.companyEmail + '\nPowered by EventSpace Pro · Whetū Digital';
   window.location.href = 'mailto:' + encodeURIComponent(email) + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
 }
 
@@ -3100,6 +3637,150 @@ function openPresentation() {
 function closePresentation() {
   document.getElementById('presOverlay').classList.remove('open');
 }
+
+// ── PIN GATE & SPLASH ────────────────────────────────────────
+var EP_PIN = '1766';
+var EP_AUTH_KEY = 'ep_auth';
+var EP_TS_KEY = 'ep_auth_ts';
+var EP_FOUR_HRS = 4 * 60 * 60 * 1000;
+var _epPinBuffer = '';
+
+function epInitAuth() {
+  var ts = parseInt(sessionStorage.getItem(EP_TS_KEY) || '0');
+  if (sessionStorage.getItem(EP_AUTH_KEY) === '1' && (Date.now() - ts) < EP_FOUR_HRS) {
+    document.getElementById('ep-splash').style.display = 'none';
+    document.getElementById('ep-pin').style.display = 'none';
+    return;
+  }
+  document.getElementById('ep-splash').style.display = 'flex';
+  document.getElementById('ep-pin').style.display = 'none';
+}
+
+function epShowPin() {
+  document.getElementById('ep-splash').style.display = 'none';
+  var pin = document.getElementById('ep-pin');
+  pin.style.display = 'flex';
+  requestAnimationFrame(function() { pin.style.opacity = '1'; });
+}
+
+function epPinPress(v) {
+  if (v === 'back') {
+    _epPinBuffer = _epPinBuffer.slice(0, -1);
+  } else if (_epPinBuffer.length < 4) {
+    _epPinBuffer += v;
+  }
+  // Update dots
+  for (var i = 0; i < 4; i++) {
+    var d = document.getElementById('ep-dot' + i);
+    if (d) d.classList.toggle('filled', i < _epPinBuffer.length);
+  }
+  // Auto-check when 4 digits entered
+  if (_epPinBuffer.length === 4) {
+    setTimeout(epCheckPin, 120);
+  }
+  document.getElementById('ep-pin-error').textContent = '';
+}
+
+function epCheckPin() {
+  if (_epPinBuffer === EP_PIN) {
+    sessionStorage.setItem(EP_AUTH_KEY, '1');
+    sessionStorage.setItem(EP_TS_KEY, Date.now().toString());
+    document.getElementById('ep-pin').style.opacity = '0';
+    setTimeout(function() { document.getElementById('ep-pin').style.display = 'none'; }, 300);
+  } else {
+    // Shake
+    var dots = document.getElementById('ep-pin-dots');
+    dots.style.animation = 'epShake .4s ease';
+    setTimeout(function() { dots.style.animation = ''; }, 400);
+    document.getElementById('ep-pin-error').textContent = 'Incorrect PIN — try again';
+    _epPinBuffer = '';
+    for (var i = 0; i < 4; i++) {
+      var d = document.getElementById('ep-dot' + i);
+      if (d) d.classList.remove('filled');
+    }
+  }
+}
+
+// Run auth check on load
+epInitAuth();
+
+// ── FULLSCREEN ───────────────────────────────────────────────
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(function(){});
+    document.querySelector('.btn-fs').textContent = '⛶';
+  } else {
+    document.exitFullscreen();
+    document.querySelector('.btn-fs').textContent = '⛶';
+  }
+}
+
+// ── MOBILE MENU ──────────────────────────────────────────────
+function toggleMobileMenu() {
+  var d = document.getElementById('mobileMenuDropdown');
+  d.style.display = d.style.display === 'none' ? 'block' : 'none';
+}
+document.addEventListener('click', function(e) {
+  var btn = document.getElementById('hdrMenuBtn');
+  var drop = document.getElementById('mobileMenuDropdown');
+  if (drop && btn && !drop.contains(e.target) && !btn.contains(e.target)) {
+    drop.style.display = 'none';
+  }
+});
+
+// ── HELP GUIDE ───────────────────────────────────────────────
+var _helpSlide = 1;
+var _helpTotal = 4;
+var _helpTimer = null;
+
+function openHelpGuide() {
+  _helpSlide = 1;
+  document.getElementById('helpModal').classList.add('open');
+  _renderHelpDots();
+  _showHelpSlide(1);
+}
+function closeHelpGuide() {
+  document.getElementById('helpModal').classList.remove('open');
+  if (_helpTimer) { clearTimeout(_helpTimer); _helpTimer = null; }
+}
+function helpNav(dir) {
+  var next = _helpSlide + dir;
+  if (next < 1 || next > _helpTotal) return;
+  _showHelpSlide(next);
+}
+function _showHelpSlide(n) {
+  if (_helpTimer) { clearTimeout(_helpTimer); _helpTimer = null; }
+  var cur = document.getElementById('hslide-' + _helpSlide);
+  var nxt = document.getElementById('hslide-' + n);
+  if (cur && cur !== nxt) {
+    cur.classList.remove('active');
+    cur.classList.add('exit');
+    setTimeout(function(){ if (cur) cur.classList.remove('exit'); }, 460);
+  }
+  _helpSlide = n;
+  if (nxt) { nxt.classList.remove('exit'); nxt.classList.add('active'); }
+  // Progress bar
+  var fill = document.getElementById('helpProgressFill');
+  if (fill) fill.style.width = (n / _helpTotal * 100) + '%';
+  // Nav buttons
+  var prev = document.getElementById('helpPrevBtn');
+  var next = document.getElementById('helpNextBtn');
+  if (prev) prev.disabled = n === 1;
+  if (next) next.textContent = n === _helpTotal ? '✓ GOT IT' : 'NEXT →';
+  if (next) next.onclick = n === _helpTotal ? closeHelpGuide : function(){ helpNav(1); };
+  _renderHelpDots();
+}
+function _renderHelpDots() {
+  var c = document.getElementById('helpDots');
+  if (!c) return;
+  c.innerHTML = '';
+  for (var i = 1; i <= _helpTotal; i++) {
+    var d = document.createElement('div');
+    d.className = 'help-dot' + (i === _helpSlide ? ' active' : '');
+    (function(idx){ d.onclick = function(){ _showHelpSlide(idx); }; })(i);
+    c.appendChild(d);
+  }
+}
 </script>
 
 <!-- EQUIPMENT CATALOGUE MODAL -->
@@ -3107,7 +3788,7 @@ function closePresentation() {
   <div class="modal-box" style="max-width:760px">
     <button class="modal-close" onclick="closeModal('catalogueModal')">✕</button>
     <h2>📋 EQUIPMENT CATALOGUE</h2>
-    <p>Full hire inventory for Events Pro Hire Group. Edit prices here — changes apply immediately to all quotes and are saved to this device.</p>
+    <p>Full hire inventory for Events Pro Hire Company. Edit prices here — changes apply immediately to all quotes and are saved to this device.</p>
     <div class="cat-tabs">
       <button class="cat-tab active" onclick="switchCatTab('cat-marquees',this)">⛺ Marquees</button>
       <button class="cat-tab" onclick="switchCatTab('cat-tables',this)">📋 Tables</button>
@@ -3167,29 +3848,30 @@ function closePresentation() {
 
 <!-- ═══════════════════ WHETŪ FOOTER ═══════════════════ -->
 <footer class="whetu-footer">
-  <!-- Business details row -->
-  <div class="wf-biz-row">
-    <div class="wf-biz-name">⛺ EVENTS PRO HIRE GROUP</div>
-    <div class="wf-biz-contacts">
-      <a href="tel:0800000000">📞 0800 XXX XXX</a>
-      <span class="wf-divider"></span>
-      <a href="mailto:hire@eventsprohire.co.nz">✉️ hire@eventsprohire.co.nz</a>
-      <span class="wf-divider"></span>
-      <span>📍 Hamilton, Waikato, New Zealand</span>
-      <span class="wf-divider"></span>
-      <span>Marquee &amp; Event Hire · Waikato Region</span>
-    </div>
+  <!-- Left: Business identity -->
+  <div class="wf-col-biz">
+    <div class="wf-biz-name">⛺ EVENTS PRO HIRE COMPANY</div>
+    <div style="font-size:8px;color:rgba(255,255,255,.3);letter-spacing:2px;margin-top:1px">WAIKATO · NEW ZEALAND</div>
   </div>
-  <!-- Whetū branding row -->
-  <div class="wf-inner">
-    <div class="wf-logo-row">
-      <span class="wf-star">✦</span>
-      <span class="wf-brand">WHETŪ DIGITAL</span>
+  <!-- Centre: Contact strip -->
+  <div class="wf-col-contact">
+    <a href="tel:02114617766">📞 021 146 1766</a>
+    <span class="wf-divider"></span>
+    <a href="mailto:hire@eventsprohire.co.nz">✉️ hire@eventsprohire.co.nz</a>
+    <span class="wf-divider"></span>
+    <span>📍 Hamilton, Waikato</span>
+    <span class="wf-divider"></span>
+    <span>Marquee &amp; Event Hire · Waikato Region</span>
+  </div>
+  <!-- Right: Whetū Digital attribution -->
+  <div class="wf-col-brand">
+    <div style="text-align:right">
+      <div style="font-size:8px;color:rgba(255,255,255,.28);letter-spacing:2px;text-transform:uppercase;margin-bottom:2px">Built by</div>
+      <div class="wf-logo-row" style="justify-content:flex-end">
+        <span class="wf-star" style="font-size:9px;opacity:.6">✦</span>
+        <a class="wf-link" href="https://whetudigital.co.nz" target="_blank" style="font-size:11px;font-weight:700;letter-spacing:1px">WHETŪ DIGITAL</a>
+      </div>
     </div>
-    <div class="wf-divider"></div>
-    <a class="wf-link" href="https://whetudigital.co.nz" target="_blank">whetudigital.co.nz</a>
-    <div class="wf-divider"></div>
-    <span class="wf-copy" style="font-size:9px;color:var(--muted);letter-spacing:1px">© 2026 Whetū Digital Ltd · EventSpace Pro · Licensed to Events Pro Hire Group · All rights reserved</span>
   </div>
 </footer>
 
