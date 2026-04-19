@@ -180,7 +180,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   box-shadow:0 0 20px rgba(0,230,255,.15),inset 0 1px 0 rgba(0,230,255,.15);
   border:1px solid rgba(0,230,255,.25)}
 .sn-step.done{color:var(--green)}
-.sn-step.done .sn-num{background:var(--green);color:#000;box-shadow:0 0 10px rgba(0,255,136,.5)}
+.sn-step.done .sn-num{background:var(--green);color:#000;box-shadow:0 0 10px rgba(0,255,136,.5);font-size:13px}
+.sn-step.done .sn-num::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900}
+.sn-step.done .sn-num-txt{opacity:0}
 .sn-num{
   width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);
   display:flex;align-items:center;justify-content:center;
@@ -1306,7 +1308,7 @@ input[type=range]{
 <!-- ═══════════════════ STEP NAV ═══════════════════ -->
 <nav class="step-nav">
   <div class="sn-step active" id="sn1" onclick="focusStep(1)">
-    <span class="sn-num">1</span>
+    <span class="sn-num"><span class="sn-num-txt">1</span></span>
     <span class="sn-lbl">Property &amp; Client</span>
   </div>
   <div class="sn-beam-wrap" id="sn-beam-2">
@@ -1314,7 +1316,7 @@ input[type=range]{
     <div class="sn-beam-head"></div>
   </div>
   <div class="sn-step" id="sn2" onclick="focusStep(2)">
-    <span class="sn-num">2</span>
+    <span class="sn-num"><span class="sn-num-txt">2</span></span>
     <span class="sn-lbl">Zone Mapping</span>
   </div>
   <div class="sn-beam-wrap" id="sn-beam-3">
@@ -1322,7 +1324,7 @@ input[type=range]{
     <div class="sn-beam-head"></div>
   </div>
   <div class="sn-step" id="sn3" onclick="focusStep(3)">
-    <span class="sn-num">3</span>
+    <span class="sn-num"><span class="sn-num-txt">3</span></span>
     <span class="sn-lbl">Marquee &amp; Furniture</span>
   </div>
   <div class="sn-beam-wrap" id="sn-beam-4">
@@ -1330,7 +1332,7 @@ input[type=range]{
     <div class="sn-beam-head"></div>
   </div>
   <div class="sn-step" id="sn4" onclick="focusStep(4)">
-    <span class="sn-num">4</span>
+    <span class="sn-num"><span class="sn-num-txt">4</span></span>
     <span class="sn-lbl">Quote &amp; Export</span>
   </div>
   <!-- Progress track -->
@@ -1351,6 +1353,7 @@ input[type=range]{
       <div class="panel-head">
         <div class="panel-title">◈ PROPERTY &amp; CLIENT</div>
         <div class="panel-sub">Enter client details and find the event property on the satellite map.</div>
+        <button onclick="loadDemoData()" style="margin-top:8px;padding:5px 12px;font-size:10px;border-radius:20px;border:1px solid rgba(0,230,255,.4);background:rgba(0,230,255,.08);color:var(--cyan);cursor:pointer;letter-spacing:.06em">✨ Load Demo Data</button>
       </div>
       <div class="panel-body">
         <div class="field-row">
@@ -2616,6 +2619,8 @@ function focusStep(n) {
         tgt.classList.add('beam-impact');
       }, 80);
     }
+    // Mini confetti on step advance
+    if (typeof confettiBurst === 'function') setTimeout(function(){ confettiBurstMini(_prevStep); }, 120);
   }
 
   // Wire states: done / active-shimmer / idle
@@ -2693,6 +2698,98 @@ function updateClientHeader() {
   var name = document.getElementById('clientName').value;
   document.getElementById('hdrClientName').textContent = name || '— New Quote —';
   document.getElementById('sbClient').textContent = name || '—';
+}
+
+function loadDemoData() {
+  document.getElementById('clientName').value = 'Sarah & James Johnson';
+  document.getElementById('clientPhone').value = '021 555 1234';
+  document.getElementById('clientEmail').value = 'sarah@johnson.co.nz';
+  // Set date to next Saturday
+  var d = new Date(); d.setDate(d.getDate() + (6 - d.getDay() + 7) % 7 || 7);
+  document.getElementById('eventDate').value = d.toISOString().split('T')[0];
+  var et = document.getElementById('eventType'); if (et) et.value = 'wedding';
+  document.getElementById('addrInput').value = '14 Beaumont Street, Hamilton';
+  updateClientHeader();
+  // Auto-search the address
+  setTimeout(function(){ searchAddress(); }, 300);
+  confettiBurst();
+}
+
+function confettiBurstMini(stepNum) {
+  var stepEl = document.getElementById('sn' + stepNum);
+  if (!stepEl) return;
+  var rect = stepEl.getBoundingClientRect();
+  var cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+  var canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999';
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  document.body.appendChild(canvas);
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var colors = ['#00ff88','#00e6ff','#ffd700','#c060ff'];
+  for (var i = 0; i < 30; i++) {
+    var angle = (Math.PI * 2 / 30) * i;
+    particles.push({
+      x: cx, y: cy,
+      vx: Math.cos(angle) * (Math.random() * 4 + 1.5),
+      vy: Math.sin(angle) * (Math.random() * 4 + 1.5),
+      r: Math.random() * 3 + 1.5,
+      color: colors[i % colors.length],
+      life: 1, decay: Math.random() * 0.03 + 0.02
+    });
+  }
+  var raf;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(function(p) {
+      p.x += p.vx; p.vy += 0.12; p.y += p.vy; p.life -= p.decay;
+      ctx.save(); ctx.globalAlpha = Math.max(0, p.life);
+      ctx.fillStyle = p.color; ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+      ctx.restore();
+    });
+    particles = particles.filter(function(p){ return p.life > 0; });
+    if (particles.length > 0) raf = requestAnimationFrame(draw);
+    else if (canvas.parentNode) document.body.removeChild(canvas);
+  }
+  draw();
+}
+
+function confettiBurst() {
+  var canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999';
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  document.body.appendChild(canvas);
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var colors = ['#00e6ff','#00ff88','#c060ff','#ffd700','#ff6b9d'];
+  for (var i = 0; i < 80; i++) {
+    particles.push({
+      x: canvas.width * 0.2 + Math.random() * canvas.width * 0.6,
+      y: canvas.height * 0.15,
+      vx: (Math.random() - 0.5) * 8,
+      vy: Math.random() * -6 - 2,
+      r: Math.random() * 5 + 2,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      life: 1, decay: Math.random() * 0.02 + 0.015, rot: Math.random() * Math.PI * 2, rv: (Math.random()-.5)*.2
+    });
+  }
+  var raf;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(function(p) {
+      p.x += p.vx; p.vy += 0.18; p.y += p.vy; p.life -= p.decay; p.rot += p.rv;
+      ctx.save(); ctx.globalAlpha = Math.max(0, p.life);
+      ctx.fillStyle = p.color; ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      ctx.fillRect(-p.r, -p.r * 0.5, p.r * 2, p.r);
+      ctx.restore();
+    });
+    particles = particles.filter(function(p){ return p.life > 0; });
+    if (particles.length > 0) raf = requestAnimationFrame(draw);
+    else { document.body.removeChild(canvas); }
+  }
+  draw();
+  setTimeout(function(){ cancelAnimationFrame(raf); if (canvas.parentNode) document.body.removeChild(canvas); }, 3000);
 }
 
 // ── UTILS ─────────────────────────────────────────────────────
