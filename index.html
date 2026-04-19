@@ -789,14 +789,105 @@ input[type=range]{
   transition:all .2s}
 .mq-apply-btn:hover{box-shadow:0 4px 20px rgba(255,215,0,.3);border-color:rgba(255,215,0,.7)}
 
+/* ── QUICK-SET QTY CHIPS ── */
+.fi-chips{display:flex;gap:3px;margin:5px 0 1px;flex-wrap:wrap;padding-left:32px}
+.qty-chip{
+  padding:2px 8px;border-radius:5px;font-size:9px;cursor:pointer;
+  background:rgba(0,230,255,.06);border:1px solid rgba(0,230,255,.16);
+  color:rgba(0,230,255,.7);transition:all .15s;font-weight:700;
+  font-family:var(--font);letter-spacing:.3px}
+.qty-chip:hover{background:rgba(0,230,255,.18);border-color:rgba(0,230,255,.5);
+  color:var(--cyan);transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,230,255,.2)}
+.qty-chip-clear{background:rgba(255,68,102,.06);border-color:rgba(255,68,102,.18);color:rgba(255,68,102,.7)}
+.qty-chip-clear:hover{background:rgba(255,68,102,.18);border-color:rgba(255,68,102,.5);color:var(--red)}
+.qty-val{cursor:pointer;transition:color .15s}
+.qty-val:hover{color:#fff;text-shadow:0 0 8px rgba(0,230,255,.6)}
+.qty-val[title]:hover::after{content:attr(title);font-size:8px;color:var(--muted);margin-left:4px}
+.qty-edit-input{
+  width:46px;text-align:center;
+  background:rgba(0,230,255,.1);border:1px solid rgba(0,230,255,.6);
+  border-radius:6px;color:var(--cyan);font-weight:900;font-size:14px;
+  padding:1px 4px;font-family:var(--font);outline:none;
+  box-shadow:0 0 14px rgba(0,230,255,.35);animation:fadeIn .1s ease}
+
+/* ── NEON GUIDE SYSTEM ── */
+.sn-step.next-pulse .sn-num{
+  animation:nextStepPulse 1.1s ease-in-out infinite;
+  border-color:rgba(0,230,255,.6)!important}
+@keyframes nextStepPulse{
+  0%{box-shadow:0 0 0 0 rgba(0,230,255,.6);background:rgba(0,230,255,.18)}
+  60%{box-shadow:0 0 0 10px rgba(0,230,255,0);background:rgba(0,230,255,.35)}
+  100%{box-shadow:0 0 0 0 rgba(0,230,255,0);background:rgba(0,230,255,.18)}}
+.sn-arrow{
+  color:var(--cyan);font-size:11px;flex-shrink:0;
+  animation:arrowPulse .6s ease-in-out infinite alternate;
+  filter:drop-shadow(0 0 6px rgba(0,230,255,1));pointer-events:none}
+@keyframes arrowPulse{
+  from{opacity:.2;transform:translateX(-2px)}
+  to{opacity:1;transform:translateX(4px)}}
+.btn-guide-pulse{
+  animation:ctaPulse 1.4s ease-in-out infinite!important;
+  border-color:rgba(0,230,255,.8)!important}
+@keyframes ctaPulse{
+  0%{box-shadow:0 0 10px rgba(0,230,255,.3),0 0 0 0 rgba(0,230,255,.5)}
+  55%{box-shadow:0 0 28px rgba(0,230,255,.6),0 0 0 10px rgba(0,230,255,0)}
+  100%{box-shadow:0 0 10px rgba(0,230,255,.3),0 0 0 0 rgba(0,230,255,0)}}
+.step-hint{
+  background:linear-gradient(135deg,rgba(0,230,255,.05),rgba(192,96,255,.03));
+  border:1px solid rgba(0,230,255,.18);border-left:3px solid rgba(0,230,255,.5);
+  border-radius:8px;padding:8px 12px;margin:0 0 10px;font-size:11px;
+  color:rgba(0,230,255,.85);display:flex;align-items:center;gap:8px;
+  animation:fadeIn .35s ease;line-height:1.5}
+.step-hint strong{color:var(--cyan)}
+
 /* ── WHETŪ FOOTER ── */
-.whetu-footer{background:linear-gradient(180deg,#04050f,#060820);border-top:1px solid rgba(0,230,255,.18);padding:14px 20px;text-align:center;flex-shrink:0;position:relative;z-index:100}
-.wf-inner{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
-.wf-logo-row{display:flex;align-items:center;gap:8px}
-.wf-star{font-size:16px;filter:drop-shadow(0 0 6px rgba(0,230,255,.7))}
-.wf-brand{font-size:12px;font-weight:900;letter-spacing:4px;background:linear-gradient(90deg,#00e6ff,#c060ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:wfGlow 2.5s ease-in-out infinite alternate}
-@keyframes wfGlow{from{filter:drop-shadow(0 0 3px rgba(0,230,255,.3))}to{filter:drop-shadow(0 0 10px rgba(0,230,255,.7))}}
-.wf-divider{width:1px;height:16px;background:rgba(255,255,255,.1)}
+.whetu-footer{
+  background:linear-gradient(180deg,#04050f,#060820);
+  border-top:1px solid rgba(0,230,255,.18);
+  padding:12px 20px 10px;text-align:center;flex-shrink:0;
+  position:relative;z-index:100}
+.wf-biz-row{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  flex-wrap:wrap;margin-bottom:8px;padding-bottom:8px;
+  border-bottom:1px solid rgba(255,255,255,.06)}
+.wf-biz-name{
+  font-size:10px;font-weight:800;letter-spacing:3px;color:rgba(255,255,255,.7);
+  text-transform:uppercase}
+.wf-biz-contacts{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.wf-biz-contacts a,.wf-biz-contacts span{
+  font-size:10px;color:rgba(255,255,255,.35);text-decoration:none;
+  letter-spacing:.5px;transition:color .2s}
+.wf-biz-contacts a:hover{color:var(--cyan)}
+.wf-inner{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+.wf-logo-row{display:flex;align-items:center;gap:8px;position:relative}
+.wf-star{font-size:15px;filter:drop-shadow(0 0 6px rgba(0,230,255,.8));animation:wfStarSpin 6s linear infinite}
+@keyframes wfStarSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.wf-brand{
+  font-size:12px;font-weight:900;letter-spacing:4px;position:relative;
+  background:linear-gradient(90deg,#fff 0%,#10d8ff 22%,#c040ff 50%,#fff 72%,#10d8ff 100%);
+  background-size:300% 100%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:wfTextSwing 8.5s ease-in-out infinite,wfAuroraText 7s ease-in-out infinite,wfTextGlow 9s ease-in-out infinite;
+  transform-style:preserve-3d}
+.wf-brand::after{
+  content:'';position:absolute;top:0;bottom:0;width:45px;left:0;
+  background:linear-gradient(90deg,transparent,rgba(16,216,255,.55),rgba(192,64,255,.28),transparent);
+  animation:wfShimmerLine 6s ease-in-out infinite;pointer-events:none;filter:blur(2px)}
+@keyframes wfTextSwing{
+  0%  {transform:perspective(700px) rotateY(-22deg) rotateX(8deg)  translateZ(-10px)}
+  18% {transform:perspective(700px) rotateY(6deg)   rotateX(-5deg) translateZ(18px)}
+  38% {transform:perspective(700px) rotateY(24deg)  rotateX(9deg)  translateZ(-8px)}
+  55% {transform:perspective(700px) rotateY(-4deg)  rotateX(-7deg) translateZ(22px)}
+  74% {transform:perspective(700px) rotateY(-20deg) rotateX(5deg)  translateZ(-12px)}
+  100%{transform:perspective(700px) rotateY(-22deg) rotateX(8deg)  translateZ(-10px)}}
+@keyframes wfTextGlow{
+  0%,88%,100%{filter:drop-shadow(0 0 8px rgba(16,216,255,.6)) drop-shadow(0 0 18px rgba(192,64,255,.3))}
+  89%{filter:drop-shadow(-4px 0 rgba(16,216,255,.95)) drop-shadow(4px 0 rgba(192,64,255,.95))}
+  91%{filter:drop-shadow(4px 0 rgba(16,216,255,.95)) drop-shadow(-4px 0 rgba(192,64,255,.95))}
+  95%{filter:drop-shadow(0 0 12px rgba(16,216,255,.5)) drop-shadow(0 0 30px rgba(192,64,255,.25))}}
+@keyframes wfAuroraText{0%{background-position:100% 50%}50%{background-position:0% 50%}100%{background-position:100% 50%}}
+@keyframes wfShimmerLine{0%{left:-120%;opacity:0}10%{opacity:.6}90%{opacity:.5}100%{left:120%;opacity:0}}
+.wf-divider{width:1px;height:14px;background:rgba(255,255,255,.1)}
 .wf-link{font-size:9px;color:rgba(0,230,255,.35);letter-spacing:2px;text-decoration:none;transition:color .2s}
 .wf-link:hover{color:var(--cyan)}
 .wf-copy{font-size:8px;color:rgba(255,255,255,.12);letter-spacing:2px}
@@ -851,14 +942,17 @@ input[type=range]{
     <span class="sn-num">1</span>
     <span class="sn-lbl">Property &amp; Client</span>
   </div>
+  <span class="sn-arrow" id="sn-arrow-2" style="display:none">▶</span>
   <div class="sn-step" id="sn2" onclick="focusStep(2)">
     <span class="sn-num">2</span>
     <span class="sn-lbl">Zone Mapping</span>
   </div>
+  <span class="sn-arrow" id="sn-arrow-3" style="display:none">▶</span>
   <div class="sn-step" id="sn3" onclick="focusStep(3)">
     <span class="sn-num">3</span>
     <span class="sn-lbl">Marquee &amp; Furniture</span>
   </div>
+  <span class="sn-arrow" id="sn-arrow-4" style="display:none">▶</span>
   <div class="sn-step" id="sn4" onclick="focusStep(4)">
     <span class="sn-num">4</span>
     <span class="sn-lbl">Quote &amp; Export</span>
@@ -1500,6 +1594,7 @@ map.on(L.Draw.Event.CREATED, function(e) {
   layer._zoneId = zone.id;
   updateZoneMetrics();
   renderZoneList();
+  updateGuide();
   showMapToolHint(false);
   document.getElementById('mapToolHint').style.display = 'none';
 });
@@ -1725,6 +1820,7 @@ function selectMarquee(id) {
   if (!state.selectedMarquee) return;
   document.getElementById('sbMarquee').textContent = state.selectedMarquee.name;
   updateMarqueeRecs(); // refresh selection highlight
+  updateGuide();
   // Draw marquee overlay on map
   drawMarqueeOnMap();
   updateTotal();
@@ -1772,19 +1868,39 @@ function renderFurniture() {
     html += '<div style="font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin:10px 0 5px;padding-top:4px;border-top:1px solid var(--border)">' + cat + '</div>';
     items.forEach(function(f) {
       var i = FURNITURE.indexOf(f);
-      html += '<div class="furniture-item">' +
-        '<div class="fi-icon">' + f.icon + '</div>' +
-        '<div class="fi-info"><div class="fi-name">' + f.name + '</div><div class="fi-price">$' + f.price + ' per ' + f.unit + '</div></div>' +
-        '<div class="fi-qty">' +
-          '<button class="qty-btn" onclick="adjQty(' + i + ',-1)">−</button>' +
-          '<div class="qty-val" id="qty_' + f.id + '">' + f.qty + '</div>' +
-          '<button class="qty-btn" onclick="adjQty(' + i + ',1)">+</button>' +
-        '</div>' +
-        '<div class="fi-total" id="ftotal_' + f.id + '">$' + (f.qty * f.price) + '</div>' +
+      html +=
+        '<div class="furniture-item" style="flex-direction:column;padding:6px 10px">' +
+          '<div style="display:flex;align-items:center;gap:8px">' +
+            '<div class="fi-icon">' + f.icon + '</div>' +
+            '<div class="fi-info" style="flex:1"><div class="fi-name">' + f.name + '</div><div class="fi-price">$' + f.price + ' per ' + f.unit + '</div></div>' +
+            '<div class="fi-qty">' +
+              '<button class="qty-btn" onclick="adjQty(' + i + ',-1)">−</button>' +
+              '<div class="qty-val" id="qty_' + f.id + '" onclick="startQtyEdit(\'' + f.id + '\',' + i + ')" title="Tap to type">' + f.qty + '</div>' +
+              '<button class="qty-btn" onclick="adjQty(' + i + ',1)">+</button>' +
+            '</div>' +
+            '<div class="fi-total" id="ftotal_' + f.id + '">$' + (f.qty * f.price) + '</div>' +
+          '</div>' +
+          '<div class="fi-chips">' +
+            '<span class="qty-chip" onclick="addQty(' + i + ',5)">+5</span>' +
+            '<span class="qty-chip" onclick="addQty(' + i + ',10)">+10</span>' +
+            '<span class="qty-chip" onclick="addQty(' + i + ',25)">+25</span>' +
+            '<span class="qty-chip" onclick="addQty(' + i + ',50)">+50</span>' +
+            '<span class="qty-chip" onclick="addQty(' + i + ',100)">+100</span>' +
+            '<span class="qty-chip qty-chip-clear" onclick="setQtyTo(' + i + ',0)">✕</span>' +
+          '</div>' +
         '</div>';
     });
   });
   el.innerHTML = html;
+  // Scroll wheel support on quantity values
+  el.querySelectorAll('.qty-val').forEach(function(qv) {
+    qv.addEventListener('wheel', function(e) {
+      e.preventDefault();
+      var fid = qv.id.replace('qty_','');
+      var f2 = FURNITURE.find(function(x){ return x.id === fid; });
+      if (f2) adjQty(FURNITURE.indexOf(f2), e.deltaY < 0 ? 1 : -1);
+    }, { passive: false });
+  });
 }
 
 function adjQty(idx, delta) {
@@ -2036,9 +2152,8 @@ function focusStep(n) {
   if (n === 3) { updateMarqueeRecs(); renderFurniture(); }
   if (n === 4) buildQuote();
   if (n === 2) map.addControl(drawControl);
-  else {
-    try { map.removeControl(drawControl); } catch(e) {}
-  }
+  else { try { map.removeControl(drawControl); } catch(e) {} }
+  setTimeout(updateGuide, 50);
 }
 
 // ── MODALS ────────────────────────────────────────────────────
@@ -2137,6 +2252,10 @@ function newQuote() {
   focusStep(1);
 }
 
+// Declare critical globals before init runs (safety — init must not crash before these)
+var _mqCustomLines = _mqCustomLines || [];
+var _mqLineId = _mqLineId || 0;
+
 // ── INIT ──────────────────────────────────────────────────────
 (function init() {
   loadCataloguePrices(); // load saved prices before rendering
@@ -2148,6 +2267,7 @@ function newQuote() {
   initSignaturePad();
   initCompareSelects();
   setSeason('standard');
+  setTimeout(updateGuide, 100);
 })();
 
 // ════════════════════════════════════════════════════════════
@@ -2319,15 +2439,15 @@ function setSeason(s) {
   var map2 = { standard:'sznStd', winter:'sznWinter', peak:'sznPeak' };
   var map3 = { standard:'', winter:'active-winter', peak:'active-peak' };
   var el = document.getElementById(map2[s]);
-  if (el) el.classList.add(map3[s] || '');
+  if (el && map3[s]) el.classList.add(map3[s]);
   updateTotal();
 }
 
 // ── PACKAGE BUNDLES ──────────────────────────────────────────
 var PACKAGES = {
-  silver:   { marquee:'st6x9',  furniture:{ chair:40, t_round:5, carpet:1 } },
-  gold:     { marquee:'xl9x12', furniture:{ chair:80, t_round:10, lights:2, carpet:1, linen:10 } },
-  platinum: { marquee:'g12x15', furniture:{ chair:150, t_round:18, lights:4, sidewall:6, dance:20, heater:4, carpet:1, linen:18 } }
+  silver:   { marquee:'m6x9',   furniture:{ chair_resin:40, t_round15:5, carpet:1 } },
+  gold:     { marquee:'xl9x12', furniture:{ chair_chiavari:80, t_round18:10, lights:2, carpet:1, linen:10 } },
+  platinum: { marquee:'g12x15', furniture:{ chair_chiavari:150, t_round18:18, lights:4, sidewall:6, dance:20, heater:4, carpet:1, linen:18 } }
 };
 function applyPackage(name) {
   var pkg = PACKAGES[name];
@@ -2596,6 +2716,104 @@ function renderFloorPlan() {
     ctx.fillText('Trestle', tx2 + 30, ty2 + 13);
   }
   ctx.textAlign = 'left';
+}
+
+// ── QTY HELPERS ──────────────────────────────────────────────
+function setQtyTo(idx, qty) {
+  FURNITURE[idx].qty = Math.max(0, qty);
+  var f = FURNITURE[idx];
+  var cell = document.getElementById('qty_' + f.id);
+  if (cell && cell.tagName !== 'INPUT') cell.textContent = f.qty;
+  var tot = document.getElementById('ftotal_' + f.id);
+  if (tot) {
+    tot.textContent = '$' + (f.qty * f.price);
+    tot.style.color = 'var(--cyan)'; tot.style.textShadow = '0 0 10px rgba(0,230,255,.5)';
+    setTimeout(function(){ tot.style.color=''; tot.style.textShadow=''; }, 600);
+  }
+  updateTotal(); updateGuide();
+}
+function addQty(idx, delta) { setQtyTo(idx, FURNITURE[idx].qty + delta); }
+
+// Click-to-type inline quantity editor
+function startQtyEdit(fid, idx) {
+  var cell = document.getElementById('qty_' + fid);
+  if (!cell || cell.tagName === 'INPUT') return;
+  var f = FURNITURE[idx];
+  var input = document.createElement('input');
+  input.type = 'number'; input.className = 'qty-edit-input';
+  input.value = f.qty; input.min = 0; input.max = 9999;
+  cell.replaceWith(input);
+  input.focus(); input.select();
+  function save() {
+    var val = Math.max(0, parseInt(input.value) || 0);
+    f.qty = val;
+    var newCell = document.createElement('div');
+    newCell.className = 'qty-val'; newCell.id = 'qty_' + fid;
+    newCell.textContent = val; newCell.title = 'Tap to type';
+    newCell.onclick = function(){ startQtyEdit(fid, idx); };
+    newCell.addEventListener('wheel', function(e){
+      e.preventDefault(); adjQty(idx, e.deltaY < 0 ? 1 : -1);
+    }, { passive:false });
+    input.replaceWith(newCell);
+    var tot = document.getElementById('ftotal_' + fid);
+    if (tot) tot.textContent = '$' + (val * f.price);
+    updateTotal(); updateGuide();
+  }
+  input.addEventListener('blur', save);
+  input.addEventListener('keydown', function(e){
+    if (e.key === 'Enter') input.blur();
+    if (e.key === 'Escape') { input.value = f.qty; input.blur(); }
+  });
+}
+
+// ── NEON GUIDE SYSTEM ────────────────────────────────────────
+function updateGuide() {
+  // Clear previous guide state
+  document.querySelectorAll('.sn-step').forEach(function(s){ s.classList.remove('next-pulse'); });
+  [2,3,4].forEach(function(n){ var a = document.getElementById('sn-arrow-'+n); if(a) a.style.display='none'; });
+  document.querySelectorAll('.btn-guide-pulse').forEach(function(b){ b.classList.remove('btn-guide-pulse'); });
+  document.querySelectorAll('.step-hint').forEach(function(h){ h.remove(); });
+
+  var s = state.step;
+  if (s === 1) {
+    if (state.address) { _pulseStep(2); _hint('step1','🗺️','Click <strong>Zone Mapping</strong> to draw your outdoor space on the satellite map.'); }
+    else { _hint('step1','📍','Enter the <strong>property address</strong> above to locate it on the satellite map.'); }
+  } else if (s === 2) {
+    if (!state.zones.length) {
+      _pulseBtn('[onclick="startDrawing()"]');
+      _hint('step2','✏️','Click <strong>Draw Zone</strong> then click points on the map to trace the available outdoor area. Double-click to finish.');
+    } else {
+      _pulseStep(3);
+      _hint('step2','✅','Zone drawn! Click <strong>Marquee & Furniture →</strong> to choose your setup.');
+    }
+  } else if (s === 3) {
+    if (!state.selectedMarquee) {
+      _hint('step3','⛺','Choose a <strong>marquee size</strong> below — recommendations are matched to your guest count.');
+    } else {
+      _pulseBtn('[onclick="buildQuote();focusStep(4)"]');
+      _hint('step3','✅','Marquee selected! Click <strong>Generate Quote →</strong> to build the client quote.');
+    }
+  } else if (s === 4) {
+    _pulseBtn('[onclick="exportPDF()"]');
+    _hint('step4','📄','Quote ready — click <strong>PDF</strong> to download or <strong>WhatsApp</strong> to send to client.');
+  }
+}
+function _pulseStep(n) {
+  var el = document.getElementById('sn'+n); if (el) el.classList.add('next-pulse');
+  var ar = document.getElementById('sn-arrow-'+n); if (ar) ar.style.display='inline';
+}
+function _pulseBtn(sel) {
+  var btn = document.querySelector(sel); if (btn) btn.classList.add('btn-guide-pulse');
+}
+function _hint(panelId, icon, msg) {
+  var panel = document.getElementById(panelId);
+  if (!panel || !panel.classList.contains('active')) return;
+  var body = panel.querySelector('.panel-body'); if (!body) return;
+  var existing = body.querySelector('.step-hint'); if (existing) existing.remove();
+  var div = document.createElement('div');
+  div.className = 'step-hint';
+  div.innerHTML = '<span style="font-size:14px;flex-shrink:0">'+icon+'</span><span>'+msg+'</span>';
+  body.insertBefore(div, body.firstChild);
 }
 
 // ── EQUIPMENT CATALOGUE ──────────────────────────────────────
@@ -2949,6 +3167,20 @@ function closePresentation() {
 
 <!-- ═══════════════════ WHETŪ FOOTER ═══════════════════ -->
 <footer class="whetu-footer">
+  <!-- Business details row -->
+  <div class="wf-biz-row">
+    <div class="wf-biz-name">⛺ EVENTS PRO HIRE GROUP</div>
+    <div class="wf-biz-contacts">
+      <a href="tel:0800000000">📞 0800 XXX XXX</a>
+      <span class="wf-divider"></span>
+      <a href="mailto:hire@eventsprohire.co.nz">✉️ hire@eventsprohire.co.nz</a>
+      <span class="wf-divider"></span>
+      <span>📍 Hamilton, Waikato, New Zealand</span>
+      <span class="wf-divider"></span>
+      <span>Marquee &amp; Event Hire · Waikato Region</span>
+    </div>
+  </div>
+  <!-- Whetū branding row -->
   <div class="wf-inner">
     <div class="wf-logo-row">
       <span class="wf-star">✦</span>
@@ -2957,7 +3189,7 @@ function closePresentation() {
     <div class="wf-divider"></div>
     <a class="wf-link" href="https://whetudigital.co.nz" target="_blank">whetudigital.co.nz</a>
     <div class="wf-divider"></div>
-    <span class="wf-copy">© 2026 · EventSpace Pro · Licensed to Events Pro Hire Group</span>
+    <span class="wf-copy" style="font-size:9px;color:var(--muted);letter-spacing:1px">© 2026 Whetū Digital Ltd · EventSpace Pro · Licensed to Events Pro Hire Group · All rights reserved</span>
   </div>
 </footer>
 
