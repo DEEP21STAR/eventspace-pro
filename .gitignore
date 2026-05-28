@@ -1,0 +1,4 @@
+
+# backups created during edit sessions
+*.bak.*
+*.bak-*
