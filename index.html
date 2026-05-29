@@ -12,6 +12,14 @@
 -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 /* ═══════════════════════════════════════════════════════════
@@ -757,12 +765,194 @@ input[type=range]{
 .cmp-v{font-weight:700}
 .cmp-select{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
 
-/* ── FLOOR PLAN MODAL ── */
-.fp-canvas-wrap{background:rgba(0,230,255,.03);border:1px solid rgba(0,230,255,.15);border-radius:10px;padding:10px;overflow:auto;text-align:center;margin-top:10px}
-#fpCanvas{border-radius:6px}
-.fp-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;font-size:9px;color:var(--muted)}
-.fp-leg-item{display:flex;align-items:center;gap:4px}
-.fp-leg-dot{width:10px;height:10px;border-radius:2px}
+/* ── FLOOR PLAN HERO BUTTONS (sidebar + empty state) ── */
+.btn-fp-hero{
+  display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:10px;cursor:pointer;
+  background:linear-gradient(135deg,#c060ff 0%,#7030ff 50%,#00e6ff 100%);
+  border:1px solid rgba(255,255,255,.2);color:#fff;font-family:var(--font);
+  font-size:11px;font-weight:800;letter-spacing:1.3px;
+  box-shadow:0 4px 16px rgba(192,96,255,.4);
+  transition:transform .2s,box-shadow .2s;animation:fpHeroPulse 2.6s ease-in-out infinite;
+}
+.btn-fp-hero:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(192,96,255,.6),0 0 18px rgba(0,230,255,.3)}
+@keyframes fpHeroPulse{0%,100%{box-shadow:0 4px 16px rgba(192,96,255,.4)}50%{box-shadow:0 6px 28px rgba(192,96,255,.7),0 0 24px rgba(0,230,255,.4)}}
+.btn-fp-cta{
+  display:block;width:100%;margin-top:16px;padding:14px 16px;border-radius:12px;cursor:pointer;
+  background:linear-gradient(135deg,#c060ff,#7030ff,#00e6ff);
+  border:1px solid rgba(255,255,255,.25);color:#fff;font-family:var(--font);
+  font-size:13px;font-weight:900;letter-spacing:2px;
+  box-shadow:0 6px 22px rgba(192,96,255,.45);
+  transition:transform .2s,box-shadow .2s;animation:fpCtaPulse 2.4s ease-in-out infinite;
+  position:relative;overflow:hidden;
+}
+.btn-fp-cta::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.25) 50%,transparent 70%);transform:translateX(-100%);transition:transform .6s}
+.btn-fp-cta:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 10px 34px rgba(192,96,255,.7),0 0 30px rgba(0,230,255,.5)}
+.btn-fp-cta:hover::before{transform:translateX(100%)}
+@keyframes fpCtaPulse{0%,100%{box-shadow:0 6px 22px rgba(192,96,255,.45)}50%{box-shadow:0 10px 38px rgba(192,96,255,.75),0 0 30px rgba(0,230,255,.45)}}
+
+/* ── FLOOR PLAN MODAL — INTERACTIVE EDITOR ── */
+.fp-modal-box{max-width:1180px !important;width:96vw;padding:18px 18px 14px !important;background:linear-gradient(160deg,#06091a 0%,#080d20 60%,#0a0f28 100%)}
+.fp-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:8px;padding-bottom:10px;border-bottom:1px solid rgba(0,230,255,.1)}
+.fp-header-titles{flex:1;min-width:0}
+.fp-live{display:inline-block;font-size:9px;letter-spacing:2px;padding:2px 8px;margin-left:6px;background:linear-gradient(135deg,#00ff88,#00e6ff);color:#021;border-radius:4px;font-weight:900;vertical-align:middle;animation:fpLivePulse 2.4s ease-in-out infinite}
+@keyframes fpLivePulse{0%,100%{box-shadow:0 0 0 0 rgba(0,255,136,.5)}50%{box-shadow:0 0 16px 4px rgba(0,255,136,.6)}}
+.fp-sub{font-size:11px;color:var(--muted);margin:0}
+.fp-3d-btn-hero{
+  display:flex;align-items:center;gap:10px;padding:10px 18px;border-radius:14px;cursor:pointer;
+  background:linear-gradient(135deg,#c060ff 0%,#7030ff 50%,#00e6ff 100%);
+  border:1px solid rgba(255,255,255,.18);color:#fff;font-family:var(--font);
+  box-shadow:0 6px 28px rgba(192,96,255,.4),0 0 0 1px rgba(0,230,255,.2) inset;
+  transition:transform .2s,box-shadow .2s;flex-shrink:0;position:relative;overflow:hidden;
+}
+.fp-3d-btn-hero::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.25) 50%,transparent 70%);transform:translateX(-100%);transition:transform .6s}
+.fp-3d-btn-hero:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 10px 40px rgba(192,96,255,.6),0 0 30px rgba(0,230,255,.4)}
+.fp-3d-btn-hero:hover::before{transform:translateX(100%)}
+.fp-3d-icon{font-size:22px;filter:drop-shadow(0 0 8px rgba(255,255,255,.6))}
+.fp-3d-text{display:flex;flex-direction:column;text-align:left;line-height:1.1}
+.fp-3d-lbl{font-size:13px;font-weight:900;letter-spacing:2px}
+.fp-3d-sub{font-size:9px;opacity:.85;letter-spacing:1.5px}
+.fp-grid{display:grid;grid-template-columns:240px 1fr;gap:14px;margin-top:10px}
+.fp-palette-col{background:rgba(0,230,255,.02);border:1px solid rgba(0,230,255,.1);border-radius:12px;padding:10px;max-height:560px;overflow-y:auto}
+.fp-palette-col::-webkit-scrollbar{width:6px}
+.fp-palette-col::-webkit-scrollbar-thumb{background:rgba(0,230,255,.25);border-radius:3px}
+.fp-palette-title{font-size:9px;letter-spacing:3px;color:var(--cyan);font-weight:800;margin-bottom:8px;padding:0 2px}
+.fp-palette-body{display:flex;flex-direction:column;gap:8px}
+.fp-pg{}
+.fp-pg-lbl{font-size:8px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin:6px 2px 4px;font-weight:700}
+.fp-pg-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.fp-pi{
+  display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;border-radius:8px;cursor:pointer;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);color:var(--text);font-family:var(--font);
+  transition:all .18s;position:relative;overflow:hidden;
+}
+.fp-pi:hover{background:rgba(255,255,255,.08);border-color:var(--eq-c,#00e6ff);transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,.4),0 0 14px var(--eq-c,#00e6ff)}
+.fp-pi:active{transform:scale(.96)}
+.fp-pi-ic{width:32px;height:32px;color:var(--eq-c,#00e6ff)}
+.fp-pi-ic svg{width:100%;height:100%;display:block}
+.fp-pi-nm{font-size:9px;font-weight:600;line-height:1.1;text-align:center;color:var(--text)}
+.fp-pi-dm{font-size:8px;color:var(--muted);letter-spacing:.3px}
+.fp-canvas-col{display:flex;flex-direction:column;gap:8px}
+.fp-canvas-wrap{
+  position:relative;background:radial-gradient(ellipse at center,#0c1832 0%,#04050f 80%);
+  border:1px solid rgba(0,230,255,.18);border-radius:14px;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(0,255,136,.08) inset,0 20px 60px rgba(0,0,0,.6);
+}
+#fpCanvas{display:block;width:100%;height:520px;border-radius:14px;cursor:default}
+#fpCanvas.fp-drag{cursor:grabbing}
+#fpCanvas.fp-hover-item{cursor:grab}
+.fp-canvas-empty{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:var(--muted);letter-spacing:2px;pointer-events:none;
+  text-shadow:0 2px 12px rgba(0,0,0,.8);
+}
+.fp-canvas-empty.hidden{display:none}
+.fp-canvas-stats{
+  position:absolute;top:10px;left:10px;display:flex;align-items:center;gap:6px;
+  background:rgba(4,5,15,.85);backdrop-filter:blur(10px);
+  border:1px solid rgba(0,230,255,.2);border-radius:8px;padding:6px 12px;
+  font-size:10px;color:var(--text);letter-spacing:1px;font-weight:600;
+}
+.fp-stat-sep{color:var(--muted);opacity:.5}
+.fp-canvas-hint{
+  position:absolute;bottom:10px;left:50%;transform:translateX(-50%);
+  font-size:9px;letter-spacing:1.5px;color:var(--cyan);
+  background:rgba(0,230,255,.08);border:1px solid rgba(0,230,255,.2);
+  padding:4px 12px;border-radius:6px;opacity:0;transition:opacity .3s;pointer-events:none;
+}
+.fp-canvas-hint.show{opacity:1}
+.fp-toolbar{display:flex;align-items:center;gap:8px;padding:8px 4px}
+.fp-tool{
+  padding:7px 14px;border-radius:8px;cursor:pointer;font-family:var(--font);
+  background:rgba(0,230,255,.05);border:1px solid rgba(0,230,255,.18);color:var(--cyan);
+  font-size:11px;font-weight:600;letter-spacing:1px;transition:all .18s;
+}
+.fp-tool:hover:not(:disabled){background:rgba(0,230,255,.12);border-color:rgba(0,230,255,.4);transform:translateY(-1px)}
+.fp-tool:active:not(:disabled){transform:scale(.96)}
+.fp-tool:disabled{opacity:.35;cursor:not-allowed}
+.fp-tool-danger{background:rgba(255,68,102,.05);border-color:rgba(255,68,102,.2);color:var(--red)}
+.fp-tool-danger:hover:not(:disabled){background:rgba(255,68,102,.14);border-color:rgba(255,68,102,.5)}
+.fp-tool-3d{background:linear-gradient(135deg,rgba(192,96,255,.18),rgba(0,230,255,.12));border-color:rgba(192,96,255,.4);color:#fff;font-weight:800}
+.fp-tool-3d:hover{background:linear-gradient(135deg,rgba(192,96,255,.3),rgba(0,230,255,.2));box-shadow:0 4px 18px rgba(192,96,255,.4)}
+.fp-spacer{flex:1}
+
+/* ── 3D WALKTHROUGH OVERLAY ── */
+.td-overlay{
+  position:fixed;inset:0;z-index:9000;display:none;
+  background:#000;overflow:hidden;
+}
+.td-overlay.open{display:block}
+#tdCanvas{display:block;width:100vw;height:100vh;outline:none}
+.td-topbar{
+  position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;
+  padding:14px 22px;z-index:5;
+  background:linear-gradient(180deg,rgba(0,0,0,.7) 0%,transparent 100%);
+  pointer-events:none;
+}
+.td-brand{font-size:14px;font-weight:900;letter-spacing:3px;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.8);pointer-events:auto}
+.td-dot{opacity:.4;margin:0 8px}
+.td-mq{font-size:11px;letter-spacing:2px;color:var(--cyan);font-weight:700;background:rgba(0,230,255,.1);padding:6px 14px;border-radius:8px;border:1px solid rgba(0,230,255,.25);pointer-events:auto}
+.td-close{
+  width:42px;height:42px;border-radius:10px;cursor:pointer;font-size:18px;font-family:var(--font);
+  background:rgba(255,68,102,.18);border:1px solid rgba(255,68,102,.45);color:#fff;pointer-events:auto;
+  transition:all .2s;display:flex;align-items:center;justify-content:center;
+}
+.td-close:hover{background:rgba(255,68,102,.4);transform:scale(1.06)}
+.td-hud{
+  position:absolute;bottom:90px;left:50%;transform:translateX(-50%);z-index:5;
+  background:rgba(0,0,0,.55);backdrop-filter:blur(14px);
+  border:1px solid rgba(0,230,255,.18);border-radius:12px;
+  padding:12px 22px;display:flex;flex-direction:column;gap:6px;
+  font-size:11px;color:rgba(255,255,255,.85);letter-spacing:1px;
+  pointer-events:none;max-width:760px;
+}
+.td-hud-row{display:flex;align-items:center;flex-wrap:wrap;gap:4px}
+.td-hud-sep{opacity:.4}
+.td-hud kbd{
+  display:inline-block;padding:2px 8px;margin:0 2px;font-family:'JetBrains Mono','Consolas',monospace;
+  background:rgba(0,230,255,.12);border:1px solid rgba(0,230,255,.3);border-radius:5px;
+  font-size:10px;color:var(--cyan);font-weight:700;
+}
+.td-modebar{
+  position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:5;
+  display:flex;gap:6px;background:rgba(0,0,0,.6);backdrop-filter:blur(14px);
+  border:1px solid rgba(0,230,255,.18);border-radius:12px;padding:5px;
+}
+.td-mode{
+  padding:8px 22px;border:none;border-radius:8px;cursor:pointer;font-family:var(--font);
+  background:transparent;color:rgba(255,255,255,.65);font-weight:800;letter-spacing:2px;font-size:11px;
+  transition:all .18s;
+}
+.td-mode:hover{background:rgba(0,230,255,.1);color:#fff}
+.td-mode.active{background:linear-gradient(135deg,rgba(0,230,255,.25),rgba(192,96,255,.18));color:#fff;box-shadow:0 0 18px rgba(0,230,255,.4)}
+.td-status{
+  position:absolute;top:80px;left:50%;transform:translateX(-50%);z-index:5;
+  font-size:10px;letter-spacing:3px;color:var(--cyan);font-weight:800;
+  background:rgba(0,0,0,.5);padding:5px 14px;border-radius:6px;
+  border:1px solid rgba(0,230,255,.25);pointer-events:none;
+  opacity:0;transition:opacity .4s;
+}
+.td-status.show{opacity:1}
+.td-loader{
+  position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
+  background:radial-gradient(ellipse at center,#0c1832 0%,#000 80%);
+  color:#fff;font-size:13px;letter-spacing:2px;font-weight:600;
+}
+.td-loader.hidden{display:none}
+.td-loader-spin{
+  width:56px;height:56px;border:3px solid rgba(0,230,255,.15);border-top-color:var(--cyan);
+  border-radius:50%;animation:tdSpin .9s linear infinite;
+  box-shadow:0 0 30px rgba(0,230,255,.4);
+}
+@keyframes tdSpin{to{transform:rotate(360deg)}}
+@media (max-width:760px){
+  .fp-grid{grid-template-columns:1fr}
+  .fp-palette-col{max-height:200px}
+  .fp-3d-btn-hero{padding:8px 12px}
+  .fp-3d-lbl{font-size:11px}
+  .fp-3d-sub{font-size:8px}
+  .td-hud{font-size:10px;padding:8px 12px;max-width:92vw}
+  .td-hud kbd{font-size:9px;padding:1px 5px}
+}
 
 /* ── PRESENTATION MODE ── */
 .pres-overlay{position:fixed;inset:0;z-index:5000;background:linear-gradient(135deg,#04050f,#06081e,#04050f);display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px}
@@ -1681,7 +1871,7 @@ input[type=range]{
         <div class="divider"></div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
           <div style="font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase">◈ Furniture &amp; Extras</div>
-          <button class="btn-sm btn-primary" style="padding:4px 10px;font-size:9px" onclick="openModal('floorPlanModal');renderFloorPlan()">📐 Floor Plan</button>
+          <button class="btn-fp-hero" onclick="openFloorPlan()" title="Drag-and-drop your layout to scale">📐 Floor Plan <span style="font-size:8px;opacity:.8;letter-spacing:1.5px">DRAG &amp; DROP</span></button>
         </div>
         <div id="furnitureList"></div>
       </div>
@@ -1924,22 +2114,72 @@ input[type=range]{
   </div>
 </div>
 
-<!-- FLOOR PLAN MODAL -->
+<!-- FLOOR PLAN MODAL — INTERACTIVE PLACEMENT EDITOR -->
 <div class="modal" id="floorPlanModal">
-  <div class="modal-box" style="max-width:680px">
-    <button class="modal-close" onclick="closeModal('floorPlanModal')">✕</button>
-    <h2>📐 FLOOR PLAN</h2>
-    <p>To-scale layout showing your furniture arrangement inside the selected marquee.</p>
-    <div class="fp-canvas-wrap">
-      <canvas id="fpCanvas" width="580" height="320"></canvas>
+  <div class="modal-box fp-modal-box">
+    <button class="modal-close" onclick="closeFloorPlan()">✕</button>
+    <div class="fp-header">
+      <div class="fp-header-titles">
+        <h2 style="margin-bottom:2px">📐 FLOOR PLAN <span class="fp-live">LIVE</span></h2>
+        <p class="fp-sub" id="fpSub">Click an item below to drop it inside the marquee · Drag to move · Right-click to rotate</p>
+      </div>
+      <button class="fp-3d-btn-hero" onclick="open3DWalkthrough()" title="Step inside in 3D">
+        <span class="fp-3d-icon">🎮</span>
+        <span class="fp-3d-text"><span class="fp-3d-lbl">STEP INSIDE</span><span class="fp-3d-sub">3D Walkthrough</span></span>
+      </button>
     </div>
-    <div class="fp-legend">
-      <div class="fp-leg-item"><div class="fp-leg-dot" style="background:#ffd700;opacity:.6"></div>Marquee</div>
-      <div class="fp-leg-item"><div class="fp-leg-dot" style="background:#00e6ff;opacity:.7;border-radius:50%"></div>Round Table</div>
-      <div class="fp-leg-item"><div class="fp-leg-dot" style="background:#00ff88;opacity:.6"></div>Trestle Table</div>
-      <div class="fp-leg-item"><div class="fp-leg-dot" style="background:#c060ff;opacity:.6;border-radius:50%"></div>Chair</div>
+
+    <div class="fp-grid">
+      <aside class="fp-palette-col" id="fpPaletteCol">
+        <div class="fp-palette-title">EQUIPMENT</div>
+        <div id="fpPaletteBody" class="fp-palette-body"></div>
+      </aside>
+      <div class="fp-canvas-col">
+        <div class="fp-canvas-wrap" id="fpCanvasWrap">
+          <canvas id="fpCanvas" width="760" height="520"></canvas>
+          <div class="fp-canvas-empty" id="fpCanvasEmpty">Select a marquee first to begin</div>
+          <div class="fp-canvas-stats">
+            <span id="fpStatItems">0 items</span>
+            <span class="fp-stat-sep">·</span>
+            <span id="fpStatArea">0.0 m² placed</span>
+            <span class="fp-stat-sep">·</span>
+            <span id="fpStatMq">—</span>
+          </div>
+          <div class="fp-canvas-hint" id="fpCanvasHint"></div>
+        </div>
+        <div class="fp-toolbar">
+          <button class="fp-tool" onclick="fpToggleGrid()" id="fpGridBtn" title="Toggle 0.5m grid">▦ Grid</button>
+          <button class="fp-tool" onclick="fpRotateSelected()" id="fpRotBtn" disabled title="Rotate 45°">↻ Rotate</button>
+          <button class="fp-tool fp-tool-danger" onclick="fpDeleteSelected()" id="fpDelBtn" disabled title="Delete selected">✕ Delete</button>
+          <button class="fp-tool fp-tool-danger" onclick="clearEquipmentLayout()" title="Clear layout">⌫ Clear</button>
+          <div class="fp-spacer"></div>
+          <button class="fp-tool fp-tool-3d" onclick="open3DWalkthrough()" title="3D Walk-through">🎮 3D WALK</button>
+        </div>
+      </div>
     </div>
   </div>
+</div>
+
+<!-- 3D WALKTHROUGH OVERLAY -->
+<div class="td-overlay" id="tdOverlay">
+  <canvas id="tdCanvas"></canvas>
+  <div class="td-topbar">
+    <div class="td-brand">EVENTSPACE PRO <span class="td-dot">·</span> <span style="color:var(--cyan)">3D WALKTHROUGH</span></div>
+    <div class="td-mq" id="tdMqLabel">—</div>
+    <button class="td-close" onclick="close3DWalkthrough()" title="Exit (Esc)">✕</button>
+  </div>
+  <div class="td-hud" id="tdHud">
+    <div class="td-hud-row"><kbd>DRAG</kbd> orbit <span class="td-hud-sep">·</span> <kbd>SCROLL</kbd> zoom</div>
+    <div class="td-hud-row"><kbd>W</kbd> walk mode <span class="td-hud-sep">·</span> <kbd>WASD</kbd> move <span class="td-hud-sep">·</span> <kbd>SHIFT</kbd> run <span class="td-hud-sep">·</span> <kbd>Q/E</kbd> up/down</div>
+    <div class="td-hud-row"><kbd>ESC</kbd> exit walk <span class="td-hud-sep">·</span> <kbd>R</kbd> reset camera <span class="td-hud-sep">·</span> <kbd>L</kbd> toggle lights</div>
+  </div>
+  <div class="td-modebar">
+    <button class="td-mode active" id="tdModeOrbit" onclick="tdSetMode('orbit')">ORBIT</button>
+    <button class="td-mode" id="tdModeWalk" onclick="tdSetMode('walk')">WALK</button>
+    <button class="td-mode" onclick="tdResetCamera()">RESET</button>
+  </div>
+  <div class="td-status" id="tdStatus">ORBIT MODE</div>
+  <div class="td-loader" id="tdLoader"><div class="td-loader-spin"></div><div>Loading 3D scene…</div></div>
 </div>
 
 <!-- COMPARE MODAL -->
@@ -2550,6 +2790,13 @@ function drawMarqueeOnMap() {
   // Equipment overlay — activate palette when marquee is ready
   try { showEquipmentPaletteForMarquee(); } catch(e) { console.warn('equipment palette init:', e); }
   try { _eqAttachMarqueeDragHandler(); } catch(e) {}
+  // First-time auto-open Floor Plan editor so users discover drag-and-drop placement
+  try {
+    if (!state._floorPlanAutoOpened) {
+      state._floorPlanAutoOpened = true;
+      setTimeout(function(){ if (typeof openFloorPlan === 'function') openFloorPlan(); }, 800);
+    }
+  } catch(e) { console.warn('FP auto-open:', e); }
 }
 
 // ═══════════ EQUIPMENT LAYOUT — Whetū Digital ═══════════
@@ -2729,7 +2976,7 @@ function renderLayoutSummary() {
   if (!body || !count) return;
   if (!state.equipment.length) {
     count.textContent = '0 items';
-    body.innerHTML = '<div class="layout-summary-empty"><strong>Drop equipment onto the map</strong><br>Select a marquee first, then use the Layout Palette to place tables, dance floor, stage, bar, and more inside the marquee footprint.</div>';
+    body.innerHTML = '<div class="layout-summary-empty"><strong>Drag &amp; drop your layout</strong><br>Pick a marquee, then place tables, chairs, dance floor, bar, stage and more — all to scale inside the marquee.<br><button class="btn-fp-cta" onclick="openFloorPlan()">🎨 OPEN FLOOR PLAN EDITOR</button></div>';
     if (foot) foot.style.display = 'none';
     if (placedCount) placedCount.textContent = '0';
     if (floorUsed)   floorUsed.textContent   = '0 m²';
@@ -3835,65 +4082,962 @@ function buildTimeline() {
     '<div class="info-card gold" style="margin-top:8px"><div class="ic-title">Pack-Down Day</div><div style="font-size:12px;color:var(--muted);margin-top:4px">· 8am–2pm: Furniture removal + marquee disassembly<br>· Site cleared and returned to original condition</div></div>';
 }
 
-// ── FLOOR PLAN RENDERER ───────────────────────────────────────
-function renderFloorPlan() {
-  var canvas = document.getElementById('fpCanvas');
-  if (!canvas) return;
-  var ctx = canvas.getContext('2d');
-  var W = canvas.width, H = canvas.height;
-  ctx.clearRect(0, 0, W, H);
-  var mq = state.selectedMarquee || { w: 6, d: 9, name: 'Select a marquee first' };
-  var pad = 30;
-  var scale = Math.min((W - pad*2) / mq.w, (H - pad*2) / mq.d);
-  var mW = mq.w * scale, mH = mq.d * scale;
-  var ox = (W - mW) / 2, oy = (H - mH) / 2;
-  // Marquee shell
-  ctx.fillStyle = 'rgba(255,215,0,.06)';
+// ── FLOOR PLAN — INTERACTIVE PLACEMENT EDITOR ────────────────
+var FP = {
+  ctx: null, canvas: null,
+  mqX:0, mqY:0, mqW:0, mqH:0, scale:0,
+  cssW:760, cssH:520,
+  dragUid:null, dragOffX:0, dragOffY:0,
+  hoverUid:null, selectedUid:null,
+  showGrid:true, bound:false, pendingRAF:false,
+};
+
+function openFloorPlan() {
+  openModal('floorPlanModal');
+  setTimeout(function(){
+    fpInit();
+    fpRenderPalette();
+    fpUpdateLabels();
+    fpRequestDraw();
+  }, 30);
+}
+function closeFloorPlan(){ closeModal('floorPlanModal'); }
+
+function fpInit() {
+  if (!FP.canvas) FP.canvas = document.getElementById('fpCanvas');
+  if (!FP.canvas) return;
+  if (!FP.ctx) FP.ctx = FP.canvas.getContext('2d');
+  fpFitCanvas();
+  if (FP.bound) return;
+  FP.canvas.addEventListener('mousedown', fpOnMouseDown);
+  window.addEventListener('mousemove', fpOnMouseMoveWin);
+  window.addEventListener('mouseup', fpOnMouseUpWin);
+  FP.canvas.addEventListener('mousemove', fpOnMouseMoveCanvas);
+  FP.canvas.addEventListener('contextmenu', fpOnContext);
+  FP.canvas.addEventListener('dblclick', fpOnDblClick);
+  window.addEventListener('resize', function(){
+    var modal = document.getElementById('floorPlanModal');
+    if (modal && modal.classList.contains('open')) fpFitCanvas();
+  });
+  // Keyboard shortcuts when modal active
+  window.addEventListener('keydown', function(e){
+    var modal = document.getElementById('floorPlanModal');
+    if (!modal || !modal.classList.contains('open')) return;
+    if (e.target && (e.target.tagName==='INPUT' || e.target.tagName==='TEXTAREA')) return;
+    if (e.key === 'Delete' || e.key === 'Backspace') { if (FP.selectedUid) { fpDeleteSelected(); e.preventDefault(); } }
+    if (e.key === 'r' || e.key === 'R') { if (FP.selectedUid) fpRotateSelected(); }
+    if (e.key === 'g' || e.key === 'G') fpToggleGrid();
+  });
+  FP.bound = true;
+}
+
+function fpFitCanvas() {
+  var c = FP.canvas; if (!c) return;
+  var rect = c.getBoundingClientRect();
+  if (rect.width < 50) { rect = { width:760, height:520 }; }
+  var dpr = window.devicePixelRatio || 1;
+  FP.cssW = rect.width;
+  FP.cssH = rect.height;
+  c.width  = Math.floor(rect.width  * dpr);
+  c.height = Math.floor(rect.height * dpr);
+  FP.ctx.setTransform(dpr,0,0,dpr,0,0);
+  fpComputeMarquee();
+  fpRequestDraw();
+}
+
+function fpComputeMarquee() {
+  var mq = state.selectedMarquee;
+  if (!mq) { FP.mqW=0; FP.mqH=0; return; }
+  var pad = 70;
+  var availW = FP.cssW - pad*2;
+  var availH = FP.cssH - pad*2;
+  FP.scale = Math.min(availW / mq.w, availH / mq.d);
+  FP.mqW = mq.w * FP.scale;
+  FP.mqH = mq.d * FP.scale;
+  FP.mqX = (FP.cssW - FP.mqW) / 2;
+  FP.mqY = (FP.cssH - FP.mqH) / 2;
+}
+
+function fpUpdateLabels() {
+  var emptyEl   = document.getElementById('fpCanvasEmpty');
+  var statItems = document.getElementById('fpStatItems');
+  var statArea  = document.getElementById('fpStatArea');
+  var statMq    = document.getElementById('fpStatMq');
+  var mq = state.selectedMarquee;
+  if (mq) {
+    if (emptyEl) emptyEl.classList.add('hidden');
+    if (statMq) statMq.textContent = mq.w + 'm × ' + mq.d + 'm';
+  } else {
+    if (emptyEl) emptyEl.classList.remove('hidden');
+    if (statMq) statMq.textContent = '—';
+  }
+  if (statItems) statItems.textContent = state.equipment.length + ' item' + (state.equipment.length === 1 ? '' : 's');
+  if (statArea) {
+    var area = state.equipment.reduce(function(s,eq){ return s + (eq.item.w * eq.item.d); }, 0);
+    statArea.textContent = area.toFixed(1) + ' m² placed';
+  }
+  var hasSel = !!FP.selectedUid;
+  var rb = document.getElementById('fpRotBtn'); if (rb) rb.disabled = !hasSel;
+  var db = document.getElementById('fpDelBtn'); if (db) db.disabled = !hasSel;
+}
+
+function fpLatLngToXY(lat, lng) {
+  if (!state.marqueeRect) return { x:0, y:0 };
+  var b = state.marqueeRect.getBounds();
+  var n=b.getNorth(), s=b.getSouth(), w=b.getWest(), e=b.getEast();
+  var nx = (lng - w) / (e - w);
+  var ny = (n - lat) / (n - s);
+  return { x: FP.mqX + nx * FP.mqW, y: FP.mqY + ny * FP.mqH };
+}
+function fpXYToLatLng(x, y) {
+  if (!state.marqueeRect) return null;
+  var b = state.marqueeRect.getBounds();
+  var n=b.getNorth(), s=b.getSouth(), w=b.getWest(), e=b.getEast();
+  var nx = (x - FP.mqX) / FP.mqW;
+  var ny = (y - FP.mqY) / FP.mqH;
+  return { lat: n - ny * (n - s), lng: w + nx * (e - w) };
+}
+
+function fpRequestDraw() {
+  if (FP.pendingRAF) return;
+  FP.pendingRAF = true;
+  requestAnimationFrame(function(){ FP.pendingRAF = false; fpDraw(); });
+}
+
+function fpRoundRect(ctx, x, y, w, h, r) {
+  if (w < 2*r) r = w/2; if (h < 2*r) r = h/2;
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.arcTo(x+w, y,   x+w, y+h, r);
+  ctx.arcTo(x+w, y+h, x,   y+h, r);
+  ctx.arcTo(x,   y+h, x,   y,   r);
+  ctx.arcTo(x,   y,   x+w, y,   r);
+  ctx.closePath();
+}
+
+function fpDraw() {
+  if (!FP.ctx) return;
+  var ctx = FP.ctx;
+  ctx.clearRect(0, 0, FP.cssW, FP.cssH);
+  if (!state.selectedMarquee) return;
+
+  // Marquee floor — green-tinted with soft inner glow
+  var grad = ctx.createLinearGradient(FP.mqX, FP.mqY, FP.mqX, FP.mqY + FP.mqH);
+  grad.addColorStop(0, 'rgba(0,255,136,.10)');
+  grad.addColorStop(1, 'rgba(0,180,100,.04)');
+  ctx.fillStyle = grad;
+  fpRoundRect(ctx, FP.mqX, FP.mqY, FP.mqW, FP.mqH, 10);
+  ctx.fill();
+
+  // Grid (0.5m + 1m)
+  if (FP.showGrid) {
+    ctx.save();
+    fpRoundRect(ctx, FP.mqX, FP.mqY, FP.mqW, FP.mqH, 10);
+    ctx.clip();
+    var step05 = 0.5 * FP.scale;
+    ctx.strokeStyle = 'rgba(0,255,136,.07)';
+    ctx.lineWidth = 1;
+    for (var gx = FP.mqX; gx <= FP.mqX + FP.mqW + 1; gx += step05) { ctx.beginPath(); ctx.moveTo(gx, FP.mqY); ctx.lineTo(gx, FP.mqY+FP.mqH); ctx.stroke(); }
+    for (var gy = FP.mqY; gy <= FP.mqY + FP.mqH + 1; gy += step05) { ctx.beginPath(); ctx.moveTo(FP.mqX, gy); ctx.lineTo(FP.mqX+FP.mqW, gy); ctx.stroke(); }
+    var step1 = 1 * FP.scale;
+    ctx.strokeStyle = 'rgba(0,255,136,.16)';
+    for (var gxa = FP.mqX; gxa <= FP.mqX + FP.mqW + 1; gxa += step1) { ctx.beginPath(); ctx.moveTo(gxa, FP.mqY); ctx.lineTo(gxa, FP.mqY+FP.mqH); ctx.stroke(); }
+    for (var gya = FP.mqY; gya <= FP.mqY + FP.mqH + 1; gya += step1) { ctx.beginPath(); ctx.moveTo(FP.mqX, gya); ctx.lineTo(FP.mqX+FP.mqW, gya); ctx.stroke(); }
+    ctx.restore();
+  }
+
+  // Marquee outline (gold)
   ctx.strokeStyle = 'rgba(255,215,0,.7)';
   ctx.lineWidth = 2;
-  ctx.fillRect(ox, oy, mW, mH);
-  ctx.strokeRect(ox, oy, mW, mH);
-  // Label
-  ctx.fillStyle = 'rgba(255,215,0,.5)';
-  ctx.font = '11px Segoe UI';
+  fpRoundRect(ctx, FP.mqX, FP.mqY, FP.mqW, FP.mqH, 10);
+  ctx.stroke();
+
+  // Dim lines
+  ctx.fillStyle = 'rgba(255,215,0,.75)';
+  ctx.font = '700 11px Inter, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(mq.w + 'm × ' + mq.d + 'm', W/2, oy - 8);
-  // Round tables (80px diameter at scale ~10px/m)
-  var rt = FURNITURE.find(function(f){ return f.id === 't_round18'; });
-  var tRect = FURNITURE.find(function(f){ return f.id === 't_trestle24'; });
-  var chairs = FURNITURE.find(function(f){ return f.id === 'chair_resin'; });
-  var tR = 28, spacing = 8;
-  var cols = Math.max(1, Math.floor(mW / (tR*2 + spacing)));
-  var rtQty = rt ? Math.min(rt.qty, 12) : 0;
-  for (var i = 0; i < rtQty; i++) {
-    var col = i % cols, row = Math.floor(i / cols);
-    var tx = ox + tR + spacing + col * (tR*2 + spacing);
-    var ty = oy + tR + spacing + row * (tR*2 + spacing + 20);
-    ctx.beginPath(); ctx.arc(tx, ty, tR, 0, Math.PI*2);
-    ctx.fillStyle = 'rgba(0,230,255,.12)'; ctx.fill();
-    ctx.strokeStyle = 'rgba(0,230,255,.5)'; ctx.lineWidth = 1.5; ctx.stroke();
-    ctx.fillStyle = 'rgba(0,230,255,.7)'; ctx.font = '9px Segoe UI'; ctx.textAlign = 'center';
-    ctx.fillText('Round', tx, ty - 3); ctx.fillText('8 seats', tx, ty + 9);
-    // Chairs around table
-    for (var c = 0; c < 8; c++) {
-      var a = (c / 8) * Math.PI * 2;
-      var cx2 = tx + Math.cos(a) * (tR + 7), cy2 = ty + Math.sin(a) * (tR + 7);
-      ctx.beginPath(); ctx.arc(cx2, cy2, 4, 0, Math.PI*2);
-      ctx.fillStyle = 'rgba(192,96,255,.5)'; ctx.fill();
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText(state.selectedMarquee.w + 'm', FP.mqX + FP.mqW/2, FP.mqY - 10);
+  ctx.save();
+  ctx.translate(FP.mqX - 16, FP.mqY + FP.mqH/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText(state.selectedMarquee.d + 'm', 0, 0);
+  ctx.restore();
+
+  // Entry notch
+  var entryW = Math.min(FP.mqW * 0.22, 56);
+  var entryX = FP.mqX + FP.mqW/2 - entryW/2;
+  var entryY = FP.mqY + FP.mqH - 1;
+  ctx.fillStyle = 'rgba(0,230,255,.55)';
+  ctx.fillRect(entryX, entryY, entryW, 3);
+  ctx.fillStyle = 'rgba(0,230,255,.85)';
+  ctx.font = '700 9px Inter';
+  ctx.fillText('ENTRY', FP.mqX + FP.mqW/2, FP.mqY + FP.mqH + 16);
+
+  // Equipment
+  state.equipment.forEach(function(eq){ fpDrawItem(ctx, eq); });
+}
+
+function fpDrawItem(ctx, eq) {
+  var it = eq.item;
+  var pos = fpLatLngToXY(eq.latlng[0], eq.latlng[1]);
+  var pw = it.w * FP.scale;
+  var ph = it.d * FP.scale;
+  var rot = (eq.rotation || 0) * Math.PI / 180;
+  var sel = (eq.uid === FP.selectedUid);
+  var hov = (eq.uid === FP.hoverUid) && !sel;
+
+  ctx.save();
+  ctx.translate(pos.x, pos.y);
+  ctx.rotate(rot);
+
+  if (sel)      { ctx.shadowColor = it.color; ctx.shadowBlur = 22; }
+  else if (hov) { ctx.shadowColor = it.color; ctx.shadowBlur = 12; }
+
+  if (it.shape === 'round') {
+    var r = Math.max(pw, ph) / 2;
+    ctx.fillStyle = it.color + '40';
+    ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2); ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = sel ? '#ffffff' : it.color;
+    ctx.lineWidth = sel ? 2.5 : 1.8;
+    ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2); ctx.stroke();
+  } else {
+    ctx.fillStyle = it.color + '40';
+    fpRoundRect(ctx, -pw/2, -ph/2, pw, ph, 4); ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = sel ? '#ffffff' : it.color;
+    ctx.lineWidth = sel ? 2.5 : 1.8;
+    fpRoundRect(ctx, -pw/2, -ph/2, pw, ph, 4); ctx.stroke();
+  }
+
+  if (Math.min(pw, ph) > 26) {
+    ctx.rotate(-rot);
+    ctx.fillStyle = 'rgba(255,255,255,.92)';
+    var fsz = Math.max(8, Math.min(11, Math.floor(Math.min(pw,ph)/4)));
+    ctx.font = '700 ' + fsz + 'px Inter';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(it.short, 0, 0);
+  }
+  ctx.restore();
+
+  if (sel) {
+    ctx.save();
+    ctx.translate(pos.x, pos.y);
+    var dashR = Math.max(pw, ph) * 0.6 + 8;
+    ctx.strokeStyle = 'rgba(255,255,255,.4)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.arc(0,0,dashR,0,Math.PI*2); ctx.stroke();
+    ctx.restore();
+  }
+}
+
+function fpHitTest(x, y) {
+  for (var i = state.equipment.length - 1; i >= 0; i--) {
+    var eq = state.equipment[i];
+    var pos = fpLatLngToXY(eq.latlng[0], eq.latlng[1]);
+    var pw = eq.item.w * FP.scale;
+    var ph = eq.item.d * FP.scale;
+    var dx = x - pos.x, dy = y - pos.y;
+    var rot = (eq.rotation || 0) * Math.PI / 180;
+    var cos = Math.cos(-rot), sin = Math.sin(-rot);
+    var lx = dx*cos - dy*sin;
+    var ly = dx*sin + dy*cos;
+    if (eq.item.shape === 'round') {
+      var r = Math.max(pw, ph) / 2;
+      if (lx*lx + ly*ly <= r*r) return eq;
+    } else {
+      if (lx >= -pw/2 && lx <= pw/2 && ly >= -ph/2 && ly <= ph/2) return eq;
     }
   }
-  // Trestle tables
-  var trQty = tRect ? Math.min(tRect.qty, 6) : 0;
-  for (var j = 0; j < trQty; j++) {
-    var tx2 = ox + spacing + j * (70 + spacing);
-    var ty2 = oy + mH - 40;
-    if (tx2 + 60 > ox + mW) break;
-    ctx.fillStyle = 'rgba(0,255,136,.1)'; ctx.strokeStyle = 'rgba(0,255,136,.5)'; ctx.lineWidth = 1.5;
-    ctx.fillRect(tx2, ty2, 60, 20); ctx.strokeRect(tx2, ty2, 60, 20);
-    ctx.fillStyle = 'rgba(0,255,136,.6)'; ctx.font = '8px Segoe UI'; ctx.textAlign = 'center';
-    ctx.fillText('Trestle', tx2 + 30, ty2 + 13);
+  return null;
+}
+
+function fpMouseCoords(e) {
+  var r = FP.canvas.getBoundingClientRect();
+  return { x: e.clientX - r.left, y: e.clientY - r.top };
+}
+
+function fpOnMouseDown(e) {
+  if (e.button === 2) return;
+  var pt = fpMouseCoords(e);
+  var hit = fpHitTest(pt.x, pt.y);
+  if (hit) {
+    FP.selectedUid = hit.uid;
+    FP.dragUid = hit.uid;
+    var pos = fpLatLngToXY(hit.latlng[0], hit.latlng[1]);
+    FP.dragOffX = pt.x - pos.x;
+    FP.dragOffY = pt.y - pos.y;
+    FP.canvas.classList.add('fp-drag');
+    selectEquipment(hit.uid);
+  } else {
+    FP.selectedUid = null;
+    selectEquipment(null);
   }
-  ctx.textAlign = 'left';
+  fpUpdateLabels();
+  fpRequestDraw();
+}
+
+function fpOnMouseMoveCanvas(e) {
+  if (FP.dragUid) return;
+  var pt = fpMouseCoords(e);
+  var hit = fpHitTest(pt.x, pt.y);
+  var newH = hit ? hit.uid : null;
+  if (newH !== FP.hoverUid) {
+    FP.hoverUid = newH;
+    if (newH) FP.canvas.classList.add('fp-hover-item');
+    else FP.canvas.classList.remove('fp-hover-item');
+    fpRequestDraw();
+  }
+}
+
+function fpOnMouseMoveWin(e) {
+  if (!FP.dragUid) return;
+  var pt = fpMouseCoords(e);
+  var eq = state.equipment.find(function(x){ return x.uid === FP.dragUid; });
+  if (!eq) return;
+  var nx = pt.x - FP.dragOffX;
+  var ny = pt.y - FP.dragOffY;
+  var pw = eq.item.w * FP.scale;
+  var ph = eq.item.d * FP.scale;
+  var halfMax = Math.max(pw, ph) / 2;
+  nx = Math.max(FP.mqX + halfMax, Math.min(FP.mqX + FP.mqW - halfMax, nx));
+  ny = Math.max(FP.mqY + halfMax, Math.min(FP.mqY + FP.mqH - halfMax, ny));
+  var ll = fpXYToLatLng(nx, ny);
+  if (ll) {
+    eq.latlng = [ll.lat, ll.lng];
+    if (eq.marker) eq.marker.setLatLng([ll.lat, ll.lng]);
+  }
+  fpRequestDraw();
+}
+
+function fpOnMouseUpWin(e) {
+  if (FP.dragUid) {
+    FP.canvas.classList.remove('fp-drag');
+    FP.dragUid = null;
+    saveEquipmentLayout();
+    renderLayoutSummary();
+    fpUpdateLabels();
+  }
+}
+
+function fpOnContext(e) {
+  e.preventDefault();
+  var pt = fpMouseCoords(e);
+  var hit = fpHitTest(pt.x, pt.y);
+  if (hit) {
+    FP.selectedUid = hit.uid;
+    selectEquipment(hit.uid);
+    rotateEquipment(hit.uid);
+    fpUpdateLabels();
+    fpRequestDraw();
+  }
+}
+
+function fpOnDblClick(e) {
+  var pt = fpMouseCoords(e);
+  var hit = fpHitTest(pt.x, pt.y);
+  if (hit) rotateEquipment(hit.uid);
+  fpUpdateLabels();
+  fpRequestDraw();
+}
+
+function fpToggleGrid() {
+  FP.showGrid = !FP.showGrid;
+  var btn = document.getElementById('fpGridBtn');
+  if (btn) btn.style.opacity = FP.showGrid ? '1' : '.5';
+  fpRequestDraw();
+}
+
+function fpRotateSelected() {
+  if (!FP.selectedUid) return;
+  rotateEquipment(FP.selectedUid);
+  fpUpdateLabels();
+  fpRequestDraw();
+}
+
+function fpDeleteSelected() {
+  if (!FP.selectedUid) return;
+  removeEquipment(FP.selectedUid);
+  FP.selectedUid = null;
+  fpUpdateLabels();
+  fpRequestDraw();
+}
+
+function fpRenderPalette() {
+  var body = document.getElementById('fpPaletteBody');
+  if (!body) return;
+  var groups = {}; var order = [];
+  EQUIPMENT_PALETTE.forEach(function(it){
+    if (!groups[it.group]) { groups[it.group] = []; order.push(it.group); }
+    groups[it.group].push(it);
+  });
+  var html = '';
+  order.forEach(function(g){
+    html += '<div class="fp-pg"><div class="fp-pg-lbl">' + g + '</div><div class="fp-pg-grid">';
+    groups[g].forEach(function(it){
+      html += '<button class="fp-pi" style="--eq-c:' + it.color + '" onclick="fpPlaceFromPalette(\'' + it.id + '\')" title="' + it.name + ' · ' + it.w + 'm × ' + it.d + 'm">' +
+                '<div class="fp-pi-ic" style="color:' + it.color + '"><svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">' + it.svg + '</svg></div>' +
+                '<div class="fp-pi-nm">' + it.short + '</div>' +
+              '</button>';
+    });
+    html += '</div></div>';
+  });
+  body.innerHTML = html;
+}
+
+function fpPlaceFromPalette(paletteId) {
+  if (!state.marqueeRect) { alert('Select a marquee first.'); return; }
+  var before = state.equipment.length;
+  placeEquipment(paletteId);
+  var last = state.equipment[state.equipment.length - 1];
+  if (last && state.equipment.length > before) {
+    FP.selectedUid = last.uid;
+    selectEquipment(last.uid);
+  }
+  fpUpdateLabels();
+  fpRequestDraw();
+  fpFlashHint('Placed · drag to reposition · right-click rotates');
+}
+
+function fpFlashHint(msg) {
+  var h = document.getElementById('fpCanvasHint');
+  if (!h) return;
+  h.textContent = msg;
+  h.classList.add('show');
+  clearTimeout(h._t);
+  h._t = setTimeout(function(){ h.classList.remove('show'); }, 2400);
+}
+
+// Backwards-compat — keep the old function name as a thin wrapper
+function renderFloorPlan() { fpUpdateLabels(); fpRequestDraw(); }
+
+// ── 3D WALKTHROUGH (Three.js) ────────────────────────────────
+var TD = {
+  loaded:false, THREE:null, OrbitControls:null, PointerLockControls:null,
+  scene:null, camera:null, renderer:null, orbit:null, pointer:null,
+  mode:'orbit', raf:null, resizeHandler:null, keyState:{},
+  lightsOn:true, fairyLights:[], equipmentMeshes:[], marqueeGroup:null,
+  _onKeyDown:null, _onKeyUp:null
+};
+
+async function tdLoad() {
+  if (TD.loaded) return;
+  TD.THREE = await import('three');
+  var oc = await import('three/addons/controls/OrbitControls.js');
+  TD.OrbitControls = oc.OrbitControls;
+  var pl = await import('three/addons/controls/PointerLockControls.js');
+  TD.PointerLockControls = pl.PointerLockControls;
+  TD.loaded = true;
+}
+
+async function open3DWalkthrough() {
+  if (!state.selectedMarquee) { alert('Select a marquee first to enter 3D walkthrough.'); return; }
+  var overlay = document.getElementById('tdOverlay');
+  var loader = document.getElementById('tdLoader');
+  overlay.classList.add('open');
+  if (loader) { loader.classList.remove('hidden'); loader.innerHTML = '<div class="td-loader-spin"></div><div>Loading 3D scene…</div>'; }
+  var fpModal = document.getElementById('floorPlanModal');
+  if (fpModal) fpModal.classList.remove('open');
+  document.getElementById('tdMqLabel').textContent = state.selectedMarquee.w + 'm × ' + state.selectedMarquee.d + 'm · ' + state.equipment.length + ' items';
+  try {
+    await tdLoad();
+    tdBuildScene();
+    if (loader) loader.classList.add('hidden');
+    tdAnimate();
+    tdShowStatus('ORBIT MODE');
+  } catch (e) {
+    console.error('3D init error', e);
+    if (loader) loader.innerHTML = '<div style="color:#ff6680;padding:20px;text-align:center;max-width:480px">3D failed to load — ' + (e && e.message ? e.message : 'check console') + '<br><br><button onclick="close3DWalkthrough()" style="margin-top:12px;padding:8px 18px;background:#222;color:#fff;border:1px solid #555;border-radius:8px;cursor:pointer">Close</button></div>';
+  }
+}
+
+function close3DWalkthrough() {
+  var overlay = document.getElementById('tdOverlay');
+  if (overlay) overlay.classList.remove('open');
+  tdStopAnimation();
+  tdDispose();
+}
+
+function tdBuildScene() {
+  var THREE = TD.THREE;
+  var canvas = document.getElementById('tdCanvas');
+  var W = window.innerWidth, H = window.innerHeight;
+
+  TD.renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+  TD.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  TD.renderer.setSize(W, H);
+  TD.renderer.shadowMap.enabled = true;
+  TD.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  TD.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  TD.renderer.toneMappingExposure = 1.1;
+
+  TD.scene = new THREE.Scene();
+  TD.scene.fog = new THREE.Fog(0x0a0e1f, 35, 140);
+
+  // Sky (gradient sphere)
+  var skyGeo = new THREE.SphereGeometry(200, 32, 16);
+  var skyMat = new THREE.ShaderMaterial({
+    side: THREE.BackSide,
+    uniforms: {
+      topColor: { value: new THREE.Color(0x05071a) },
+      midColor: { value: new THREE.Color(0x180a36) },
+      botColor: { value: new THREE.Color(0x0a1830) }
+    },
+    vertexShader: 'varying vec3 vPos; void main(){ vPos = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+    fragmentShader: 'varying vec3 vPos; uniform vec3 topColor; uniform vec3 midColor; uniform vec3 botColor; void main(){ float h = normalize(vPos).y; vec3 c = mix(botColor, midColor, smoothstep(-0.1, 0.5, h)); c = mix(c, topColor, smoothstep(0.3, 1.0, h)); gl_FragColor = vec4(c, 1.0); }'
+  });
+  TD.scene.add(new THREE.Mesh(skyGeo, skyMat));
+
+  // Ground (grass)
+  var groundMat = new THREE.MeshStandardMaterial({ color: 0x1d3a22, roughness: 0.95 });
+  var ground = new THREE.Mesh(new THREE.PlaneGeometry(140, 140), groundMat);
+  ground.rotation.x = -Math.PI/2;
+  ground.receiveShadow = true;
+  TD.scene.add(ground);
+
+  // Stars
+  var starGeo = new THREE.BufferGeometry();
+  var starPos = [];
+  for (var s = 0; s < 700; s++) {
+    var r = 110 + Math.random() * 60;
+    var theta = Math.random() * Math.PI * 2;
+    var phi = Math.acos(2 * Math.random() - 1);
+    starPos.push(r * Math.sin(phi) * Math.cos(theta), Math.abs(r * Math.cos(phi)) + 4, r * Math.sin(phi) * Math.sin(theta));
+  }
+  starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starPos, 3));
+  TD.scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.5, transparent: true, opacity: 0.55, sizeAttenuation: false })));
+
+  // Lighting
+  TD.scene.add(new THREE.HemisphereLight(0x5588dd, 0x1a2a10, 0.55));
+  var sun = new THREE.DirectionalLight(0xfff0d6, 0.85);
+  sun.position.set(22, 30, 14);
+  sun.castShadow = true;
+  sun.shadow.mapSize.width = 2048;
+  sun.shadow.mapSize.height = 2048;
+  sun.shadow.camera.near = 0.5;
+  sun.shadow.camera.far = 90;
+  sun.shadow.camera.left = -30; sun.shadow.camera.right = 30;
+  sun.shadow.camera.top = 30; sun.shadow.camera.bottom = -30;
+  TD.scene.add(sun);
+
+  tdBuildMarquee();
+  tdBuildEquipment();
+
+  var mqW = state.selectedMarquee.w, mqD = state.selectedMarquee.d;
+  var diag = Math.sqrt(mqW*mqW + mqD*mqD);
+  TD.camera = new THREE.PerspectiveCamera(55, W / H, 0.1, 500);
+  TD.camera.position.set(diag * 1.2, mqW * 0.9, diag * 1.2);
+  TD.camera.lookAt(0, 1.4, 0);
+
+  TD.orbit = new TD.OrbitControls(TD.camera, canvas);
+  TD.orbit.target.set(0, 1.4, 0);
+  TD.orbit.enableDamping = true;
+  TD.orbit.dampingFactor = 0.08;
+  TD.orbit.minDistance = 2;
+  TD.orbit.maxDistance = 70;
+  TD.orbit.maxPolarAngle = Math.PI * 0.495;
+  TD.orbit.update();
+
+  TD.pointer = new TD.PointerLockControls(TD.camera, document.body);
+
+  TD.keyState = {};
+  TD._onKeyDown = function(e){
+    if (document.activeElement && (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA')) return;
+    TD.keyState[e.code] = true;
+    if (e.code === 'KeyW' && TD.mode === 'orbit') { tdSetMode('walk'); }
+    if (e.code === 'Escape') {
+      if (TD.mode === 'walk') tdSetMode('orbit');
+      else close3DWalkthrough();
+    }
+    if (e.code === 'KeyR') tdResetCamera();
+    if (e.code === 'KeyL') tdToggleLights();
+  };
+  TD._onKeyUp = function(e){ TD.keyState[e.code] = false; };
+  window.addEventListener('keydown', TD._onKeyDown);
+  window.addEventListener('keyup', TD._onKeyUp);
+
+  TD.resizeHandler = function(){
+    var w = window.innerWidth, h = window.innerHeight;
+    if (!TD.camera || !TD.renderer) return;
+    TD.camera.aspect = w / h;
+    TD.camera.updateProjectionMatrix();
+    TD.renderer.setSize(w, h);
+  };
+  window.addEventListener('resize', TD.resizeHandler);
+}
+
+function tdBuildMarquee() {
+  var THREE = TD.THREE;
+  var w = state.selectedMarquee.w;
+  var d = state.selectedMarquee.d;
+  var wallH = 2.4;
+  var peakH = 1.6;
+
+  var grp = new THREE.Group();
+  grp.name = 'marquee';
+
+  // Wooden plank floor
+  var floor = new THREE.Mesh(new THREE.PlaneGeometry(w, d), new THREE.MeshStandardMaterial({ color: 0x6b4a2b, roughness: 0.7 }));
+  floor.rotation.x = -Math.PI/2;
+  floor.position.y = 0.02;
+  floor.receiveShadow = true;
+  grp.add(floor);
+  var plankCount = Math.max(4, Math.floor(d / 0.4));
+  for (var pi = 0; pi < plankCount; pi++) {
+    var line = new THREE.Mesh(new THREE.BoxGeometry(w, 0.005, 0.03), new THREE.MeshStandardMaterial({ color: 0x3a2818, roughness: 0.9 }));
+    line.position.set(0, 0.025, -d/2 + (pi + 1) * (d / plankCount));
+    grp.add(line);
+  }
+
+  // Fabric walls (translucent)
+  var fabricMat = new THREE.MeshStandardMaterial({ color: 0xf5efd9, roughness: 0.85, transparent: true, opacity: 0.78, side: THREE.DoubleSide });
+  var wL = new THREE.Mesh(new THREE.PlaneGeometry(d, wallH), fabricMat); wL.position.set(-w/2, wallH/2, 0); wL.rotation.y = Math.PI/2; grp.add(wL);
+  var wR = new THREE.Mesh(new THREE.PlaneGeometry(d, wallH), fabricMat); wR.position.set( w/2, wallH/2, 0); wR.rotation.y = -Math.PI/2; grp.add(wR);
+  var wB = new THREE.Mesh(new THREE.PlaneGeometry(w, wallH), fabricMat); wB.position.set(0, wallH/2, -d/2); grp.add(wB);
+  // Front wall with entry gap
+  var entryW = Math.min(w * 0.3, 2.0);
+  var sideW = (w - entryW) / 2;
+  if (sideW > 0.1) {
+    var wFL = new THREE.Mesh(new THREE.PlaneGeometry(sideW, wallH), fabricMat); wFL.position.set(-w/2 + sideW/2, wallH/2, d/2); wFL.rotation.y = Math.PI; grp.add(wFL);
+    var wFR = new THREE.Mesh(new THREE.PlaneGeometry(sideW, wallH), fabricMat); wFR.position.set( w/2 - sideW/2, wallH/2, d/2); wFR.rotation.y = Math.PI; grp.add(wFR);
+  }
+
+  // Gable roof (two sloped panels)
+  var slopeMat = new THREE.MeshStandardMaterial({ color: 0xfaf6e8, roughness: 0.7, transparent: true, opacity: 0.92, side: THREE.DoubleSide });
+  var rGeoL = new THREE.BufferGeometry();
+  rGeoL.setAttribute('position', new THREE.BufferAttribute(new Float32Array([
+    -w/2, wallH,  d/2,
+    -w/2, wallH, -d/2,
+       0, wallH+peakH, -d/2,
+    -w/2, wallH,  d/2,
+       0, wallH+peakH, -d/2,
+       0, wallH+peakH,  d/2
+  ]), 3));
+  rGeoL.computeVertexNormals();
+  grp.add(new THREE.Mesh(rGeoL, slopeMat));
+  var rGeoR = new THREE.BufferGeometry();
+  rGeoR.setAttribute('position', new THREE.BufferAttribute(new Float32Array([
+     w/2, wallH,  d/2,
+       0, wallH+peakH,  d/2,
+       0, wallH+peakH, -d/2,
+     w/2, wallH,  d/2,
+       0, wallH+peakH, -d/2,
+     w/2, wallH, -d/2
+  ]), 3));
+  rGeoR.computeVertexNormals();
+  grp.add(new THREE.Mesh(rGeoR, slopeMat));
+
+  // Gable end triangles
+  var gableMat = fabricMat;
+  var gfGeo = new THREE.BufferGeometry();
+  gfGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array([
+    -w/2, wallH, d/2,
+     w/2, wallH, d/2,
+       0, wallH+peakH, d/2
+  ]), 3));
+  gfGeo.computeVertexNormals();
+  grp.add(new THREE.Mesh(gfGeo, gableMat));
+  var gbGeo = new THREE.BufferGeometry();
+  gbGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array([
+    -w/2, wallH, -d/2,
+       0, wallH+peakH, -d/2,
+     w/2, wallH, -d/2
+  ]), 3));
+  gbGeo.computeVertexNormals();
+  grp.add(new THREE.Mesh(gbGeo, gableMat));
+
+  // Corner poles + ridge pole
+  var poleMat = new THREE.MeshStandardMaterial({ color: 0x4a2a18, roughness: 0.8 });
+  [[-w/2,-d/2],[w/2,-d/2],[-w/2,d/2],[w/2,d/2]].forEach(function(p){
+    var pole = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, wallH, 8), poleMat);
+    pole.position.set(p[0], wallH/2, p[1]); pole.castShadow = true; grp.add(pole);
+  });
+  var ridge = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, d, 8), poleMat);
+  ridge.rotation.x = Math.PI/2;
+  ridge.position.set(0, wallH + peakH, 0);
+  grp.add(ridge);
+
+  // Fairy lights
+  TD.fairyLights = [];
+  var nLights = Math.max(4, Math.floor(d / 1.5));
+  for (var i = 0; i < nLights; i++) {
+    var t = (i + 0.5) / nLights;
+    var pz = -d/2 + t * d;
+    var lt = new THREE.PointLight(0xffd28a, 0.55, 6, 1.5);
+    lt.position.set(0, wallH + peakH * 0.85, pz);
+    grp.add(lt);
+    TD.fairyLights.push(lt);
+    var bulb = new THREE.Mesh(new THREE.SphereGeometry(0.05, 8, 6), new THREE.MeshBasicMaterial({ color: 0xffe4a8 }));
+    bulb.position.copy(lt.position);
+    grp.add(bulb);
+  }
+
+  TD.scene.add(grp);
+  TD.marqueeGroup = grp;
+}
+
+function tdBuildEquipment() {
+  var THREE = TD.THREE;
+  TD.equipmentMeshes = [];
+  state.equipment.forEach(function(eq){
+    var mesh = tdMakeEquipmentMesh(eq);
+    if (!mesh) return;
+    if (state.marqueeRect) {
+      var b = state.marqueeRect.getBounds();
+      var n=b.getNorth(), s=b.getSouth(), w=b.getWest(), e=b.getEast();
+      var nx = (eq.latlng[1] - w) / (e - w);
+      var ny = (eq.latlng[0] - s) / (n - s);
+      var mqW = state.selectedMarquee.w, mqD = state.selectedMarquee.d;
+      mesh.position.x = (nx - 0.5) * mqW;
+      mesh.position.z = -(ny - 0.5) * mqD;
+    }
+    mesh.rotation.y = -(eq.rotation || 0) * Math.PI / 180;
+    mesh.traverse(function(o){ if (o.isMesh) o.castShadow = true; });
+    TD.scene.add(mesh);
+    TD.equipmentMeshes.push(mesh);
+  });
+}
+
+function tdMakeEquipmentMesh(eq) {
+  var THREE = TD.THREE;
+  var it = eq.item;
+  var grp = new THREE.Group();
+  var col = new THREE.Color(it.color);
+
+  function addChairsAround(count, radius) {
+    var mat = new THREE.MeshStandardMaterial({ color: 0x222830, roughness: 0.7 });
+    for (var i = 0; i < count; i++) {
+      var a = (i / count) * Math.PI * 2;
+      var cx = Math.cos(a) * radius, cz = Math.sin(a) * radius;
+      var seat = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.05, 0.38), mat);
+      seat.position.set(cx, 0.45, cz);
+      grp.add(seat);
+      var back = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.45, 0.04), mat);
+      back.position.set(cx - Math.cos(a)*0.19, 0.68, cz - Math.sin(a)*0.19);
+      back.lookAt(0, 0.68, 0);
+      grp.add(back);
+    }
+  }
+
+  if (it.shape === 'round') {
+    if (it.id && it.id.indexOf('r_table') === 0) {
+      var rad = it.w / 2;
+      var top = new THREE.Mesh(new THREE.CylinderGeometry(rad, rad, 0.04, 32), new THREE.MeshStandardMaterial({ color: 0xf6f1e3, roughness: 0.5 }));
+      top.position.y = 0.74; grp.add(top);
+      var leg = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.72, 12), new THREE.MeshStandardMaterial({ color: 0x202020 }));
+      leg.position.y = 0.36; grp.add(leg);
+      var base = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.03, 16), new THREE.MeshStandardMaterial({ color: 0x202020 }));
+      base.position.y = 0.015; grp.add(base);
+      var chairCount = it.id === 'r_table_10' ? 10 : it.id === 'r_table_8' ? 8 : 6;
+      addChairsAround(chairCount, rad + 0.48);
+    } else if (it.id === 'cocktail') {
+      var ct = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 0.04, 24), new THREE.MeshStandardMaterial({ color: 0xf6f1e3 }));
+      ct.position.y = 1.08; grp.add(ct);
+      var cs = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 1.06, 12), new THREE.MeshStandardMaterial({ color: 0x101010 }));
+      cs.position.y = 0.53; grp.add(cs);
+      var cb = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.03, 24), new THREE.MeshStandardMaterial({ color: 0x202020 }));
+      cb.position.y = 0.015; grp.add(cb);
+    } else if (it.id === 'heater_col') {
+      var hs = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 1.8, 12), new THREE.MeshStandardMaterial({ color: 0x555555 }));
+      hs.position.y = 0.9; grp.add(hs);
+      var hh = new THREE.Mesh(new THREE.ConeGeometry(0.4, 0.5, 16), new THREE.MeshStandardMaterial({ color: 0xff6644, emissive: 0xff4422, emissiveIntensity: 0.7 }));
+      hh.position.y = 1.95; grp.add(hh);
+      var hl = new THREE.PointLight(0xff8855, 0.7, 5); hl.position.y = 1.9; grp.add(hl);
+    } else if (it.id === 'lighting') {
+      var lm = new THREE.Mesh(new THREE.SphereGeometry(0.22, 16, 12), new THREE.MeshBasicMaterial({ color: 0xffe4a8 }));
+      lm.position.y = 2.0; grp.add(lm);
+      var lp = new THREE.PointLight(0xffd28a, 1.4, 9); lp.position.y = 2.0; grp.add(lp);
+    } else if (it.id === 'speaker') {
+      var sp = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.7, 0.35), new THREE.MeshStandardMaterial({ color: 0x111111 }));
+      sp.position.y = 0.35; grp.add(sp);
+    } else {
+      var fb = new THREE.Mesh(new THREE.CylinderGeometry(it.w/2, it.w/2, 0.7, 24), new THREE.MeshStandardMaterial({ color: col, roughness: 0.6 }));
+      fb.position.y = 0.35; grp.add(fb);
+    }
+  } else {
+    if (it.id && it.id.indexOf('banquet') === 0) {
+      var w = it.w, d = it.d;
+      var topR = new THREE.Mesh(new THREE.BoxGeometry(w, 0.05, d), new THREE.MeshStandardMaterial({ color: 0xf6f1e3, roughness: 0.5 }));
+      topR.position.y = 0.74; grp.add(topR);
+      var legMat = new THREE.MeshStandardMaterial({ color: 0x202020 });
+      [[-w/2+0.08,-d/2+0.08],[w/2-0.08,-d/2+0.08],[-w/2+0.08,d/2-0.08],[w/2-0.08,d/2-0.08]].forEach(function(pt){
+        var lg = new THREE.Mesh(new THREE.CylinderGeometry(0.03,0.03,0.72,8), legMat);
+        lg.position.set(pt[0], 0.36, pt[1]); grp.add(lg);
+      });
+      var n = Math.max(2, Math.floor(w / 0.55));
+      var chairMat = new THREE.MeshStandardMaterial({ color: 0x222830, roughness: 0.7 });
+      for (var ci = 0; ci < n; ci++) {
+        var cx2 = -w/2 + (ci + 0.5) * (w / n);
+        [-1, 1].forEach(function(si){
+          var seat = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.05, 0.38), chairMat);
+          seat.position.set(cx2, 0.45, si * (d/2 + 0.27)); grp.add(seat);
+          var bk = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.42, 0.04), chairMat);
+          bk.position.set(cx2, 0.66, si * (d/2 + 0.45)); grp.add(bk);
+        });
+      }
+    } else if (it.id && it.id.indexOf('dance') === 0) {
+      var df = new THREE.Mesh(new THREE.BoxGeometry(it.w, 0.06, it.d), new THREE.MeshStandardMaterial({ color: 0x141420, roughness: 0.3, metalness: 0.4 }));
+      df.position.y = 0.04; grp.add(df);
+      var tiles = 8;
+      for (var tx = 0; tx < tiles; tx++) {
+        for (var tz = 0; tz < tiles; tz++) {
+          if ((tx + tz) % 2 === 0) continue;
+          var tile = new THREE.Mesh(new THREE.PlaneGeometry(it.w/tiles, it.d/tiles), new THREE.MeshBasicMaterial({ color: 0x6020a0, transparent: true, opacity: 0.55 }));
+          tile.rotation.x = -Math.PI/2;
+          tile.position.set(-it.w/2 + (tx+0.5)*(it.w/tiles), 0.075, -it.d/2 + (tz+0.5)*(it.d/tiles));
+          grp.add(tile);
+        }
+      }
+      var dl = new THREE.PointLight(0xc060ff, 0.9, 9); dl.position.set(0, 2.4, 0); grp.add(dl);
+    } else if (it.id === 'stage_3x2') {
+      var st = new THREE.Mesh(new THREE.BoxGeometry(it.w, 0.4, it.d), new THREE.MeshStandardMaterial({ color: 0x1a0a2a, roughness: 0.6 }));
+      st.position.y = 0.2; grp.add(st);
+      var spotlight = new THREE.SpotLight(0xff66cc, 1.0, 7, Math.PI/4, 0.5);
+      spotlight.position.set(0, 3, 0); spotlight.target.position.set(0,0.4,0);
+      grp.add(spotlight); grp.add(spotlight.target);
+    } else if (it.id === 'dj_booth') {
+      var bt = new THREE.Mesh(new THREE.BoxGeometry(it.w, 1.1, it.d), new THREE.MeshStandardMaterial({ color: 0x202028, roughness: 0.5 }));
+      bt.position.y = 0.55; grp.add(bt);
+      var dk = new THREE.Mesh(new THREE.BoxGeometry(it.w*0.9, 0.04, it.d*0.7), new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0x00e6ff, emissiveIntensity: 0.4 }));
+      dk.position.y = 1.12; grp.add(dk);
+    } else if (it.id === 'bar') {
+      var bar = new THREE.Mesh(new THREE.BoxGeometry(it.w, 1.05, it.d), new THREE.MeshStandardMaterial({ color: 0x3a1a0a, roughness: 0.7 }));
+      bar.position.y = 0.52; grp.add(bar);
+      var btop = new THREE.Mesh(new THREE.BoxGeometry(it.w + 0.05, 0.04, it.d + 0.1), new THREE.MeshStandardMaterial({ color: 0xf6f1e3, roughness: 0.4 }));
+      btop.position.y = 1.07; grp.add(btop);
+    } else if (it.id === 'arch') {
+      var arch = new THREE.Mesh(new THREE.TorusGeometry(it.w/2, 0.08, 8, 24, Math.PI), new THREE.MeshStandardMaterial({ color: 0xf2eedd, roughness: 0.6 }));
+      arch.position.set(0, it.w/2, 0); grp.add(arch);
+      for (var fa = 0; fa < 7; fa++) {
+        var ang = (fa / 6) * Math.PI;
+        var fx = Math.cos(ang) * it.w/2;
+        var fy = Math.sin(ang) * it.w/2;
+        var flower = new THREE.Mesh(new THREE.SphereGeometry(0.13, 10, 8), new THREE.MeshStandardMaterial({ color: 0xffaaaa, emissive: 0xff6666, emissiveIntensity: 0.25 }));
+        flower.position.set(fx, fy, 0); grp.add(flower);
+      }
+    } else if (it.id === 'photo_booth') {
+      var pb = new THREE.Mesh(new THREE.BoxGeometry(it.w, 2.2, it.d), new THREE.MeshStandardMaterial({ color: col, roughness: 0.7 }));
+      pb.position.y = 1.1; grp.add(pb);
+    } else if (it.id === 'first_aid') {
+      var fb1 = new THREE.Mesh(new THREE.BoxGeometry(it.w, 1.0, it.d), new THREE.MeshStandardMaterial({ color: 0xffffff }));
+      fb1.position.y = 0.5; grp.add(fb1);
+      var cross = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.4, 0.02), new THREE.MeshStandardMaterial({ color: 0xff2244, emissive: 0xff2244, emissiveIntensity: 0.5 }));
+      cross.position.set(0, 0.7, it.d/2 + 0.01); grp.add(cross);
+    } else if (it.id === 'generator') {
+      var gn = new THREE.Mesh(new THREE.BoxGeometry(it.w, 0.7, it.d), new THREE.MeshStandardMaterial({ color: 0x444444, roughness: 0.8 }));
+      gn.position.y = 0.35; grp.add(gn);
+    } else {
+      var ht = (it.id === 'kids_zone') ? 0.3 : 0.85;
+      var gen = new THREE.Mesh(new THREE.BoxGeometry(it.w, ht, it.d), new THREE.MeshStandardMaterial({ color: col, roughness: 0.7 }));
+      gen.position.y = ht/2; grp.add(gen);
+    }
+  }
+  return grp;
+}
+
+function tdAnimate() {
+  var THREE = TD.THREE;
+  var clock = new THREE.Clock();
+  function frame() {
+    TD.raf = requestAnimationFrame(frame);
+    var dt = Math.min(0.05, clock.getDelta());
+    if (TD.mode === 'walk' && TD.pointer && TD.pointer.isLocked) {
+      var speed = (TD.keyState['ShiftLeft'] || TD.keyState['ShiftRight']) ? 7.5 : 3.2;
+      var fwd = 0, side = 0;
+      if (TD.keyState['KeyW']) fwd += 1;
+      if (TD.keyState['KeyS']) fwd -= 1;
+      if (TD.keyState['KeyA']) side -= 1;
+      if (TD.keyState['KeyD']) side += 1;
+      if (TD.keyState['KeyQ']) TD.camera.position.y -= speed * dt;
+      if (TD.keyState['KeyE']) TD.camera.position.y += speed * dt;
+      if (fwd) TD.pointer.moveForward(fwd * speed * dt);
+      if (side) TD.pointer.moveRight(side * speed * dt);
+      if (TD.camera.position.y < 0.6) TD.camera.position.y = 0.6;
+    } else if (TD.orbit) {
+      TD.orbit.update();
+    }
+    if (TD.fairyLights) {
+      TD.fairyLights.forEach(function(fl, i){
+        fl.intensity = 0.42 + 0.18 * Math.sin(performance.now() * 0.003 + i * 0.7);
+      });
+    }
+    TD.renderer.render(TD.scene, TD.camera);
+  }
+  frame();
+}
+
+function tdStopAnimation() {
+  if (TD.raf) cancelAnimationFrame(TD.raf);
+  TD.raf = null;
+}
+
+function tdDispose() {
+  if (TD._onKeyDown) window.removeEventListener('keydown', TD._onKeyDown);
+  if (TD._onKeyUp) window.removeEventListener('keyup', TD._onKeyUp);
+  if (TD.resizeHandler) window.removeEventListener('resize', TD.resizeHandler);
+  TD._onKeyDown = null; TD._onKeyUp = null; TD.resizeHandler = null;
+  if (TD.pointer && TD.pointer.isLocked) TD.pointer.unlock();
+  if (TD.scene) {
+    TD.scene.traverse(function(o){
+      if (o.geometry) o.geometry.dispose();
+      if (o.material) {
+        if (Array.isArray(o.material)) o.material.forEach(function(m){ m.dispose(); });
+        else o.material.dispose();
+      }
+    });
+  }
+  if (TD.renderer) TD.renderer.dispose();
+  TD.scene = null; TD.renderer = null; TD.camera = null;
+  TD.orbit = null; TD.pointer = null;
+  TD.equipmentMeshes = []; TD.fairyLights = []; TD.marqueeGroup = null;
+}
+
+function tdSetMode(mode) {
+  if (!TD.scene) return;
+  TD.mode = mode;
+  var ob = document.getElementById('tdModeOrbit'); if (ob) ob.classList.toggle('active', mode === 'orbit');
+  var wb = document.getElementById('tdModeWalk');  if (wb) wb.classList.toggle('active', mode === 'walk');
+  if (mode === 'walk') {
+    if (TD.orbit) TD.orbit.enabled = false;
+    var mqD = state.selectedMarquee.d;
+    TD.camera.position.set(0, 1.7, mqD/2 + 1.6);
+    TD.camera.lookAt(0, 1.6, 0);
+    if (TD.pointer) TD.pointer.lock();
+    tdShowStatus('WALK MODE · ESC to exit');
+  } else {
+    if (TD.pointer && TD.pointer.isLocked) TD.pointer.unlock();
+    if (TD.orbit) TD.orbit.enabled = true;
+    tdShowStatus('ORBIT MODE');
+  }
+}
+
+function tdResetCamera() {
+  if (!TD.camera || !TD.orbit) return;
+  var mqW = state.selectedMarquee.w, mqD = state.selectedMarquee.d;
+  var diag = Math.sqrt(mqW*mqW + mqD*mqD);
+  TD.camera.position.set(diag * 1.2, mqW * 0.9, diag * 1.2);
+  TD.orbit.target.set(0, 1.4, 0);
+  TD.orbit.update();
+  tdShowStatus('CAMERA RESET');
+}
+
+function tdToggleLights() {
+  if (!TD.fairyLights) return;
+  TD.lightsOn = !TD.lightsOn;
+  TD.fairyLights.forEach(function(fl){ fl.visible = TD.lightsOn; });
+  tdShowStatus(TD.lightsOn ? 'LIGHTS ON' : 'LIGHTS OFF');
+}
+
+function tdShowStatus(msg) {
+  var s = document.getElementById('tdStatus');
+  if (!s) return;
+  s.textContent = msg;
+  s.classList.add('show');
+  clearTimeout(s._t);
+  s._t = setTimeout(function(){ s.classList.remove('show'); }, 2200);
 }
 
 // ── QTY HELPERS ──────────────────────────────────────────────
