@@ -873,7 +873,116 @@ input[type=range]{
 .fp-tool-danger:hover:not(:disabled){background:rgba(255,68,102,.14);border-color:rgba(255,68,102,.5)}
 .fp-tool-3d{background:linear-gradient(135deg,rgba(192,96,255,.18),rgba(0,230,255,.12));border-color:rgba(192,96,255,.4);color:#fff;font-weight:800}
 .fp-tool-3d:hover{background:linear-gradient(135deg,rgba(192,96,255,.3),rgba(0,230,255,.2));box-shadow:0 4px 18px rgba(192,96,255,.4)}
+.fp-tool-auto{background:linear-gradient(135deg,#ffd700 0%,#ff9900 50%,#ff4466 100%);border-color:rgba(255,255,255,.25);color:#000;font-weight:900;letter-spacing:1.5px;box-shadow:0 4px 18px rgba(255,215,0,.4);animation:fpAutoPulse 2.6s ease-in-out infinite;position:relative;overflow:hidden}
+.fp-tool-auto::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.4) 50%,transparent 70%);transform:translateX(-100%);transition:transform .6s}
+.fp-tool-auto:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 8px 32px rgba(255,215,0,.7)}
+.fp-tool-auto:hover::before{transform:translateX(100%)}
+@keyframes fpAutoPulse{0%,100%{box-shadow:0 4px 18px rgba(255,215,0,.4)}50%{box-shadow:0 6px 28px rgba(255,215,0,.7),0 0 24px rgba(255,153,0,.4)}}
+.fp-tool-share{background:linear-gradient(135deg,#00e676 0%,#00b859 100%);border-color:rgba(255,255,255,.2);color:#02180b;font-weight:800}
+.fp-tool-share:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(0,230,118,.5)}
 .fp-spacer{flex:1}
+
+/* ── AUTO-PLAN WIZARD ── */
+.apw-overlay{position:fixed;inset:0;z-index:8500;background:rgba(2,4,12,.85);backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;padding:20px;animation:apwFadeIn .35s}
+.apw-overlay.open{display:flex}
+@keyframes apwFadeIn{from{opacity:0}to{opacity:1}}
+.apw-modal{position:relative;max-width:820px;width:100%;max-height:90vh;overflow-y:auto;background:linear-gradient(165deg,#080d20 0%,#0a0f28 60%,#0c1230 100%);border:1px solid rgba(255,215,0,.3);border-radius:24px;box-shadow:0 40px 120px rgba(0,0,0,.8),0 0 60px rgba(255,215,0,.15);padding:32px 32px 24px;animation:apwModalIn .4s cubic-bezier(.22,1,.36,1)}
+@keyframes apwModalIn{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.apw-close{position:absolute;top:18px;right:18px;width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--muted);cursor:pointer;font-size:14px;font-family:inherit;transition:all .2s}
+.apw-close:hover{background:rgba(255,68,102,.18);color:var(--red);border-color:rgba(255,68,102,.4)}
+.apw-header{text-align:center;margin-bottom:24px}
+.apw-eyebrow{font-size:10px;letter-spacing:4px;color:#ffd700;font-weight:800;margin-bottom:8px;text-shadow:0 0 12px rgba(255,215,0,.4)}
+.apw-title{font-size:24px;font-weight:800;color:var(--text);letter-spacing:.5px;margin-bottom:18px}
+.apw-progress{position:relative;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;margin-bottom:8px}
+.apw-progress-fill{position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,#ffd700,#ff9900,#ff4466);border-radius:2px;width:25%;transition:width .4s cubic-bezier(.22,1,.36,1);box-shadow:0 0 14px rgba(255,215,0,.5)}
+.apw-step-dots{display:flex;justify-content:center;gap:14px;margin-top:14px}
+.apw-step-dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.15);transition:all .3s}
+.apw-step-dots span.active{background:linear-gradient(135deg,#ffd700,#ff9900);box-shadow:0 0 10px rgba(255,215,0,.6);transform:scale(1.2)}
+.apw-step-dots span.done{background:rgba(255,215,0,.5)}
+.apw-step{display:none;animation:apwStepIn .4s}
+.apw-step.active{display:block}
+@keyframes apwStepIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+.apw-q{font-size:18px;font-weight:700;color:var(--text);text-align:center;margin-bottom:6px}
+.apw-q-sub{font-size:11px;color:var(--muted);letter-spacing:1.5px;margin-top:6px;text-transform:uppercase}
+.apw-grid{display:grid;gap:10px;margin-top:18px}
+.apw-grid-2{grid-template-columns:repeat(2,1fr)}
+.apw-grid-3{grid-template-columns:repeat(3,1fr)}
+.apw-grid-4{grid-template-columns:repeat(4,1fr)}
+.apw-opt{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 8px;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.08);border-radius:14px;cursor:pointer;font-family:inherit;color:var(--text);transition:all .2s;position:relative;overflow:hidden}
+.apw-opt:hover{background:rgba(255,215,0,.06);border-color:rgba(255,215,0,.4);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4),0 0 18px rgba(255,215,0,.15)}
+.apw-opt.selected{background:linear-gradient(135deg,rgba(255,215,0,.18),rgba(255,153,0,.1));border-color:#ffd700;box-shadow:0 0 24px rgba(255,215,0,.4),inset 0 0 12px rgba(255,215,0,.1)}
+.apw-opt.selected::before{content:"✓";position:absolute;top:6px;right:8px;color:#ffd700;font-weight:900;font-size:12px}
+.apw-opt-tall{padding:18px 10px}
+.apw-emoji{font-size:26px;line-height:1}
+.apw-lbl{font-size:12px;font-weight:700;letter-spacing:.3px}
+.apw-sub{font-size:9px;color:var(--muted);letter-spacing:.5px;text-align:center;margin-top:2px}
+.apw-orient{display:flex;justify-content:center;margin-top:14px}
+.apw-orient-grid{display:grid;grid-template-columns:repeat(3,90px);grid-template-rows:repeat(3,90px);gap:10px}
+.apw-orient-btn{padding:10px 4px}
+.apw-orient-center{display:flex;align-items:center;justify-content:center;font-size:22px;color:rgba(255,215,0,.5);background:rgba(255,255,255,.03);border:1px dashed rgba(255,215,0,.2);border-radius:14px}
+.apw-footer{display:flex;align-items:center;justify-content:space-between;margin-top:24px;padding-top:18px;border-top:1px solid rgba(255,255,255,.06)}
+.apw-btn{padding:10px 22px;border-radius:12px;cursor:pointer;font-family:inherit;font-size:12px;font-weight:800;letter-spacing:1.5px;transition:all .2s;border:1px solid transparent}
+.apw-btn-back{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12);color:var(--muted)}
+.apw-btn-back:hover{background:rgba(255,255,255,.1);color:var(--text)}
+.apw-btn-back.hidden{visibility:hidden}
+.apw-btn-next{background:linear-gradient(135deg,#ffd700,#ff9900);color:#000;font-weight:900;box-shadow:0 4px 16px rgba(255,215,0,.4)}
+.apw-btn-next:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 24px rgba(255,215,0,.6)}
+.apw-btn-next:disabled{opacity:.4;cursor:not-allowed}
+.apw-cap{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;text-align:center;flex:1}
+
+/* ── VARIANT PICKER ── */
+.apv-overlay{position:fixed;inset:0;z-index:8500;background:rgba(2,4,12,.88);backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;padding:20px;animation:apwFadeIn .35s}
+.apv-overlay.open{display:flex}
+.apv-modal{position:relative;max-width:1100px;width:100%;max-height:92vh;overflow-y:auto;background:linear-gradient(165deg,#06091a 0%,#080d20 60%,#0a0f28 100%);border:1px solid rgba(255,215,0,.25);border-radius:24px;box-shadow:0 40px 120px rgba(0,0,0,.8);padding:28px;animation:apwModalIn .4s cubic-bezier(.22,1,.36,1)}
+.apv-close{position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--muted);cursor:pointer;font-size:14px;font-family:inherit}
+.apv-close:hover{background:rgba(255,68,102,.18);color:var(--red)}
+.apv-header{text-align:center;margin-bottom:20px}
+.apv-eyebrow{font-size:10px;letter-spacing:4px;color:#ffd700;font-weight:800;margin-bottom:6px}
+.apv-title{font-size:22px;font-weight:800;color:var(--text);letter-spacing:.3px;margin-bottom:6px}
+.apv-cap{font-size:11px;color:var(--muted);letter-spacing:1.5px}
+.apv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.apv-card{display:flex;flex-direction:column;background:rgba(0,0,0,.4);border:1.5px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;cursor:pointer;transition:all .25s}
+.apv-card:hover{border-color:rgba(255,215,0,.5);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.5),0 0 24px rgba(255,215,0,.2)}
+.apv-card-canvas{width:100%;aspect-ratio:1.2/1;background:radial-gradient(ellipse at center,#0c1832 0%,#04050f 80%);display:block}
+.apv-card-body{padding:14px 14px 16px}
+.apv-card-name{font-size:13px;font-weight:800;color:var(--text);letter-spacing:1px;margin-bottom:4px}
+.apv-card-meta{font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:10px}
+.apv-card-stats{display:flex;gap:14px;margin-bottom:12px;font-size:9px;letter-spacing:1px}
+.apv-card-stats div{display:flex;flex-direction:column;gap:2px}
+.apv-card-stats strong{font-size:14px;color:#ffd700;font-weight:800}
+.apv-card-pick{display:block;width:100%;padding:10px;border-radius:10px;background:linear-gradient(135deg,#ffd700,#ff9900);color:#000;font-weight:900;letter-spacing:1.5px;font-size:11px;border:none;cursor:pointer;font-family:inherit;transition:all .2s}
+.apv-card-pick:hover{box-shadow:0 4px 18px rgba(255,215,0,.5)}
+.apv-cap-fit{color:#00ff88;font-weight:700}
+.apv-cap-tight{color:#ff9900;font-weight:700}
+.apv-cap-over{color:#ff4466;font-weight:700}
+.apv-footer{display:flex;justify-content:space-between;margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06)}
+.apv-btn{padding:10px 22px;border-radius:12px;cursor:pointer;font-family:inherit;font-size:11px;font-weight:800;letter-spacing:1.5px;transition:all .2s;border:1px solid}
+.apv-btn-back{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12);color:var(--muted)}
+.apv-btn-back:hover{background:rgba(255,255,255,.1);color:var(--text)}
+.apv-btn-regen{background:linear-gradient(135deg,#c060ff,#7030ff);border-color:rgba(255,255,255,.18);color:#fff}
+.apv-btn-regen:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(192,96,255,.4)}
+
+/* ── SHARE MODAL ── */
+.aps-overlay{position:fixed;inset:0;z-index:8600;background:rgba(2,4,12,.85);backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;padding:20px}
+.aps-overlay.open{display:flex;animation:apwFadeIn .35s}
+.aps-modal{position:relative;max-width:480px;width:100%;background:linear-gradient(165deg,#06091a,#0a0f28);border:1px solid rgba(0,230,118,.3);border-radius:24px;box-shadow:0 40px 120px rgba(0,0,0,.8),0 0 60px rgba(0,230,118,.12);padding:32px 28px}
+.aps-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--muted);cursor:pointer;font-size:14px;font-family:inherit}
+.aps-eyebrow{font-size:10px;letter-spacing:4px;color:#00e676;font-weight:800;margin-bottom:8px;text-align:center}
+.aps-title{font-size:20px;font-weight:800;color:var(--text);text-align:center;margin-bottom:8px}
+.aps-sub{font-size:12px;color:var(--muted);text-align:center;line-height:1.6;margin-bottom:18px}
+.aps-link-row{display:flex;gap:8px;margin-bottom:14px}
+.aps-link{flex:1;padding:11px 14px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.12);color:var(--text);font-family:'JetBrains Mono','Geist Mono',monospace;font-size:11px;letter-spacing:.5px;outline:none}
+.aps-copy{padding:11px 16px;border-radius:10px;background:linear-gradient(135deg,#00e676,#00b859);border:none;color:#02180b;font-weight:800;cursor:pointer;font-family:inherit;font-size:11px;letter-spacing:1px}
+.aps-tiny{text-align:center;font-size:10px;color:#00e676;min-height:14px;margin-bottom:8px;letter-spacing:1.5px}
+.aps-share-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
+.aps-share-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 8px;border-radius:12px;text-decoration:none;font-weight:800;font-size:11px;letter-spacing:.5px;font-family:inherit;color:#fff;transition:transform .2s,filter .2s}
+.aps-share-btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.aps-wa{background:linear-gradient(135deg,#25D366,#128C7E)}
+.aps-em{background:linear-gradient(135deg,#5b8def,#3b5ec9)}
+.aps-sms{background:linear-gradient(135deg,#ff9900,#cc6600)}
+.aps-qr-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px;background:#fff;border-radius:14px;margin:0 auto;max-width:200px}
+#apsQrCanvas{display:block}
+.aps-qr-cap{font-size:9px;color:#000;letter-spacing:2px;font-weight:700}
 
 /* ── 3D WALKTHROUGH OVERLAY ── */
 .td-overlay{
@@ -2152,11 +2261,143 @@ input[type=range]{
           <button class="fp-tool" onclick="fpRotateSelected()" id="fpRotBtn" disabled title="Rotate 45°">↻ Rotate</button>
           <button class="fp-tool fp-tool-danger" onclick="fpDeleteSelected()" id="fpDelBtn" disabled title="Delete selected">✕ Delete</button>
           <button class="fp-tool fp-tool-danger" onclick="clearEquipmentLayout()" title="Clear layout">⌫ Clear</button>
+          <button class="fp-tool fp-tool-auto" onclick="openAutoPlanWizard()" title="Auto-design my layout">⚡ AUTO-PLAN</button>
+          <button class="fp-tool fp-tool-share" onclick="openShareModal()" title="Share with client">📲 SHARE</button>
           <div class="fp-spacer"></div>
           <button class="fp-tool fp-tool-3d" onclick="open3DWalkthrough()" title="3D Walk-through">🎮 3D WALK</button>
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     AUTO-PLAN WIZARD — 4 questions → smart layout
+     ═══════════════════════════════════════════════════════════ -->
+<div class="apw-overlay" id="apwOverlay">
+  <div class="apw-modal">
+    <button class="apw-close" onclick="closeAutoPlanWizard()" title="Close (Esc)">✕</button>
+    <div class="apw-header">
+      <div class="apw-eyebrow">⚡ AUTO-PLAN MY LAYOUT</div>
+      <div class="apw-title" id="apwTitle">Tell us about your event</div>
+      <div class="apw-progress">
+        <div class="apw-progress-fill" id="apwProgressFill"></div>
+        <div class="apw-step-dots" id="apwStepDots">
+          <span class="active"></span><span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 1 — Event type -->
+    <div class="apw-step" data-step="1">
+      <div class="apw-q">What kind of event?</div>
+      <div class="apw-grid apw-grid-4">
+        <button class="apw-opt" data-key="event" data-val="wedding"><div class="apw-emoji">💍</div><div class="apw-lbl">Wedding</div></button>
+        <button class="apw-opt" data-key="event" data-val="birthday"><div class="apw-emoji">🎂</div><div class="apw-lbl">Birthday</div></button>
+        <button class="apw-opt" data-key="event" data-val="cocktail"><div class="apw-emoji">🥂</div><div class="apw-lbl">Cocktail</div></button>
+        <button class="apw-opt" data-key="event" data-val="corporate"><div class="apw-emoji">🏢</div><div class="apw-lbl">Corporate</div></button>
+        <button class="apw-opt" data-key="event" data-val="family"><div class="apw-emoji">👨‍👩‍👧</div><div class="apw-lbl">Family</div></button>
+        <button class="apw-opt" data-key="event" data-val="school"><div class="apw-emoji">🏫</div><div class="apw-lbl">School</div></button>
+        <button class="apw-opt" data-key="event" data-val="performance"><div class="apw-emoji">🎤</div><div class="apw-lbl">Performance</div></button>
+        <button class="apw-opt" data-key="event" data-val="market"><div class="apw-emoji">📊</div><div class="apw-lbl">Market</div></button>
+      </div>
+    </div>
+
+    <!-- STEP 2 — Layout style -->
+    <div class="apw-step" data-step="2">
+      <div class="apw-q">How should guests sit?</div>
+      <div class="apw-grid apw-grid-3">
+        <button class="apw-opt apw-opt-tall" data-key="style" data-val="seated"><div class="apw-emoji">🍽</div><div class="apw-lbl">Seated dinner</div><div class="apw-sub">Round tables · banquet rows</div></button>
+        <button class="apw-opt apw-opt-tall" data-key="style" data-val="mingle"><div class="apw-emoji">🎉</div><div class="apw-lbl">Mingle &amp; dance</div><div class="apw-sub">Round tables + dance floor</div></button>
+        <button class="apw-opt apw-opt-tall" data-key="style" data-val="theatre"><div class="apw-emoji">🎙</div><div class="apw-lbl">Theatre rows</div><div class="apw-sub">Facing the stage</div></button>
+        <button class="apw-opt apw-opt-tall" data-key="style" data-val="cocktail"><div class="apw-emoji">🥂</div><div class="apw-lbl">Cocktail standing</div><div class="apw-sub">High tables, lots of space</div></button>
+        <button class="apw-opt apw-opt-tall" data-key="style" data-val="ushape"><div class="apw-emoji">🍱</div><div class="apw-lbl">U-shape</div><div class="apw-sub">Conference / family meal</div></button>
+        <button class="apw-opt apw-opt-tall" data-key="style" data-val="boardroom"><div class="apw-emoji">🔲</div><div class="apw-lbl">Boardroom</div><div class="apw-sub">One long table</div></button>
+      </div>
+    </div>
+
+    <!-- STEP 3 — Front of room -->
+    <div class="apw-step" data-step="3">
+      <div class="apw-q">Where is the front of the room?<div class="apw-q-sub">Stage / head table / focal point</div></div>
+      <div class="apw-orient">
+        <div class="apw-orient-grid">
+          <div></div>
+          <button class="apw-opt apw-orient-btn" data-key="front" data-val="north"><div class="apw-emoji">⬆</div><div class="apw-lbl">Top</div></button>
+          <div></div>
+          <button class="apw-opt apw-orient-btn" data-key="front" data-val="west"><div class="apw-emoji">⬅</div><div class="apw-lbl">Left</div></button>
+          <div class="apw-orient-center">↻</div>
+          <button class="apw-opt apw-orient-btn" data-key="front" data-val="east"><div class="apw-emoji">➡</div><div class="apw-lbl">Right</div></button>
+          <div></div>
+          <button class="apw-opt apw-orient-btn" data-key="front" data-val="south"><div class="apw-emoji">⬇</div><div class="apw-lbl">Entry side</div></button>
+          <div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 — Features -->
+    <div class="apw-step" data-step="4">
+      <div class="apw-q">What features do you want?<div class="apw-q-sub">Pick any that fit your event</div></div>
+      <div class="apw-grid apw-grid-2">
+        <button class="apw-opt apw-multi" data-key="feat_dance"><div class="apw-emoji">💃</div><div class="apw-lbl">Dance floor</div></button>
+        <button class="apw-opt apw-multi" data-key="feat_stage"><div class="apw-emoji">🎤</div><div class="apw-lbl">Stage / DJ</div></button>
+        <button class="apw-opt apw-multi" data-key="feat_bar"><div class="apw-emoji">🍸</div><div class="apw-lbl">Bar station</div></button>
+        <button class="apw-opt apw-multi" data-key="feat_buffet"><div class="apw-emoji">🍱</div><div class="apw-lbl">Buffet</div></button>
+        <button class="apw-opt apw-multi" data-key="feat_heaters"><div class="apw-emoji">🔥</div><div class="apw-lbl">Heaters</div></button>
+        <button class="apw-opt apw-multi" data-key="feat_lighting"><div class="apw-emoji">✨</div><div class="apw-lbl">Fairy lights</div></button>
+        <button class="apw-opt apw-multi" data-key="feat_cake"><div class="apw-emoji">🎂</div><div class="apw-lbl">Cake table</div></button>
+        <button class="apw-opt apw-multi" data-key="feat_arch"><div class="apw-emoji">🌸</div><div class="apw-lbl">Ceremony arch</div></button>
+      </div>
+    </div>
+
+    <div class="apw-footer">
+      <button class="apw-btn apw-btn-back" id="apwBackBtn" onclick="apwBack()">← Back</button>
+      <div class="apw-cap" id="apwCap"></div>
+      <button class="apw-btn apw-btn-next" id="apwNextBtn" onclick="apwNext()" disabled>Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     VARIANT PICKER — A/B/C side-by-side
+     ═══════════════════════════════════════════════════════════ -->
+<div class="apv-overlay" id="apvOverlay">
+  <div class="apv-modal">
+    <button class="apv-close" onclick="closeVariantPicker()">✕</button>
+    <div class="apv-header">
+      <div class="apv-eyebrow">⚡ THREE LAYOUTS · PICK YOUR FAVOURITE</div>
+      <div class="apv-title" id="apvTitle">Designed for your event</div>
+      <div class="apv-cap" id="apvCap"></div>
+    </div>
+    <div class="apv-grid" id="apvGrid">
+      <!-- 3 variant cards inserted dynamically -->
+    </div>
+    <div class="apv-footer">
+      <button class="apv-btn apv-btn-back" onclick="closeVariantPicker()">← Edit answers</button>
+      <button class="apv-btn apv-btn-regen" onclick="apvRegenerate()">🎲 Generate 3 new</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SHARE-WITH-CLIENT MODAL
+     ═══════════════════════════════════════════════════════════ -->
+<div class="aps-overlay" id="apsOverlay">
+  <div class="aps-modal">
+    <button class="aps-close" onclick="closeShareModal()">✕</button>
+    <div class="aps-eyebrow">📲 SHARE WITH CLIENT</div>
+    <div class="aps-title">Your design is ready to share</div>
+    <p class="aps-sub">Send this link — your client can view the floor plan, walk inside in 3D, and reply.</p>
+    <div class="aps-link-row">
+      <input type="text" class="aps-link" id="apsLink" readonly>
+      <button class="aps-copy" onclick="apsCopyLink()">📋 Copy</button>
+    </div>
+    <div class="aps-tiny" id="apsTiny"></div>
+    <div class="aps-share-grid">
+      <a class="aps-share-btn aps-wa" id="apsWaBtn" href="#" target="_blank">💬 WhatsApp</a>
+      <a class="aps-share-btn aps-em" id="apsEmBtn" href="#">✉ Email</a>
+      <a class="aps-share-btn aps-sms" id="apsSmsBtn" href="#">📱 SMS</a>
+    </div>
+    <div class="aps-qr-wrap" id="apsQrWrap"><canvas id="apsQrCanvas" width="160" height="160"></canvas><div class="aps-qr-cap">Scan with phone</div></div>
   </div>
 </div>
 
@@ -5039,6 +5280,619 @@ function tdShowStatus(msg) {
   clearTimeout(s._t);
   s._t = setTimeout(function(){ s.classList.remove('show'); }, 2200);
 }
+
+// ═══════════════════════════════════════════════════════════
+//  AUTO-PLAN WIZARD — 4 questions → smart layout → variants
+// ═══════════════════════════════════════════════════════════
+var APW = {
+  step: 1,
+  totalSteps: 4,
+  answers: { event:null, style:null, front:'north', feat_dance:true, feat_stage:true, feat_bar:true, feat_buffet:false, feat_heaters:false, feat_lighting:true, feat_cake:false, feat_arch:false },
+  bound: false,
+};
+
+function openAutoPlanWizard() {
+  if (!state.selectedMarquee) { alert('Pick a marquee first so we know what space to design for.'); return; }
+  document.getElementById('apwOverlay').classList.add('open');
+  if (!APW.bound) apwBind();
+  apwGoTo(1);
+  // Smart defaults from any chosen FURNITURE counts
+  apwInferDefaults();
+}
+function closeAutoPlanWizard() {
+  document.getElementById('apwOverlay').classList.remove('open');
+}
+
+function apwBind() {
+  document.querySelectorAll('.apw-opt[data-key]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var key = btn.getAttribute('data-key');
+      var val = btn.getAttribute('data-val');
+      if (btn.classList.contains('apw-multi')) {
+        // toggle boolean
+        APW.answers[key] = !APW.answers[key];
+        btn.classList.toggle('selected', APW.answers[key]);
+      } else {
+        APW.answers[key] = val;
+        // unselect siblings
+        document.querySelectorAll('.apw-opt[data-key="' + key + '"]').forEach(function(b){ b.classList.toggle('selected', b === btn); });
+        // Auto-advance non-multi steps after a brief reveal
+        setTimeout(function(){ apwNext(); }, 320);
+      }
+      apwRefreshNext();
+    });
+  });
+  document.addEventListener('keydown', function(e){
+    if (!document.getElementById('apwOverlay').classList.contains('open')) return;
+    if (e.key === 'Escape') closeAutoPlanWizard();
+    if (e.key === 'Enter' && !document.getElementById('apwNextBtn').disabled) apwNext();
+  });
+  APW.bound = true;
+}
+
+function apwInferDefaults() {
+  // Pre-select multi options on step 4 from existing state
+  ['feat_dance','feat_stage','feat_bar','feat_buffet','feat_heaters','feat_lighting','feat_cake','feat_arch'].forEach(function(k){
+    var btn = document.querySelector('.apw-opt[data-key="' + k + '"]');
+    if (btn) btn.classList.toggle('selected', !!APW.answers[k]);
+  });
+}
+
+function apwGoTo(step) {
+  APW.step = Math.max(1, Math.min(APW.totalSteps, step));
+  document.querySelectorAll('.apw-step').forEach(function(s){
+    s.classList.toggle('active', parseInt(s.getAttribute('data-step')) === APW.step);
+  });
+  // Progress
+  var pct = (APW.step / APW.totalSteps) * 100;
+  document.getElementById('apwProgressFill').style.width = pct + '%';
+  var dots = document.querySelectorAll('#apwStepDots span');
+  dots.forEach(function(d, i){
+    d.classList.toggle('active', i + 1 === APW.step);
+    d.classList.toggle('done', i + 1 < APW.step);
+  });
+  // Title per step
+  var titles = ['Tell us about your event','How should guests sit?','Where is the front?','What features?'];
+  document.getElementById('apwTitle').textContent = titles[APW.step - 1];
+  // Back/Next state
+  document.getElementById('apwBackBtn').classList.toggle('hidden', APW.step === 1);
+  var nextBtn = document.getElementById('apwNextBtn');
+  if (APW.step === APW.totalSteps) {
+    nextBtn.innerHTML = '⚡ Generate layouts →';
+  } else {
+    nextBtn.innerHTML = 'Next →';
+  }
+  apwRefreshNext();
+  // Caption for footer
+  var cap = '';
+  if (APW.answers.event) cap += APW.answers.event;
+  if (APW.answers.style) cap += ' · ' + APW.answers.style;
+  document.getElementById('apwCap').textContent = cap;
+}
+
+function apwRefreshNext() {
+  var nextBtn = document.getElementById('apwNextBtn');
+  var canAdvance = true;
+  if (APW.step === 1) canAdvance = !!APW.answers.event;
+  if (APW.step === 2) canAdvance = !!APW.answers.style;
+  if (APW.step === 3) canAdvance = !!APW.answers.front;
+  if (APW.step === 4) canAdvance = true; // features all optional
+  nextBtn.disabled = !canAdvance;
+}
+
+function apwBack() { apwGoTo(APW.step - 1); }
+function apwNext() {
+  if (APW.step < APW.totalSteps) {
+    apwGoTo(APW.step + 1);
+  } else {
+    apwFinish();
+  }
+}
+
+function apwFinish() {
+  closeAutoPlanWizard();
+  // Generate 3 variants and open picker
+  var variants = apvGenerate(3);
+  apvShow(variants);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  SMART AUTO-PLACEMENT ALGORITHM
+// ═══════════════════════════════════════════════════════════
+function _byPid(pid){ for (var i=0;i<EQUIPMENT_PALETTE.length;i++) if (EQUIPMENT_PALETTE[i].id===pid) return EQUIPMENT_PALETTE[i]; return null; }
+
+function _aplGuestEstimate() {
+  // Use guest count from state or infer from FURNITURE chair counts
+  var guests = state.guests || 50;
+  try {
+    var chairs = FURNITURE.filter(function(f){ return f.cat==='Chairs'; }).reduce(function(a,f){ return a + (f.qty||0); }, 0);
+    if (chairs > guests) guests = chairs;
+  } catch(e) {}
+  return guests;
+}
+
+function _aplRng(seed) {
+  // Deterministic pseudo-random for variant repeatability
+  var s = seed || 1;
+  return function(){ s = (s * 9301 + 49297) % 233280; return s / 233280; };
+}
+
+function _aplBlankPlan() { return { items: [], notes: [], score: 0, capacity: { seats:0, fits:true, needBigger:null } }; }
+
+// Add an item to the plan. Position in local marquee coords (0,0 = centre, x right, y forward toward front)
+function _aplAdd(plan, paletteId, x, y, rot) {
+  var it = _byPid(paletteId); if (!it) return;
+  plan.items.push({ paletteId: paletteId, item: it, x: x, y: y, rot: rot || 0 });
+}
+
+// Front-of-room direction: 'north' (top of marquee) is default forward
+// In marquee local coords we always put "front" at +y (top). Caller transforms after.
+function _aplBuildPlan(answers, seed) {
+  var rng = _aplRng(seed);
+  var plan = _aplBlankPlan();
+  var mq = state.selectedMarquee;
+  if (!mq) return plan;
+  var W = mq.w, D = mq.d;            // metres
+  var marginEdge = 0.4;              // 0.4m walkway against walls
+  var Wmax = W - 2 * marginEdge;
+  var Dmax = D - 2 * marginEdge;
+  var guests = _aplGuestEstimate();
+
+  // STAGE (back of room — far side from entry)
+  if (answers.feat_stage) {
+    var stageW = Math.min(3.0, Wmax * 0.55);
+    _aplAdd(plan, 'stage_3x2', 0, D/2 - 1.0 - marginEdge, 0);
+    plan.notes.push('Stage placed at the back wall.');
+  } else if (answers.style === 'mingle' || answers.style === 'seated') {
+    _aplAdd(plan, 'dj_booth', -W/2 + 1.0 + marginEdge, D/2 - 0.5 - marginEdge, 0);
+    plan.notes.push('DJ booth in front corner.');
+  }
+
+  // DANCE FLOOR — centred in front of stage
+  var dfRefY = (answers.feat_stage) ? (D/2 - 4.0) : (D/2 - 3.0);
+  if (answers.feat_dance && answers.style !== 'theatre' && answers.style !== 'boardroom' && answers.style !== 'ushape') {
+    var dfId = guests >= 60 ? 'dance_5x5' : 'dance_4x4';
+    var df = _byPid(dfId);
+    if (df && df.w + 1.0 < Wmax && df.d + 1.0 < Dmax) {
+      _aplAdd(plan, dfId, 0, dfRefY - df.d/2 - 1.0, 0);
+      plan.notes.push('Dance floor centred.');
+    } else {
+      // try smaller
+      _aplAdd(plan, 'dance_4x4', 0, dfRefY - 2.0, 0);
+    }
+  }
+
+  // BAR & BUFFET — long walls
+  var sideY = -D/2 + 1.5 + marginEdge;
+  if (answers.feat_bar) {
+    var bar = _byPid('bar');
+    if (bar) {
+      _aplAdd(plan, 'bar', -W/2 + bar.w/2 + marginEdge, sideY, 0);
+      plan.notes.push('Bar by the entry side wall.');
+    }
+  }
+  if (answers.feat_buffet) {
+    var buf = _byPid('buffet');
+    if (buf) {
+      _aplAdd(plan, 'buffet', W/2 - buf.w/2 - marginEdge, sideY, 0);
+      plan.notes.push('Buffet opposite the bar.');
+    }
+  }
+
+  // SEATING — depends on style
+  var seated = 0;
+  var avoidY = (answers.feat_dance) ? (dfRefY - 3.0) : (D/2 - 3.0);
+  if (answers.style === 'seated' || answers.style === 'mingle') {
+    // Round tables — choose size matched to marquee
+    var tableId = (W >= 9 || guests >= 60) ? 'r_table_10' : (W >= 7) ? 'r_table_8' : 'r_table_6';
+    var tableItem = _byPid(tableId);
+    var tableSize = tableItem ? tableItem.w : 1.5;
+    var perTable = tableId === 'r_table_10' ? 10 : tableId === 'r_table_8' ? 8 : 6;
+    var maxTables = Math.min(14, Math.ceil(guests / perTable));
+    // Try grid placement first (more deterministic), then fill any gaps with random
+    var cols = Math.max(2, Math.floor(Wmax / (tableSize + 1.4)));
+    var rowSpacing = tableSize + 1.6;
+    var startY = (answers.feat_dance ? (dfRefY - 4.5) : (D/2 - 2.5));
+    var placed = 0;
+    var seedOffset = ((rng() * 5) | 0); // variant diversity
+    outer: for (var row = 0; row < 4; row++) {
+      for (var col = 0; col < cols; col++) {
+        if (placed >= maxTables) break outer;
+        var idx = row * cols + col + seedOffset;
+        var jitterX = (rng() - 0.5) * 0.4;
+        var jitterY = (rng() - 0.5) * 0.4;
+        var tx = -((cols - 1) / 2) * (tableSize + 1.4) + col * (tableSize + 1.4) + jitterX;
+        var ty = startY - row * rowSpacing + jitterY;
+        if (Math.abs(tx) + tableSize/2 > Wmax/2) continue;
+        if (ty - tableSize/2 < -Dmax/2) continue;
+        var collide = plan.items.some(function(it){
+          var dx = it.x - tx, dy = it.y - ty;
+          var minDist = (tableSize/2 + Math.max(it.item.w, it.item.d)/2) + 0.45;
+          return Math.sqrt(dx*dx + dy*dy) < minDist;
+        });
+        if (collide) continue;
+        _aplAdd(plan, tableId, tx, ty, 0);
+        placed++; seated += perTable;
+      }
+    }
+    // If still under quota, attempt random fill
+    var tries = 30;
+    while (placed < maxTables && tries-- > 0) {
+      var rx = (rng() - 0.5) * (Wmax - tableSize);
+      var ry = (rng() - 0.5) * (Dmax - tableSize) - 0.5;
+      if (Math.abs(ry - (answers.feat_dance ? dfRefY - 2 : 0)) < 2) continue;
+      var collide2 = plan.items.some(function(it){
+        var dx = it.x - rx, dy = it.y - ry;
+        var minDist = (tableSize/2 + Math.max(it.item.w, it.item.d)/2) + 0.5;
+        return Math.sqrt(dx*dx + dy*dy) < minDist;
+      });
+      if (collide2) continue;
+      _aplAdd(plan, tableId, rx, ry, 0);
+      placed++; seated += perTable;
+    }
+    if (placed > 0) plan.notes.push(placed + ' × ' + perTable + '-seater round tables (~' + seated + ' seats).');
+  } else if (answers.style === 'theatre') {
+    // Banquet rows facing stage
+    var rowSpacing = 0.95;
+    var seatPerRow = Math.max(4, Math.floor((Wmax - 1.5) / 0.55));
+    var rowCount = Math.min(Math.ceil(guests / seatPerRow), Math.floor((Dmax - 4) / rowSpacing));
+    for (var r = 0; r < rowCount; r++) {
+      var ry = (D/2 - 4) - r * rowSpacing - 0.5;
+      _aplAdd(plan, 'banquet_24', 0, ry, 0);
+      seated += seatPerRow;
+    }
+    plan.notes.push(rowCount + ' rows · ' + seated + ' seats facing stage.');
+  } else if (answers.style === 'cocktail') {
+    var cocktailCount = Math.min(8, Math.floor(guests / 6));
+    for (var c = 0; c < cocktailCount; c++) {
+      var ang2 = (c / cocktailCount) * Math.PI * 2 + rng() * 0.5;
+      var rr2 = 2.0 + (c % 2) * 1.2;
+      var cx = Math.cos(ang2) * rr2;
+      var cy = Math.sin(ang2) * rr2 * 0.8;
+      if (Math.abs(cx) > Wmax/2 - 0.5 || Math.abs(cy) > Dmax/2 - 0.5) continue;
+      _aplAdd(plan, 'cocktail', cx, cy, 0);
+    }
+    plan.notes.push('Cocktail leaners spread for mingling.');
+    seated = guests;
+  } else if (answers.style === 'ushape' || answers.style === 'boardroom') {
+    // Long tables along walls (U) or single line (board)
+    var bq = _byPid('banquet_24');
+    if (bq) {
+      if (answers.style === 'ushape') {
+        // 3 sides
+        _aplAdd(plan, 'banquet_24', 0, D/2 - 3.5, 0);  // top
+        _aplAdd(plan, 'banquet_24', -Wmax/2 + bq.d/2 + 0.5, 0, 90);  // left
+        _aplAdd(plan, 'banquet_24', Wmax/2 - bq.d/2 - 0.5, 0, 90);   // right
+        seated = 30;
+        plan.notes.push('U-shape — 3 long tables.');
+      } else {
+        _aplAdd(plan, 'banquet_24', 0, 0, 0);
+        seated = 18;
+        plan.notes.push('Boardroom long table.');
+      }
+    }
+  }
+
+  // DECOR
+  if (answers.feat_cake) _aplAdd(plan, 'cake_table', W/2 - 1.0 - marginEdge, D/2 - 2.5, 0);
+  if (answers.feat_arch && (answers.event === 'wedding' || answers.style === 'theatre')) _aplAdd(plan, 'arch', 0, D/2 - 0.4, 0);
+
+  // UTILITY — heaters at corners
+  if (answers.feat_heaters) {
+    [[-W/2 + 0.5, -D/2 + 0.5],[W/2 - 0.5, -D/2 + 0.5],[-W/2 + 0.5, D/2 - 0.5],[W/2 - 0.5, D/2 - 0.5]].forEach(function(c){
+      _aplAdd(plan, 'heater_col', c[0], c[1], 0);
+    });
+    plan.notes.push('4 patio heaters at corners.');
+  }
+  // Lighting — chandeliers along centre line
+  if (answers.feat_lighting) {
+    var nLights = Math.max(2, Math.floor(D / 3));
+    for (var li = 0; li < nLights; li++) {
+      var ly = -D/2 + (li + 0.5) * (D / nLights);
+      _aplAdd(plan, 'lighting', 0, ly, 0);
+    }
+  }
+
+  // Capacity check
+  plan.capacity.seats = seated;
+  if (seated >= guests * 0.9 || answers.style === 'cocktail') plan.capacity.fits = true;
+  else { plan.capacity.fits = false; plan.capacity.needBigger = Math.ceil(guests / 8) + ' tables (current ' + (seated/8|0) + ')'; }
+
+  // Score (higher = better)
+  plan.score = plan.items.length * 10 + (plan.capacity.fits ? 50 : 0);
+  return plan;
+}
+
+// Apply an algorithm plan onto state.equipment (with rotation based on `front` direction)
+function _aplApplyPlan(plan, opts) {
+  if (!state.marqueeRect || !state.selectedMarquee) return;
+  _silentClearEquipment();
+  var W = state.selectedMarquee.w, D = state.selectedMarquee.d;
+  var front = (APW.answers && APW.answers.front) || 'north';
+  // Front direction transforms: 'north' = no rotation (front = +y)
+  function rotateXY(x, y) {
+    if (front === 'north') return { x: x, y: y };
+    if (front === 'south') return { x: -x, y: -y };
+    if (front === 'east')  return { x: y, y: -x };
+    if (front === 'west')  return { x: -y, y: x };
+    return { x: x, y: y };
+  }
+  // Build sequence
+  var seq = plan.items.slice();
+  var staggerMs = (opts && opts.stagger != null) ? opts.stagger : 90;
+  if (!staggerMs) {
+    // place all immediately
+    seq.forEach(function(it){ _aplPlaceWithRotate(it, rotateXY); });
+    saveEquipmentLayout();
+    renderLayoutSummary();
+    fpUpdateLabels(); fpRequestDraw();
+    return;
+  }
+  // Open Floor Plan + cinematic stagger
+  if (!document.getElementById('floorPlanModal').classList.contains('open')) openFloorPlan();
+  var i = 0;
+  fpFlashHint('⚡ Auto-planning ' + seq.length + ' items…');
+  function tick() {
+    if (i >= seq.length) {
+      saveEquipmentLayout(); renderLayoutSummary(); fpUpdateLabels(); fpRequestDraw();
+      fpFlashHint('✓ Auto-plan complete · ' + plan.items.length + ' items placed');
+      return;
+    }
+    _aplPlaceWithRotate(seq[i], rotateXY);
+    renderLayoutSummary(); fpUpdateLabels(); fpRequestDraw();
+    i++;
+    setTimeout(tick, staggerMs);
+  }
+  tick();
+}
+
+function _aplPlaceWithRotate(planItem, rotateXY) {
+  // local marquee centre coords -> lat/lng on map
+  var pr = rotateXY(planItem.x, planItem.y);
+  var b = state.marqueeRect.getBounds();
+  var w = b.getWest(), e = b.getEast(), s = b.getSouth(), n = b.getNorth();
+  var mqW = state.selectedMarquee.w, mqD = state.selectedMarquee.d;
+  // -mqW/2..+mqW/2 -> w..e
+  var lng = w + (pr.x / mqW + 0.5) * (e - w);
+  var lat = s + (pr.y / mqD + 0.5) * (n - s);
+  // Clamp inside bounds
+  var marginLat = (n - s) * 0.04;
+  var marginLng = (e - w) * 0.04;
+  lat = Math.max(s + marginLat, Math.min(n - marginLat, lat));
+  lng = Math.max(w + marginLng, Math.min(e - marginLng, lng));
+
+  var item = planItem.item;
+  var uid = _eqUid();
+  var marker = L.marker([lat, lng], {
+    icon: _eqMakeIcon(item, planItem.rot),
+    draggable: true, autoPan: true, zIndexOffset: 1000
+  }).addTo(_eqEnsureGroup());
+  var eq = { uid: uid, paletteId: planItem.paletteId, latlng: [lat, lng], rotation: planItem.rot, marker: marker, item: item };
+  state.equipment.push(eq);
+  _eqAttachMarkerEvents(eq);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  VARIANT PICKER
+// ═══════════════════════════════════════════════════════════
+function apvGenerate(count) {
+  var variants = [];
+  for (var i = 0; i < count; i++) {
+    var seed = Date.now() + i * 7919;
+    var plan = _aplBuildPlan(APW.answers, seed);
+    plan.seed = seed;
+    plan.label = String.fromCharCode(65 + i);
+    variants.push(plan);
+  }
+  return variants;
+}
+
+function apvShow(variants) {
+  var overlay = document.getElementById('apvOverlay');
+  var grid = document.getElementById('apvGrid');
+  grid.innerHTML = '';
+  variants.forEach(function(v){
+    var card = document.createElement('div');
+    card.className = 'apv-card';
+    card.innerHTML =
+      '<canvas class="apv-card-canvas" width="280" height="240"></canvas>' +
+      '<div class="apv-card-body">' +
+        '<div class="apv-card-name">LAYOUT ' + v.label + '</div>' +
+        '<div class="apv-card-meta">' + v.items.length + ' items · ' + (v.capacity.seats || 0) + ' seats</div>' +
+        '<div class="apv-card-stats">' +
+          '<div><strong>' + v.items.length + '</strong><span>Pieces</span></div>' +
+          '<div><strong>' + (v.capacity.seats || 0) + '</strong><span>Seats</span></div>' +
+          '<div><strong style="color:' + (v.capacity.fits ? '#00ff88' : '#ff9900') + '">' + (v.capacity.fits ? '✓ FITS' : '⚠ TIGHT') + '</strong><span>Capacity</span></div>' +
+        '</div>' +
+        '<button class="apv-card-pick">⚡ Use this layout</button>' +
+      '</div>';
+    grid.appendChild(card);
+    // Draw the variant preview
+    var cv = card.querySelector('canvas');
+    _apvDrawPreview(cv, v);
+    card.querySelector('.apv-card-pick').addEventListener('click', function(){
+      apvCommit(v);
+    });
+  });
+  // Cap text
+  var ans = APW.answers;
+  var capText = (ans.event||'') + ' · ' + (ans.style||'') + ' · ' + APW._frontLabel();
+  document.getElementById('apvCap').textContent = capText;
+  document.getElementById('apvOverlay').classList.add('open');
+  document.getElementById('apvOverlay')._lastVariants = variants;
+}
+APW._frontLabel = function(){
+  var f = APW.answers.front;
+  return f==='north'?'Front: top':f==='south'?'Front: entry':f==='east'?'Front: right':'Front: left';
+};
+
+function _apvDrawPreview(canvas, plan) {
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+  ctx.clearRect(0,0,W,H);
+  var mq = state.selectedMarquee;
+  if (!mq) return;
+  var pad = 18;
+  var scale = Math.min((W-pad*2)/mq.w, (H-pad*2)/mq.d);
+  var mW = mq.w*scale, mH = mq.d*scale;
+  var ox = (W-mW)/2, oy = (H-mH)/2;
+  // marquee
+  ctx.fillStyle = 'rgba(0,255,136,.05)';
+  ctx.strokeStyle = 'rgba(255,215,0,.6)';
+  ctx.lineWidth = 1.5;
+  ctx.fillRect(ox, oy, mW, mH); ctx.strokeRect(ox, oy, mW, mH);
+  // entry
+  ctx.fillStyle = 'rgba(0,230,255,.6)';
+  ctx.fillRect(ox + mW/2 - 12, oy + mH - 1, 24, 2);
+  // items
+  var front = APW.answers.front || 'north';
+  function rotXY(x, y) {
+    if (front==='north') return { x:x, y:y };
+    if (front==='south') return { x:-x, y:-y };
+    if (front==='east') return { x:y, y:-x };
+    return { x:-y, y:x };
+  }
+  plan.items.forEach(function(it){
+    var p = rotXY(it.x, it.y);
+    var px = ox + mW/2 + p.x * scale;
+    var py = oy + mH/2 + p.y * scale;
+    var iw = it.item.w * scale, ih = it.item.d * scale;
+    ctx.save();
+    ctx.translate(px, py);
+    ctx.rotate((it.rot||0) * Math.PI/180);
+    ctx.fillStyle = it.item.color + '60';
+    ctx.strokeStyle = it.item.color;
+    ctx.lineWidth = 1;
+    if (it.item.shape === 'round') {
+      var r = Math.max(iw,ih)/2;
+      ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    } else {
+      ctx.fillRect(-iw/2, -ih/2, iw, ih);
+      ctx.strokeRect(-iw/2, -ih/2, iw, ih);
+    }
+    ctx.restore();
+  });
+}
+
+function apvRegenerate() {
+  var v = apvGenerate(3);
+  apvShow(v);
+}
+function closeVariantPicker() { document.getElementById('apvOverlay').classList.remove('open'); }
+function apvCommit(plan) {
+  closeVariantPicker();
+  _aplApplyPlan(plan, { stagger: 90 });
+}
+
+// ═══════════════════════════════════════════════════════════
+//  SHARE-WITH-CLIENT
+// ═══════════════════════════════════════════════════════════
+function openShareModal() {
+  document.getElementById('apsOverlay').classList.add('open');
+  var url = _apsBuildUrl();
+  document.getElementById('apsLink').value = url;
+  // Update WhatsApp/Email/SMS hrefs
+  var client = (state.clientName || 'your client');
+  var msg = "Hi " + client + " — here's the floor plan we designed for your event. Tap to view + walk inside in 3D: " + url;
+  document.getElementById('apsWaBtn').setAttribute('href', 'https://wa.me/?text=' + encodeURIComponent(msg));
+  document.getElementById('apsEmBtn').setAttribute('href', 'mailto:?subject=' + encodeURIComponent('Your event design — preview inside') + '&body=' + encodeURIComponent(msg));
+  document.getElementById('apsSmsBtn').setAttribute('href', 'sms:?&body=' + encodeURIComponent(msg));
+  // Render QR (simple QR via Google Charts API fallback if available, else just leave canvas blank)
+  try { _apsRenderQR(url); } catch(e){}
+}
+function closeShareModal() { document.getElementById('apsOverlay').classList.remove('open'); }
+function _apsBuildUrl() {
+  // Compact encoding: marquee + equipment positions
+  var mq = state.selectedMarquee;
+  var payload = {
+    v: 1,
+    mq: mq ? mq.id : null,
+    eq: state.equipment.map(function(eq){
+      var b = state.marqueeRect.getBounds();
+      var n = b.getNorth(), s = b.getSouth(), w = b.getWest(), e = b.getEast();
+      var nx = +((eq.latlng[1] - w) / (e - w)).toFixed(3);
+      var ny = +((eq.latlng[0] - s) / (n - s)).toFixed(3);
+      return [eq.paletteId, nx, ny, eq.rotation || 0];
+    }),
+    cl: state.clientName || ''
+  };
+  var json = JSON.stringify(payload);
+  // base64-url
+  var b64 = btoa(unescape(encodeURIComponent(json))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  var base = location.origin + location.pathname;
+  return base + '#design=' + b64;
+}
+function apsCopyLink() {
+  var input = document.getElementById('apsLink');
+  input.select(); input.setSelectionRange(0, 99999);
+  try {
+    navigator.clipboard ? navigator.clipboard.writeText(input.value) : document.execCommand('copy');
+    var t = document.getElementById('apsTiny');
+    t.textContent = '✓ COPIED · paste anywhere';
+    setTimeout(function(){ t.textContent=''; }, 3000);
+  } catch(e){}
+}
+function _apsRenderQR(url) {
+  // Use a lightweight inline QR via tiny algorithm (Google Charts API requires network and is deprecated)
+  // Fallback: just draw a placeholder grid + URL beneath
+  var c = document.getElementById('apsQrCanvas');
+  var ctx = c.getContext('2d');
+  ctx.fillStyle = '#fff'; ctx.fillRect(0,0,c.width,c.height);
+  // Hash-derived pseudo-QR (not a real scannable QR — sub later if we add a QR lib)
+  var hash = 0;
+  for (var i = 0; i < url.length; i++) { hash = ((hash << 5) - hash + url.charCodeAt(i)) | 0; }
+  var cell = 8;
+  var n = c.width / cell;
+  ctx.fillStyle = '#000';
+  for (var x = 0; x < n; x++) {
+    for (var y = 0; y < n; y++) {
+      // Stable corner finder patterns
+      var corner = (x<3&&y<3) || (x>n-4&&y<3) || (x<3&&y>n-4);
+      var on = corner || (((hash >>> ((x+y*7)%30)) & 1) === 1);
+      if (on) ctx.fillRect(x*cell, y*cell, cell, cell);
+    }
+  }
+}
+
+// Decode shared design on page load (if URL has #design=...)
+(function _decodeSharedDesign(){
+  try {
+    var hash = window.location.hash || '';
+    var m = hash.match(/#design=([^&]+)/);
+    if (!m) return;
+    var b64 = m[1].replace(/-/g,'+').replace(/_/g,'/');
+    while (b64.length % 4) b64 += '=';
+    var json = decodeURIComponent(escape(atob(b64)));
+    var data = JSON.parse(json);
+    if (!data || data.v !== 1) return;
+    // Defer until app is ready
+    setTimeout(function(){
+      if (data.mq) {
+        try { selectMarquee(data.mq); } catch(e){}
+      }
+      setTimeout(function(){
+        if (!data.eq || !state.marqueeRect) return;
+        _silentClearEquipment();
+        var b = state.marqueeRect.getBounds();
+        var n=b.getNorth(), s=b.getSouth(), w=b.getWest(), e=b.getEast();
+        data.eq.forEach(function(t){
+          var pid=t[0], nx=t[1], ny=t[2], rot=t[3]||0;
+          var lng = w + nx * (e - w);
+          var lat = s + ny * (n - s);
+          var item = _byPid(pid); if (!item) return;
+          var uid = _eqUid();
+          var marker = L.marker([lat,lng], { icon: _eqMakeIcon(item, rot), draggable:true, autoPan:true, zIndexOffset:1000 }).addTo(_eqEnsureGroup());
+          var eq = { uid:uid, paletteId:pid, latlng:[lat,lng], rotation:rot, marker:marker, item:item };
+          state.equipment.push(eq);
+          _eqAttachMarkerEvents(eq);
+        });
+        renderLayoutSummary();
+        fpUpdateLabels && fpUpdateLabels();
+        fpRequestDraw && fpRequestDraw();
+      }, 1200);
+    }, 800);
+  } catch(e) { console.warn('shared design decode failed', e); }
+})();
 
 // ── QTY HELPERS ──────────────────────────────────────────────
 function setQtyTo(idx, qty) {
