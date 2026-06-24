@@ -717,6 +717,74 @@ input[type=range]{
 .cov-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:var(--green)}
 .cov-lbl{font-size:8px;color:var(--muted);letter-spacing:1px}
 
+/* ── ROOFTOP VIEW & FURNITURE ICONS ── */
+/* Rooftop toggle button */
+.rooftop-toggle-btn{
+  position:absolute;bottom:72px;right:14px;z-index:500;
+  background:rgba(4,5,15,.92);border:1px solid rgba(0,230,255,.35);
+  color:var(--cyan);border-radius:10px;padding:8px 14px;cursor:pointer;
+  font-family:var(--font);font-size:11px;font-weight:700;letter-spacing:.5px;
+  backdrop-filter:blur(10px);transition:all .25s;display:flex;align-items:center;gap:6px}
+.rooftop-toggle-btn:hover{background:rgba(0,230,255,.15);box-shadow:0 0 16px rgba(0,230,255,.3)}
+.rooftop-toggle-btn.active{
+  background:rgba(255,255,255,.92);color:#111;border-color:rgba(0,0,0,.2);
+  box-shadow:0 4px 20px rgba(0,0,0,.3)}
+/* Print layout button (only in rooftop mode) */
+.print-layout-btn{
+  position:absolute;bottom:72px;right:158px;z-index:500;
+  background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.45);
+  color:var(--gold);border-radius:10px;padding:8px 14px;cursor:pointer;
+  font-family:var(--font);font-size:11px;font-weight:700;letter-spacing:.5px;
+  backdrop-filter:blur(10px);transition:all .3s;
+  display:none;align-items:center;gap:6px}
+.print-layout-btn:hover{background:rgba(255,215,0,.28);box-shadow:0 0 16px rgba(255,215,0,.35)}
+/* Items counter badge */
+.furn-counter-badge{
+  position:absolute;top:14px;right:14px;z-index:500;
+  background:rgba(4,5,15,.9);border:1px solid rgba(255,215,0,.4);
+  border-radius:10px;padding:6px 12px;display:none;align-items:center;gap:8px;
+  backdrop-filter:blur(8px);font-size:11px;font-weight:700}
+.furn-counter-badge.visible{display:flex}
+.furn-counter-badge-val{color:var(--gold);font-size:16px;font-weight:900}
+.furn-counter-badge-lbl{color:var(--muted);font-size:9px;letter-spacing:1.5px;text-transform:uppercase}
+/* Visibility toggle */
+.furn-vis-toggle{
+  position:absolute;bottom:112px;right:14px;z-index:500;
+  background:rgba(4,5,15,.88);border:1px solid rgba(255,255,255,.12);
+  color:rgba(255,255,255,.55);border-radius:8px;padding:6px 10px;cursor:pointer;
+  font-family:var(--font);font-size:10px;font-weight:600;letter-spacing:.5px;
+  backdrop-filter:blur(8px);transition:all .2s;display:none}
+.furn-vis-toggle.visible-toggle{display:flex;align-items:center;gap:5px}
+.furn-vis-toggle:hover{color:var(--cyan);border-color:rgba(0,230,255,.3)}
+
+/* Furniture marker on map */
+.furn-icon-marker{
+  display:flex;align-items:center;justify-content:center;
+  border-radius:3px;pointer-events:none;
+  transition:opacity .25s,transform .25s}
+.furn-icon-marker.animate-in{animation:furnDropIn .35s cubic-bezier(.34,1.56,.64,1) forwards}
+@keyframes furnDropIn{
+  0%{opacity:0;transform:scale(.3)}
+  100%{opacity:1;transform:scale(1)}}
+
+/* Rooftop map tile fade overlay */
+#rooftopOverlay{
+  position:absolute;inset:0;z-index:150;pointer-events:none;
+  background:#f5f0eb;transition:opacity .6s ease;opacity:0}
+#rooftopOverlay.active{opacity:1;pointer-events:none}
+
+/* Print styles */
+@media print {
+  .hdr,.step-nav,.status-bar,.sidebar,.eq-palette,.rooftop-toggle-btn,
+  .print-layout-btn,.furn-counter-badge,.furn-vis-toggle,.map-badge,
+  .coverage-badge,.map-area-badge,.map-tool-hint,.marquee-overlay-info,
+  .whetu-footer,.leaflet-control-container,.map-vignette,.map-cursor-glow{display:none!important}
+  body,html{background:#fff!important;overflow:visible!important;height:auto!important}
+  .main{height:100vh!important;display:block!important}
+  .map-wrap{width:100vw!important;height:100vh!important;position:relative!important}
+  #map{position:absolute!important;inset:0!important}
+}
+
 /* ── NZ COMPLIANCE CHECKLIST ── */
 .compliance-list{margin-bottom:12px}
 .ci{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:7px;border:1px solid var(--border);margin-bottom:4px;background:rgba(255,255,255,.02);cursor:pointer;transition:all .15s;user-select:none}
@@ -2088,6 +2156,33 @@ input[type=range]{
       <div class="moi-area" id="moiArea"></div>
       <div style="font-size:10px;color:var(--muted);margin-top:4px">Drag to reposition</div>
     </div>
+
+    <!-- ═══ ROOFTOP VIEW OVERLAY (white tile mask) ═══ -->
+    <div id="rooftopOverlay"></div>
+
+    <!-- ═══ FURNITURE COUNTER BADGE ═══ -->
+    <div class="furn-counter-badge" id="furnCounterBadge">
+      <div>
+        <div class="furn-counter-badge-val" id="furnCounterVal">0</div>
+        <div class="furn-counter-badge-lbl">Items on map</div>
+      </div>
+    </div>
+
+    <!-- ═══ ITEMS VISIBILITY TOGGLE ═══ -->
+    <button class="furn-vis-toggle" id="furnVisToggle" onclick="toggleFurnitureVisibility()">
+      <span id="furnVisIcon">👁</span> <span id="furnVisLbl">Hide Items</span>
+    </button>
+
+    <!-- ═══ ROOFTOP VIEW TOGGLE ═══ -->
+    <button class="rooftop-toggle-btn" id="rooftopToggleBtn" onclick="toggleRooftopView()">
+      🏠 Rooftop View
+    </button>
+
+    <!-- ═══ PRINT LAYOUT BUTTON ═══ -->
+    <button class="print-layout-btn" id="printLayoutBtn" onclick="printLayout()">
+      🖨️ Print Layout
+    </button>
+
     <!-- ═══════════ EQUIPMENT LAYOUT PALETTE ═══════════ -->
     <div class="eq-palette" id="eqPalette" role="region" aria-label="Equipment Layout Palette">
       <div class="eq-palette-head">
@@ -6420,6 +6515,528 @@ function _renderHelpDots() {
     c.appendChild(d);
   }
 }
+
+// ═══════════════════════════════════════════════════════════════════════
+//  FURNITURE ICON VISUALISATION — Whetū Digital · EventSpace Pro
+//  Renders FURNITURE qty items as actual SVG icons on the Leaflet map.
+//  Rooftop View: clean white background for client presentation.
+//  Real-time: hooks into adjQty/setQtyTo for live updates.
+// ═══════════════════════════════════════════════════════════════════════
+
+// ── SVG ICON DEFINITIONS per furniture id ──────────────────────────────
+var FURN_ICONS = {
+  // CHAIRS
+  'chair_resin':    { color:'#4da6ff', svg:'<rect x="4" y="28" width="18" height="14" rx="2" fill="currentColor" opacity=".85"/><path d="M4 22 L22 22 L22 28 L4 28 Z" fill="currentColor"/><path d="M22 16 L22 30" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M4 28 L4 42 M8 28 L8 42 M14 28 L14 42 M18 28 L18 42" stroke="currentColor" stroke-width="1.8" opacity=".4"/><path d="M6 42 L20 42" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>', size:12 },
+  'chair_chiavari': { color:'#a8d8ff', svg:'<path d="M8 16 Q12 10 18 10 Q24 10 28 16 L26 28 L10 28 Z" fill="currentColor" opacity=".8"/><rect x="8" y="28" width="20" height="12" rx="2" fill="currentColor" opacity=".7"/><path d="M10 40 L10 46 M26 40 L26 46" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M8 32 L28 32 M8 36 L28 36" stroke="rgba(255,255,255,.35)" stroke-width="1"/>', size:12 },
+  'chair_banquet':  { color:'#6699cc', svg:'<rect x="4" y="24" width="20" height="16" rx="2" fill="currentColor" opacity=".8"/><path d="M24 18 L24 34 Q28 34 28 30 L28 22 Q28 18 24 18 Z" fill="currentColor" opacity=".65"/><path d="M4 40 L4 46 M8 40 L8 46 M16 40 L16 46 M20 40 L20 46" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>', size:12 },
+  'chair_bentwood': { color:'#88bbee', svg:'<path d="M6 28 Q6 12 18 10 Q30 12 30 28" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><rect x="6" y="28" width="24" height="10" rx="2" fill="currentColor" opacity=".75"/><path d="M8 38 L6 46 M28 38 L30 46" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>', size:12 },
+  'chair_kids':     { color:'#ffcc44', svg:'<circle cx="18" cy="14" r="6" fill="currentColor" opacity=".85"/><rect x="8" y="24" width="20" height="14" rx="3" fill="currentColor" opacity=".7"/><path d="M10 38 L8 46 M26 38 L28 46" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M14 20 L14 24 M22 20 L22 24" stroke="currentColor" stroke-width="2"/>', size:10 },
+  // TABLES
+  't_trestle24':    { color:'#d4a55c', svg:'<rect x="2" y="16" width="44" height="16" rx="2" fill="currentColor" opacity=".8"/><g fill="none" stroke="currentColor" stroke-width="1.5" opacity=".5"><circle cx="8" cy="10" r="3.5"/><circle cx="16" cy="10" r="3.5"/><circle cx="24" cy="10" r="3.5"/><circle cx="32" cy="10" r="3.5"/><circle cx="40" cy="10" r="3.5"/><circle cx="8" cy="38" r="3.5"/><circle cx="16" cy="38" r="3.5"/><circle cx="24" cy="38" r="3.5"/><circle cx="32" cy="38" r="3.5"/><circle cx="40" cy="38" r="3.5"/></g>', size:20 },
+  't_trestle18':    { color:'#c49a52', svg:'<rect x="4" y="17" width="40" height="14" rx="2" fill="currentColor" opacity=".8"/><g fill="none" stroke="currentColor" stroke-width="1.5" opacity=".5"><circle cx="10" cy="11" r="3.5"/><circle cx="20" cy="11" r="3.5"/><circle cx="30" cy="11" r="3.5"/><circle cx="38" cy="11" r="3.5"/><circle cx="10" cy="37" r="3.5"/><circle cx="20" cy="37" r="3.5"/><circle cx="30" cy="37" r="3.5"/><circle cx="38" cy="37" r="3.5"/></g>', size:18 },
+  't_round18':      { color:'#e8c060', svg:'<circle cx="24" cy="24" r="16" fill="currentColor" opacity=".75"/><circle cx="24" cy="24" r="16" fill="none" stroke="currentColor" stroke-width="2.5"/><g fill="none" stroke="currentColor" stroke-width="2" opacity=".65"><circle cx="24" cy="5" r="3.5"/><circle cx="24" cy="43" r="3.5"/><circle cx="5" cy="24" r="3.5"/><circle cx="43" cy="24" r="3.5"/><circle cx="9" cy="9" r="3.5"/><circle cx="39" cy="9" r="3.5"/><circle cx="9" cy="39" r="3.5"/><circle cx="39" cy="39" r="3.5"/><circle cx="16" cy="5" r="3"/><circle cx="32" cy="5" r="3"/></g>', size:22 },
+  't_round15':      { color:'#d4a84b', svg:'<circle cx="24" cy="24" r="13" fill="currentColor" opacity=".75"/><circle cx="24" cy="24" r="13" fill="none" stroke="currentColor" stroke-width="2"/><g fill="none" stroke="currentColor" stroke-width="2" opacity=".65"><circle cx="24" cy="7" r="3.2"/><circle cx="24" cy="41" r="3.2"/><circle cx="7" cy="24" r="3.2"/><circle cx="41" cy="24" r="3.2"/><circle cx="11" cy="11" r="3.2"/><circle cx="37" cy="11" r="3.2"/><circle cx="11" cy="37" r="3.2"/><circle cx="37" cy="37" r="3.2"/></g>', size:20 },
+  't_round12':      { color:'#c49840', svg:'<circle cx="24" cy="24" r="10" fill="currentColor" opacity=".75"/><circle cx="24" cy="24" r="10" fill="none" stroke="currentColor" stroke-width="2"/><g fill="none" stroke="currentColor" stroke-width="1.8" opacity=".65"><circle cx="24" cy="10" r="3"/><circle cx="24" cy="38" r="3"/><circle cx="10" cy="24" r="3"/><circle cx="38" cy="24" r="3"/><circle cx="13" cy="13" r="3"/><circle cx="35" cy="13" r="3"/></g>', size:16 },
+  't_leaner':       { color:'#ff9944', svg:'<circle cx="24" cy="22" r="8" fill="currentColor" opacity=".85"/><circle cx="24" cy="22" r="8" fill="none" stroke="currentColor" stroke-width="2"/><line x1="24" y1="30" x2="24" y2="44" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><line x1="16" y1="44" x2="32" y2="44" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>', size:10 },
+  // EXTRAS
+  'heater':         { color:'#ff6644', svg:'<path d="M20 8 C14 16 22 20 20 28 C18 36 24 38 24 38 C24 38 30 36 28 28 C26 20 34 16 28 8 C26 20 22 20 20 8 Z" fill="currentColor" opacity=".85"/><ellipse cx="24" cy="42" rx="10" ry="3" fill="currentColor" opacity=".4"/>', size:10 },
+  'lights':         { color:'#ffffaa', svg:'<path d="M8 10 L40 10" stroke="currentColor" stroke-width="2"/><g fill="currentColor"><ellipse cx="12" cy="16" rx="3" ry="4" opacity=".9"/><ellipse cx="20" cy="16" rx="3" ry="4" opacity=".9"/><ellipse cx="28" cy="16" rx="3" ry="4" opacity=".9"/><ellipse cx="36" cy="16" rx="3" ry="4" opacity=".9"/></g><path d="M8 22 L40 22 M8 30 L40 30" stroke="currentColor" stroke-width="1" opacity=".3" stroke-dasharray="3 3"/>', size:14 },
+  'sidewall':       { color:'#aabbcc', svg:'<rect x="4" y="12" width="40" height="28" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><g stroke="currentColor" stroke-width="1" opacity=".45"><line x1="4" y1="20" x2="44" y2="20"/><line x1="4" y1="28" x2="44" y2="28"/><line x1="4" y1="36" x2="44" y2="36"/></g>', size:14 },
+  'dance':          { color:'#ffe0a0', svg:'<rect x="4" y="4" width="40" height="40" fill="currentColor" opacity=".6"/><g fill="rgba(0,0,0,.25)"><rect x="4" y="4" width="10" height="10"/><rect x="24" y="4" width="10" height="10"/><rect x="14" y="14" width="10" height="10"/><rect x="34" y="14" width="10" height="10"/><rect x="4" y="24" width="10" height="10"/><rect x="24" y="24" width="10" height="10"/><rect x="14" y="34" width="10" height="10"/><rect x="34" y="34" width="10" height="10"/></g><rect x="4" y="4" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2"/>', size:18 },
+  'linen':          { color:'#ffccdd', svg:'<rect x="6" y="14" width="36" height="24" rx="3" fill="currentColor" opacity=".75"/><path d="M6 22 L42 22 M6 30 L42 30" stroke="rgba(255,255,255,.5)" stroke-width="1"/>', size:10 },
+  'carpet':         { color:'#cc8866', svg:'<rect x="4" y="8" width="40" height="32" rx="2" fill="currentColor" opacity=".7"/><rect x="8" y="12" width="32" height="24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/><rect x="12" y="16" width="24" height="16" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1"/>', size:16 },
+  'power':          { color:'#88cc88', svg:'<rect x="12" y="10" width="24" height="30" rx="3" fill="currentColor" opacity=".8"/><rect x="16" y="20" width="16" height="10" rx="2" fill="rgba(0,0,0,.3)"/><circle cx="20" cy="25" r="2" fill="rgba(0,0,0,.5)"/><circle cx="28" cy="25" r="2" fill="rgba(0,0,0,.5)"/><path d="M18 8 L18 12 M30 8 L30 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>', size:10 },
+};
+
+// ── PLACEMENT CONSTANTS ─────────────────────────────────────────────────
+// 1 degree lat/lng ≈ 111,000m in NZ. We scale icons in metres to lat/lng.
+var DEG_PER_METRE = 1 / 111000;
+
+// Chair footprint: 0.5m × 0.5m, spacing 0.55m per seat
+var CHAIR_SPACING = 0.55 * DEG_PER_METRE; // degrees
+var CHAIR_ROW_GAP = 0.80 * DEG_PER_METRE; // row-to-row gap
+var TABLE_SPACING_ROUND = 2.2 * DEG_PER_METRE;
+var TABLE_SPACING_RECT  = 2.4 * DEG_PER_METRE;
+
+// ── FURNITURE MARKER LAYER ──────────────────────────────────────────────
+var _furnMarkerGroup = null;
+var _furnVisible = true;
+var _rooftopActive = false;
+var _furnRenderThrottle = null;
+
+function _furnEnsureGroup() {
+  if (!_furnMarkerGroup) {
+    _furnMarkerGroup = L.featureGroup().addTo(map);
+    // Ensure this layer is below the equipment layer (zIndex managed via pane)
+  }
+  return _furnMarkerGroup;
+}
+
+// ── MAIN RENDER FUNCTION ────────────────────────────────────────────────
+function renderFurnitureIcons() {
+  // Clear existing furniture markers
+  if (_furnMarkerGroup) {
+    _furnMarkerGroup.clearLayers();
+  } else {
+    _furnEnsureGroup();
+  }
+
+  if (!_furnVisible) {
+    _updateFurnCounterBadge();
+    return;
+  }
+
+  var mq = state.marqueeRect;
+  if (!mq) {
+    _updateFurnCounterBadge();
+    return;
+  }
+
+  var bounds = mq.getBounds();
+  var south = bounds.getSouth();
+  var north = bounds.getNorth();
+  var west  = bounds.getWest();
+  var east  = bounds.getEast();
+  var latSpan = north - south;
+  var lngSpan = east - west;
+
+  var totalPlaced = 0;
+  var animDelay = 0;
+
+  // ── Chairs ──────────────────────────────────────────────────────────
+  var chairTypes = ['chair_resin','chair_chiavari','chair_banquet','chair_bentwood','chair_kids'];
+  var totalChairs = 0;
+  chairTypes.forEach(function(id) {
+    var f = FURNITURE.find(function(x){ return x.id === id; });
+    if (f) totalChairs += f.qty;
+  });
+
+  if (totalChairs > 0) {
+    var chairPositions = _placeInRows(
+      totalChairs,
+      west  + lngSpan * 0.05,
+      east  - lngSpan * 0.05,
+      south + latSpan * 0.05,
+      north - latSpan * 0.50, // chairs in lower half
+      CHAIR_SPACING,
+      CHAIR_ROW_GAP
+    );
+    var chairIdx = 0;
+    // Distribute across chair types by qty
+    chairTypes.forEach(function(id) {
+      var f = FURNITURE.find(function(x){ return x.id === id; });
+      if (!f || f.qty === 0) return;
+      var ico = FURN_ICONS[id];
+      for (var q = 0; q < f.qty && chairIdx < chairPositions.length; q++, chairIdx++) {
+        var pos = chairPositions[chairIdx];
+        _spawnFurnMarker(pos[0], pos[1], ico, id, animDelay);
+        animDelay += 8;
+        totalPlaced++;
+      }
+    });
+  }
+
+  // ── Round Tables ─────────────────────────────────────────────────────
+  var roundTableTypes = ['t_round18','t_round15','t_round12'];
+  roundTableTypes.forEach(function(id) {
+    var f = FURNITURE.find(function(x){ return x.id === id; });
+    if (!f || f.qty === 0) return;
+    var ico = FURN_ICONS[id];
+    var positions = _placeInGrid(
+      f.qty,
+      west  + lngSpan * 0.10,
+      east  - lngSpan * 0.10,
+      south + latSpan * 0.45,
+      north - latSpan * 0.05,
+      TABLE_SPACING_ROUND,
+      TABLE_SPACING_ROUND * 0.72 // lat aspect correction
+    );
+    for (var q = 0; q < positions.length; q++) {
+      _spawnFurnMarker(positions[q][0], positions[q][1], ico, id, animDelay);
+      animDelay += 20;
+      totalPlaced++;
+    }
+  });
+
+  // ── Trestle/Banquet Tables ───────────────────────────────────────────
+  var rectTableTypes = ['t_trestle24','t_trestle18'];
+  rectTableTypes.forEach(function(id) {
+    var f = FURNITURE.find(function(x){ return x.id === id; });
+    if (!f || f.qty === 0) return;
+    var ico = FURN_ICONS[id];
+    var positions = _placeInGrid(
+      f.qty,
+      west  + lngSpan * 0.08,
+      east  - lngSpan * 0.08,
+      south + latSpan * 0.15,
+      north - latSpan * 0.10,
+      TABLE_SPACING_RECT,
+      TABLE_SPACING_RECT * 0.55
+    );
+    for (var q = 0; q < positions.length; q++) {
+      _spawnFurnMarker(positions[q][0], positions[q][1], ico, id, animDelay);
+      animDelay += 20;
+      totalPlaced++;
+    }
+  });
+
+  // ── Leaners / Cocktail ───────────────────────────────────────────────
+  var f_leaner = FURNITURE.find(function(x){ return x.id === 't_leaner'; });
+  if (f_leaner && f_leaner.qty > 0) {
+    var ico = FURN_ICONS['t_leaner'];
+    var lPos = _placeAroundPerimeter(
+      f_leaner.qty,
+      west  + lngSpan * 0.08,
+      east  - lngSpan * 0.08,
+      south + latSpan * 0.08,
+      north - latSpan * 0.08,
+      1.5 * DEG_PER_METRE
+    );
+    for (var q = 0; q < lPos.length; q++) {
+      _spawnFurnMarker(lPos[q][0], lPos[q][1], ico, 't_leaner', animDelay);
+      animDelay += 15;
+      totalPlaced++;
+    }
+  }
+
+  // ── Dance Floor ──────────────────────────────────────────────────────
+  var f_dance = FURNITURE.find(function(x){ return x.id === 'dance'; });
+  if (f_dance && f_dance.qty > 0) {
+    var ico = FURN_ICONS['dance'];
+    // Dance floor centred in middle of marquee, scaled by qty (m²)
+    var danceM = Math.sqrt(f_dance.qty);  // side length in metres
+    var danceW = danceM * DEG_PER_METRE;
+    var danceH = danceM * DEG_PER_METRE * 0.72;
+    var danceCount = Math.max(1, Math.round(f_dance.qty / 16)); // one 4x4 tile per 16m²
+    var dcLat = south + latSpan * 0.5;
+    var dcLng = west  + lngSpan * 0.5;
+    var cols = Math.ceil(Math.sqrt(danceCount));
+    var rows = Math.ceil(danceCount / cols);
+    var tileSize = 4 * DEG_PER_METRE;
+    for (var r = 0; r < rows; r++) {
+      for (var c = 0; c < cols; c++) {
+        if (r * cols + c >= danceCount) break;
+        var dlat = dcLat + (r - rows/2) * tileSize * 0.72;
+        var dlng = dcLng + (c - cols/2) * tileSize;
+        _spawnFurnMarker(dlat, dlng, ico, 'dance', animDelay);
+        animDelay += 25;
+        totalPlaced++;
+      }
+    }
+  }
+
+  // ── Heaters — scattered around perimeter ────────────────────────────
+  var f_heater = FURNITURE.find(function(x){ return x.id === 'heater'; });
+  if (f_heater && f_heater.qty > 0) {
+    var ico = FURN_ICONS['heater'];
+    var hPos = _placeAroundPerimeter(
+      f_heater.qty,
+      west  + lngSpan * 0.06,
+      east  - lngSpan * 0.06,
+      south + latSpan * 0.06,
+      north - latSpan * 0.06,
+      3.0 * DEG_PER_METRE
+    );
+    for (var q = 0; q < hPos.length; q++) {
+      _spawnFurnMarker(hPos[q][0], hPos[q][1], ico, 'heater', animDelay);
+      animDelay += 20;
+      totalPlaced++;
+    }
+  }
+
+  // ── Linen — small dots overlaid on table positions (no separate icons, skip) ──
+  // ── Carpet — single large icon centred ──────────────────────────────
+  var f_carpet = FURNITURE.find(function(x){ return x.id === 'carpet'; });
+  if (f_carpet && f_carpet.qty > 0) {
+    var ico = FURN_ICONS['carpet'];
+    var cLat = south + latSpan * 0.5;
+    var cLng = west  + lngSpan * 0.5;
+    _spawnFurnMarker(cLat, cLng, ico, 'carpet', animDelay, 36);
+    animDelay += 20;
+    totalPlaced++;
+  }
+
+  // ── Power boards — near edge ─────────────────────────────────────────
+  var f_power = FURNITURE.find(function(x){ return x.id === 'power'; });
+  if (f_power && f_power.qty > 0) {
+    var ico = FURN_ICONS['power'];
+    var step = lngSpan * 0.15;
+    for (var q = 0; q < f_power.qty; q++) {
+      var plat = south + latSpan * 0.08;
+      var plng = west  + lngSpan * 0.08 + q * step;
+      if (plng > east - lngSpan * 0.08) plng = east - lngSpan * 0.08;
+      _spawnFurnMarker(plat, plng, ico, 'power', animDelay);
+      animDelay += 15;
+      totalPlaced++;
+    }
+  }
+
+  // ── String Lights — decorative row along top ─────────────────────────
+  var f_lights = FURNITURE.find(function(x){ return x.id === 'lights'; });
+  if (f_lights && f_lights.qty > 0) {
+    var ico = FURN_ICONS['lights'];
+    var lightsN = north - latSpan * 0.06;
+    var step = lngSpan / (f_lights.qty + 1);
+    for (var q = 0; q < f_lights.qty; q++) {
+      var llng = west + step * (q + 1);
+      _spawnFurnMarker(lightsN, llng, ico, 'lights', animDelay, 16);
+      animDelay += 15;
+      totalPlaced++;
+    }
+  }
+
+  // ── Sidewalls — along perimeter edges ───────────────────────────────
+  var f_side = FURNITURE.find(function(x){ return x.id === 'sidewall'; });
+  if (f_side && f_side.qty > 0) {
+    var ico = FURN_ICONS['sidewall'];
+    var sStep = lngSpan * 0.2;
+    for (var q = 0; q < f_side.qty; q++) {
+      var slng = west + sStep * (q % 5) + lngSpan * 0.05;
+      var slat = q < 5 ? (south + latSpan * 0.03) : (north - latSpan * 0.03);
+      _spawnFurnMarker(slat, slng, ico, 'sidewall', animDelay, 18);
+      animDelay += 10;
+      totalPlaced++;
+    }
+  }
+
+  state._furnTotalPlaced = totalPlaced;
+  _updateFurnCounterBadge();
+}
+
+// ── PLACEMENT HELPERS ───────────────────────────────────────────────────
+function _placeInRows(count, wLng, eLng, sLat, nLat, spacing, rowGap) {
+  var positions = [];
+  if (count <= 0) return positions;
+  var lngRange = eLng - wLng;
+  var cols = Math.max(1, Math.floor(lngRange / spacing));
+  var latStart = nLat;
+  var row = 0;
+  for (var i = 0; i < count; i++) {
+    var col = i % cols;
+    var r   = Math.floor(i / cols);
+    var lat = latStart - r * rowGap;
+    var lng = wLng + col * spacing + (spacing * 0.5);
+    if (lat < sLat) lat = sLat + (Math.random() * (nLat - sLat) * 0.8);
+    if (lng > eLng) lng = eLng - spacing * 0.3;
+    positions.push([lat, lng]);
+  }
+  return positions;
+}
+
+function _placeInGrid(count, wLng, eLng, sLat, nLat, spacingLng, spacingLat) {
+  var positions = [];
+  if (count <= 0) return positions;
+  var lngRange = eLng - wLng;
+  var latRange = nLat - sLat;
+  var cols = Math.max(1, Math.floor(lngRange / spacingLng));
+  var rows = Math.ceil(count / cols);
+  var latStep = rows > 1 ? latRange / rows : latRange / 2;
+  var lngStep = cols > 1 ? lngRange / cols : lngRange / 2;
+  for (var i = 0; i < count; i++) {
+    var col = i % cols;
+    var row = Math.floor(i / cols);
+    var lat = nLat - (row + 0.5) * latStep;
+    var lng = wLng + (col + 0.5) * lngStep;
+    // Clamp
+    lat = Math.max(sLat, Math.min(nLat, lat));
+    lng = Math.max(wLng, Math.min(eLng, lng));
+    positions.push([lat, lng]);
+  }
+  return positions;
+}
+
+function _placeAroundPerimeter(count, wLng, eLng, sLat, nLat, minSpacing) {
+  var positions = [];
+  if (count <= 0) return positions;
+  var perimeter = 2 * ((eLng - wLng) + (nLat - sLat));
+  var step = perimeter / count;
+  var perimSpots = []; // all candidate perimeter positions
+  var pw = eLng - wLng, ph = nLat - sLat;
+  for (var i = 0; i < count; i++) {
+    var t = (i / count) * perimeter;
+    var lat, lng;
+    if (t < pw) {
+      lng = wLng + t; lat = sLat;
+    } else if (t < pw + ph) {
+      lng = eLng; lat = sLat + (t - pw);
+    } else if (t < 2 * pw + ph) {
+      lng = eLng - (t - pw - ph); lat = nLat;
+    } else {
+      lng = wLng; lat = nLat - (t - 2 * pw - ph);
+    }
+    lat = Math.max(sLat, Math.min(nLat, lat));
+    lng = Math.max(wLng, Math.min(eLng, lng));
+    positions.push([lat, lng]);
+  }
+  return positions;
+}
+
+// ── SPAWN A SINGLE FURNITURE MARKER ────────────────────────────────────
+function _spawnFurnMarker(lat, lng, ico, id, delayMs, overrideSize) {
+  var sz = overrideSize || ico.size;
+  var tooltipName = (FURNITURE.find(function(x){ return x.id === id; }) || {}).name || id;
+
+  // Make a tight, minimal SVG icon
+  var isRooftop = _rooftopActive;
+  var iconBg   = isRooftop ? 'rgba(255,255,255,0.92)' : 'rgba(10,14,32,0.88)';
+  var borderClr = ico.color;
+  var shadow   = isRooftop ? '0 1px 4px rgba(0,0,0,.18)' : '0 2px 8px rgba(0,0,0,.5)';
+
+  var html =
+    '<div class="furn-icon-marker animate-in" style="' +
+      'width:' + sz + 'px;height:' + sz + 'px;' +
+      'background:' + iconBg + ';' +
+      'border:1.5px solid ' + borderClr + ';' +
+      'border-radius:' + (ico.shape === 'round' ? '50%' : '3px') + ';' +
+      'box-shadow:' + shadow + ';' +
+      'animation-delay:' + Math.min(delayMs, 800) + 'ms' +
+    '">' +
+      '<svg viewBox="0 0 48 48" width="' + sz + '" height="' + sz + '" xmlns="http://www.w3.org/2000/svg" ' +
+        'style="color:' + ico.color + ';display:block">' +
+        ico.svg +
+      '</svg>' +
+    '</div>';
+
+  var marker = L.marker([lat, lng], {
+    icon: L.divIcon({
+      className: 'furn-divicon',
+      html: html,
+      iconSize:   [sz, sz],
+      iconAnchor: [sz/2, sz/2]
+    }),
+    interactive: false, // non-draggable, click-through
+    zIndexOffset: 50
+  });
+
+  marker.addTo(_furnEnsureGroup());
+  marker.bindTooltip(tooltipName, { permanent: false, direction: 'top', className: 'furn-tooltip' });
+}
+
+// ── COUNTER BADGE ───────────────────────────────────────────────────────
+function _updateFurnCounterBadge() {
+  var total = 0;
+  FURNITURE.forEach(function(f){ total += f.qty; });
+  var badge = document.getElementById('furnCounterBadge');
+  var valEl = document.getElementById('furnCounterVal');
+  var visBtn = document.getElementById('furnVisToggle');
+  if (!badge) return;
+  if (total > 0 && state.marqueeRect) {
+    badge.classList.add('visible');
+    if (valEl) valEl.textContent = total;
+    if (visBtn) visBtn.classList.add('visible-toggle');
+  } else {
+    badge.classList.remove('visible');
+    if (visBtn) visBtn.classList.remove('visible-toggle');
+  }
+}
+
+// ── VISIBILITY TOGGLE ───────────────────────────────────────────────────
+function toggleFurnitureVisibility() {
+  _furnVisible = !_furnVisible;
+  var icon = document.getElementById('furnVisIcon');
+  var lbl  = document.getElementById('furnVisLbl');
+  if (icon) icon.textContent = _furnVisible ? '👁' : '🚫';
+  if (lbl)  lbl.textContent  = _furnVisible ? 'Hide Items' : 'Show Items';
+  renderFurnitureIcons();
+}
+
+// ── THROTTLED RE-RENDER (called from adjQty / setQtyTo hooks) ───────────
+function scheduleRenderFurnIcons() {
+  if (_furnRenderThrottle) clearTimeout(_furnRenderThrottle);
+  _furnRenderThrottle = setTimeout(function(){
+    renderFurnitureIcons();
+  }, 180); // 180ms debounce — snappy but not choppy for rapid +1 presses
+}
+
+// ── ROOFTOP VIEW ────────────────────────────────────────────────────────
+function toggleRooftopView() {
+  _rooftopActive = !_rooftopActive;
+  var overlay = document.getElementById('rooftopOverlay');
+  var btn     = document.getElementById('rooftopToggleBtn');
+  var printBtn = document.getElementById('printLayoutBtn');
+
+  if (overlay) overlay.classList.toggle('active', _rooftopActive);
+  if (btn) {
+    btn.classList.toggle('active', _rooftopActive);
+    btn.innerHTML = _rooftopActive ? '🗺️ Satellite View' : '🏠 Rooftop View';
+  }
+  if (printBtn) printBtn.style.display = _rooftopActive ? 'flex' : 'none';
+
+  if (_rooftopActive) {
+    // Fade tiles: hide satellite and labels layers
+    satelliteLayer.setOpacity(0);
+    labelsLayer.setOpacity(0);
+    // Make marquee rect more visible on white
+    if (state.marqueeRect) {
+      state.marqueeRect.setStyle({ color:'#0055aa', fillColor:'#0055aa', fillOpacity:0.08, weight:2.5 });
+    }
+  } else {
+    satelliteLayer.setOpacity(1);
+    labelsLayer.setOpacity(0.8);
+    if (state.marqueeRect) {
+      state.marqueeRect.setStyle({ color:'#00e6ff', fillColor:'#00e6ff', fillOpacity:0.12, weight:2 });
+    }
+  }
+  // Re-render icons with new bg colour
+  renderFurnitureIcons();
+}
+
+// ── PRINT LAYOUT ────────────────────────────────────────────────────────
+function printLayout() {
+  if (!_rooftopActive) toggleRooftopView();
+  // Brief delay to let styles apply then print
+  setTimeout(function() {
+    window.print();
+  }, 400);
+}
+
+// ── HOOK INTO adjQty AND setQtyTo ───────────────────────────────────────
+// Wrap the existing functions to trigger icon re-render
+(function() {
+  var _origAdjQty = window.adjQty;
+  window.adjQty = function(idx, delta) {
+    _origAdjQty(idx, delta);
+    scheduleRenderFurnIcons();
+  };
+  var _origSetQtyTo = window.setQtyTo;
+  window.setQtyTo = function(idx, qty) {
+    _origSetQtyTo(idx, qty);
+    scheduleRenderFurnIcons();
+  };
+  // Also hook applyPackage for bulk fills
+  var _origApplyPackage = window.applyPackage;
+  if (_origApplyPackage) {
+    window.applyPackage = function(pkg) {
+      _origApplyPackage(pkg);
+      setTimeout(scheduleRenderFurnIcons, 300);
+    };
+  }
+})();
+
+// ── ALSO RE-RENDER WHEN MARQUEE IS SET ──────────────────────────────────
+// Hook selectMarquee to trigger on marquee placement
+(function() {
+  var _origSelectMarquee = window.selectMarquee;
+  window.selectMarquee = function(id) {
+    _origSelectMarquee(id);
+    setTimeout(function(){ renderFurnitureIcons(); }, 400);
+  };
+})();
+
+// ── TOOLTIP CSS injected ─────────────────────────────────────────────────
+(function(){
+  var s = document.createElement('style');
+  s.textContent =
+    '.furn-divicon{background:transparent!important;border:none!important}' +
+    '.furn-tooltip{background:rgba(10,14,30,.92)!important;color:#e0f0ff!important;' +
+    'border:1px solid rgba(0,230,255,.3)!important;border-radius:6px!important;' +
+    'font-size:10px!important;font-family:Inter,sans-serif!important;' +
+    'padding:3px 8px!important;box-shadow:0 2px 8px rgba(0,0,0,.4)!important}' +
+    '.furn-tooltip::before{display:none!important}';
+  document.head.appendChild(s);
+})();
+
+// ── END FURNITURE ICON VISUALISATION ────────────────────────────────────
 </script>
 
 <!-- EQUIPMENT CATALOGUE MODAL -->
@@ -6527,5 +7144,7 @@ function _renderHelpDots() {
   });
 })();
 </script>
+
+<script src="./whetu_upgrade.js"></script>
 </body>
 </html>
