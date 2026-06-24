@@ -1705,6 +1705,217 @@ input[type=range]{
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
+/* ══════════════════════════════════════════
+   V6 ADDITIONS: BOOKING CALENDAR · HERO · EQUIPMENT DASHBOARD
+   ══════════════════════════════════════════ */
+
+/* ── CINEMATIC HERO ── */
+#venueHero{
+  position:fixed;inset:0;z-index:700;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  overflow:hidden;
+  background:linear-gradient(135deg,#010210 0%,#030624 30%,#04091a 60%,#010212 100%);
+  transition:opacity .5s ease,visibility .5s ease}
+#venueHero.hero-hidden{opacity:0;visibility:hidden;pointer-events:none}
+.vh-lights{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.vh-light{
+  position:absolute;border-radius:50%;filter:blur(80px);
+  animation:vhLightDrift 8s ease-in-out infinite alternate}
+.vh-light:nth-child(1){width:600px;height:600px;top:-150px;left:-100px;background:radial-gradient(circle,rgba(0,230,255,.18),transparent 70%);animation-delay:0s}
+.vh-light:nth-child(2){width:500px;height:500px;top:20%;right:-80px;background:radial-gradient(circle,rgba(192,96,255,.15),transparent 70%);animation-delay:-3s}
+.vh-light:nth-child(3){width:400px;height:400px;bottom:-100px;left:30%;background:radial-gradient(circle,rgba(255,215,0,.1),transparent 70%);animation-delay:-6s}
+@keyframes vhLightDrift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(40px,30px) scale(1.1)}}
+/* Twinkling stars */
+.vh-stars{position:absolute;inset:0;pointer-events:none}
+.vh-star{position:absolute;border-radius:50%;background:#fff;animation:vhTwinkle var(--d,2s) ease-in-out infinite}
+@keyframes vhTwinkle{0%,100%{opacity:var(--lo,.1);transform:scale(1)}50%{opacity:var(--hi,.9);transform:scale(1.4)}}
+/* Marquee tent illustration */
+.vh-scene{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:min(900px,100vw);height:280px;pointer-events:none}
+.vh-tent{position:absolute;bottom:0;left:50%;transform:translateX(-50%)}
+/* String lights */
+.vh-strings{position:absolute;top:40px;left:10%;right:10%;height:60px;pointer-events:none}
+/* Content */
+.vh-content{position:relative;z-index:2;text-align:center;padding:0 24px}
+.vh-headline{
+  font-family:'Bebas Neue',var(--font);font-size:clamp(52px,10vw,120px);font-weight:400;
+  letter-spacing:8px;line-height:1;color:#fff;
+  text-shadow:0 0 60px rgba(0,230,255,.5),0 0 120px rgba(0,230,255,.2)}
+.vh-headline span{display:inline-block;opacity:0;transform:translateY(30px);animation:vhLetterIn .6s cubic-bezier(.2,0,.1,1) forwards}
+@keyframes vhLetterIn{to{opacity:1;transform:translateY(0)}}
+.vh-sub{
+  font-size:13px;letter-spacing:4px;color:rgba(0,230,255,.7);text-transform:uppercase;
+  margin:12px 0 32px;opacity:0;animation:vhFadeIn .8s .8s ease forwards}
+@keyframes vhFadeIn{to{opacity:1}}
+.vh-cta{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:14px 32px;border-radius:50px;cursor:pointer;
+  background:linear-gradient(135deg,rgba(0,230,255,.25),rgba(192,96,255,.2));
+  border:1px solid rgba(0,230,255,.5);color:var(--cyan);
+  font-family:var(--font);font-size:14px;font-weight:800;letter-spacing:2px;
+  box-shadow:0 0 30px rgba(0,230,255,.3),0 0 60px rgba(0,230,255,.1);
+  transition:all .3s;opacity:0;animation:vhFadeIn .8s 1.2s ease forwards}
+.vh-cta:hover{
+  background:linear-gradient(135deg,rgba(0,230,255,.45),rgba(192,96,255,.38));
+  box-shadow:0 0 50px rgba(0,230,255,.6),0 0 100px rgba(0,230,255,.2);
+  transform:translateY(-3px) scale(1.04)}
+.vh-skip{
+  position:absolute;bottom:24px;right:24px;
+  font-size:11px;color:rgba(255,255,255,.35);cursor:pointer;
+  letter-spacing:2px;text-transform:uppercase;border:none;background:none;
+  font-family:var(--font);transition:color .2s}
+.vh-skip:hover{color:rgba(255,255,255,.7)}
+.vh-toggle-btn{
+  padding:7px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.03));
+  color:rgba(255,255,255,.75);cursor:pointer;
+  font-size:11px;letter-spacing:.5px;font-family:var(--font);font-weight:600;
+  transition:all .15s}
+.vh-toggle-btn:hover{background:rgba(0,230,255,.12);border-color:rgba(0,230,255,.4);color:var(--cyan)}
+
+/* ── NEXT-EVENT HERO CARD ── */
+.next-event-card{
+  background:linear-gradient(135deg,rgba(0,230,255,.08),rgba(192,96,255,.06));
+  border:1px solid rgba(0,230,255,.3);border-radius:14px;padding:14px 16px;
+  margin-bottom:16px;position:relative;overflow:hidden}
+.next-event-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent)}
+.nec-label{font-size:8px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
+.nec-name{font-size:16px;font-weight:900;color:#fff;margin-bottom:2px}
+.nec-date{font-size:11px;color:var(--cyan);margin-bottom:10px}
+.nec-pills{display:flex;gap:6px;flex-wrap:wrap}
+.nec-pill{
+  font-size:9px;font-weight:700;letter-spacing:.5px;padding:3px 10px;border-radius:20px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:var(--muted)}
+.nec-pill.cyan{background:rgba(0,230,255,.1);border-color:rgba(0,230,255,.3);color:var(--cyan)}
+.nec-pill.gold{background:rgba(255,215,0,.1);border-color:rgba(255,215,0,.3);color:var(--gold)}
+.nec-pill.green{background:rgba(0,255,136,.1);border-color:rgba(0,255,136,.3);color:var(--green)}
+.nec-days{
+  position:absolute;top:14px;right:14px;text-align:center;
+  background:rgba(0,230,255,.12);border:1px solid rgba(0,230,255,.3);
+  border-radius:10px;padding:6px 10px}
+.nec-days-num{font-size:22px;font-weight:900;color:var(--cyan);line-height:1}
+.nec-days-lbl{font-size:7px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+
+/* ── BOOKING CALENDAR ── */
+#step5{display:none;flex-direction:column;height:100%;overflow-y:auto}
+#step5.active{display:flex}
+.bk-cal-wrap{padding:16px 20px;flex:1}
+.bk-util-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:14px}
+.bk-util-pct{font-size:10px;color:var(--muted);letter-spacing:1px}
+.bk-util-pct strong{color:var(--cyan);font-size:14px}
+.bk-add-btn{
+  padding:6px 14px;border-radius:8px;cursor:pointer;font-family:var(--font);
+  font-size:10px;font-weight:700;letter-spacing:.5px;
+  background:linear-gradient(135deg,rgba(0,230,255,.2),rgba(192,96,255,.15));
+  border:1px solid rgba(0,230,255,.4);color:var(--cyan);transition:all .2s}
+.bk-add-btn:hover{background:linear-gradient(135deg,rgba(0,230,255,.35),rgba(192,96,255,.28));box-shadow:0 0 16px rgba(0,230,255,.3)}
+.bk-cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.bk-cal-month{font-size:14px;font-weight:800;color:#fff;letter-spacing:1px}
+.bk-cal-arrow{
+  width:28px;height:28px;border-radius:7px;border:1px solid var(--border);
+  background:rgba(255,255,255,.04);color:var(--text);cursor:pointer;
+  font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  font-family:var(--font);transition:all .15s}
+.bk-cal-arrow:hover{border-color:rgba(0,230,255,.4);color:var(--cyan);background:rgba(0,230,255,.08)}
+.bk-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.bk-cal-dow{
+  text-align:center;font-size:8px;letter-spacing:1px;color:var(--muted);
+  padding:4px 0;text-transform:uppercase}
+.bk-day{
+  aspect-ratio:1;border-radius:6px;border:1px solid transparent;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .15s;position:relative;min-height:34px;font-size:11px;font-weight:600}
+.bk-day:hover{border-color:rgba(0,230,255,.3);background:rgba(0,230,255,.06)}
+.bk-day.other-month{opacity:.25;pointer-events:none}
+.bk-day.today{border-color:rgba(255,255,255,.3) !important;background:rgba(255,255,255,.05)}
+.bk-day.booked{
+  background:rgba(0,230,255,.15);border-color:rgba(0,230,255,.5);color:var(--cyan);
+  box-shadow:0 0 8px rgba(0,230,255,.2)}
+.bk-day.tentative{
+  border:1px dashed rgba(255,215,0,.6);color:var(--gold);background:rgba(255,215,0,.06)}
+.bk-day.setup{
+  background:rgba(255,140,0,.1);border-color:rgba(255,140,0,.4);color:var(--orange)}
+.bk-day-dot{
+  width:4px;height:4px;border-radius:50%;position:absolute;bottom:3px;left:50%;transform:translateX(-50%)}
+.bk-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+.bk-legend-item{display:flex;align-items:center;gap:5px;font-size:8px;color:var(--muted);letter-spacing:.5px}
+.bk-legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+
+/* ── BOOKING DETAIL PANEL ── */
+.bk-detail{
+  margin-top:14px;padding:14px;border-radius:12px;
+  background:linear-gradient(135deg,rgba(0,230,255,.06),rgba(192,96,255,.04));
+  border:1px solid rgba(0,230,255,.2);display:none}
+.bk-detail.visible{display:block}
+.bk-detail-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.bk-detail-name{font-size:14px;font-weight:800;color:#fff}
+.bk-detail-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;font-family:var(--font);line-height:1}
+.bk-detail-rows{display:flex;flex-direction:column;gap:5px}
+.bk-detail-row{display:flex;justify-content:space-between;font-size:11px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.bk-detail-row:last-child{border-bottom:none}
+.bk-detail-row .bdk{color:var(--muted)}
+.bk-detail-row .bdv{color:var(--text);font-weight:600}
+.bk-detail-status{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:2px 8px;border-radius:20px;font-size:9px;font-weight:700;margin-top:8px}
+.bk-status-confirmed{background:rgba(0,230,255,.12);border:1px solid rgba(0,230,255,.3);color:var(--cyan)}
+.bk-status-tentative{background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);color:var(--gold)}
+.bk-status-setup{background:rgba(255,140,0,.1);border:1px solid rgba(255,140,0,.3);color:var(--orange)}
+
+/* ── EQUIPMENT AVAILABILITY WIDGET ── */
+.eq-avail-widget{
+  margin-top:14px;padding:12px 14px;border-radius:12px;
+  background:rgba(255,255,255,.025);border:1px solid rgba(255,215,0,.2)}
+.eaw-title{
+  font-size:9px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;
+  font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.eaw-row{
+  display:flex;align-items:center;gap:8px;padding:5px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);font-size:11px}
+.eaw-row:last-child{border-bottom:none}
+.eaw-icon{font-size:14px;width:20px;text-align:center;flex-shrink:0}
+.eaw-name{flex:1;color:var(--text)}
+.eaw-count{font-weight:700;font-variant-numeric:tabular-nums}
+.eaw-count.ok{color:var(--green)}
+.eaw-count.warn{color:var(--orange)}
+.eaw-count.crit{color:var(--red)}
+.eaw-bar-track{width:60px;height:4px;background:rgba(255,255,255,.08);border-radius:2px;flex-shrink:0}
+.eaw-bar-fill{height:100%;border-radius:2px;transition:width .4s ease}
+.eaw-bar-fill.ok{background:var(--green)}
+.eaw-bar-fill.warn{background:var(--orange)}
+.eaw-bar-fill.crit{background:var(--red)}
+.eaw-conflict-badge{
+  font-size:8px;font-weight:700;padding:1px 6px;border-radius:8px;
+  background:rgba(255,68,102,.15);border:1px solid rgba(255,68,102,.3);color:var(--red)}
+.eaw-footer{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.05);
+  font-size:10px;color:var(--muted)}
+.eaw-edit-btn{
+  font-size:9px;font-weight:700;padding:3px 10px;border-radius:6px;cursor:pointer;
+  background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.3);color:var(--gold);
+  font-family:var(--font);transition:all .15s}
+.eaw-edit-btn:hover{background:rgba(255,215,0,.18);border-color:rgba(255,215,0,.5)}
+
+/* ── NEW BOOKING MODAL ── */
+#newBookingModal{
+  display:none;position:fixed;inset:0;z-index:2000;
+  background:rgba(0,0,0,.88);backdrop-filter:blur(12px);
+  align-items:center;justify-content:center}
+#newBookingModal.open{display:flex}
+.nbm-wrap{
+  width:min(500px,96vw);max-height:90vh;overflow-y:auto;
+  background:linear-gradient(160deg,rgba(12,14,30,.98),rgba(8,10,24,.98));
+  border:1px solid rgba(0,230,255,.25);border-radius:20px;
+  box-shadow:0 0 60px rgba(0,230,255,.15),0 0 120px rgba(192,96,255,.08);
+  padding:24px}
+.nbm-title{font-size:15px;font-weight:800;letter-spacing:2px;color:var(--cyan);margin-bottom:16px}
+.nbm-row{display:flex;gap:10px;margin-bottom:0}
+.nbm-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
+
 /* ── SGMDS: GRAIN + PARALLAX DEPTH ── */
 .wes-grain::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.036;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='1'/%3E%3C/svg%3E");
@@ -1780,6 +1991,61 @@ input[type=range]{
   <div class="aurora-blob"></div>
 </div>
 
+<!-- ══════════════════════════════════════════════════════
+     CINEMATIC VENUE HERO (collapsible)
+══════════════════════════════════════════════════════ -->
+<div id="venueHero">
+  <!-- Ambient lights -->
+  <div class="vh-lights">
+    <div class="vh-light"></div>
+    <div class="vh-light"></div>
+    <div class="vh-light"></div>
+  </div>
+  <!-- Twinkling stars (injected by JS) -->
+  <div class="vh-stars" id="vhStars"></div>
+  <!-- SVG Marquee scene -->
+  <div class="vh-scene" aria-hidden="true">
+    <svg viewBox="0 0 900 280" xmlns="http://www.w3.org/2000/svg" style="position:absolute;bottom:0;left:0;width:100%;height:100%">
+      <!-- Ground -->
+      <rect x="0" y="240" width="900" height="40" fill="rgba(0,230,255,.04)" rx="0"/>
+      <!-- Tent body -->
+      <polygon points="450,40 140,220 760,220" fill="rgba(0,180,220,.06)" stroke="rgba(0,230,255,.3)" stroke-width="1.5"/>
+      <!-- Tent ridge -->
+      <line x1="140" y1="220" x2="310" y2="130" stroke="rgba(0,230,255,.25)" stroke-width="1"/>
+      <line x1="760" y1="220" x2="590" y2="130" stroke="rgba(0,230,255,.25)" stroke-width="1"/>
+      <!-- Decorative drape panels -->
+      <polygon points="140,220 220,220 200,160 180,130" fill="rgba(192,96,255,.08)" stroke="rgba(192,96,255,.2)" stroke-width="1"/>
+      <polygon points="760,220 680,220 700,160 720,130" fill="rgba(192,96,255,.08)" stroke="rgba(192,96,255,.2)" stroke-width="1"/>
+      <!-- String lights line 1 -->
+      <path d="M140,220 Q290,170 450,155 Q610,170 760,220" fill="none" stroke="rgba(255,215,0,.25)" stroke-width="1" stroke-dasharray="4,3"/>
+      <!-- String lights bulbs -->
+      <circle cx="200" cy="195" r="2.5" fill="#ffd700" opacity=".7"><animate attributeName="opacity" values=".3;1;.3" dur="1.8s" repeatCount="indefinite"/></circle>
+      <circle cx="280" cy="175" r="2.5" fill="#ffd700" opacity=".8"><animate attributeName="opacity" values=".5;1;.5" dur="2.2s" repeatCount="indefinite"/></circle>
+      <circle cx="360" cy="163" r="2.5" fill="#ffd700" opacity=".6"><animate attributeName="opacity" values=".2;1;.2" dur="1.5s" repeatCount="indefinite"/></circle>
+      <circle cx="450" cy="160" r="2.5" fill="#00e6ff" opacity=".9"><animate attributeName="opacity" values=".6;1;.6" dur="1.9s" repeatCount="indefinite"/></circle>
+      <circle cx="540" cy="163" r="2.5" fill="#ffd700" opacity=".7"><animate attributeName="opacity" values=".3;1;.3" dur="2.1s" repeatCount="indefinite"/></circle>
+      <circle cx="620" cy="175" r="2.5" fill="#c060ff" opacity=".8"><animate attributeName="opacity" values=".4;1;.4" dur="1.7s" repeatCount="indefinite"/></circle>
+      <circle cx="700" cy="195" r="2.5" fill="#ffd700" opacity=".6"><animate attributeName="opacity" values=".5;1;.5" dur="2.3s" repeatCount="indefinite"/></circle>
+      <!-- Tables inside -->
+      <ellipse cx="310" cy="210" rx="30" ry="8" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+      <ellipse cx="450" cy="210" rx="30" ry="8" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+      <ellipse cx="590" cy="210" rx="30" ry="8" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.1)" stroke-width="1"/>
+      <!-- Chairs silhouettes -->
+      <rect x="292" y="203" width="5" height="10" fill="rgba(255,255,255,.08)" rx="1"/>
+      <rect x="330" y="203" width="5" height="10" fill="rgba(255,255,255,.08)" rx="1"/>
+      <rect x="432" y="203" width="5" height="10" fill="rgba(255,255,255,.08)" rx="1"/>
+      <rect x="470" y="203" width="5" height="10" fill="rgba(255,255,255,.08)" rx="1"/>
+    </svg>
+  </div>
+  <!-- Hero content -->
+  <div class="vh-content">
+    <div class="vh-headline" id="vhHeadline"></div>
+    <div class="vh-sub">Whetū Digital EventSpace Pro &mdash; Configure &middot; Price &middot; Book</div>
+    <button class="vh-cta" onclick="dismissHero()">Start Planning &rarr;</button>
+  </div>
+  <button class="vh-skip" onclick="dismissHero()">Skip ✕</button>
+</div>
+
 <!-- ═══════════════════ HEADER ═══════════════════ -->
 <header class="hdr">
   <div class="hdr-logo">
@@ -1801,6 +2067,7 @@ input[type=range]{
     <button class="hdr-btn hdr-desktop" onclick="openUploadModal()">📸 Photo</button>
     <button class="hdr-btn hdr-desktop" onclick="openVisitModal()">📅 Visit</button>
     <button class="hdr-btn btn-gold-hdr hdr-desktop" onclick="openPresentation()">🖥 Present</button>
+    <button class="hdr-btn vh-toggle-btn hdr-desktop" onclick="showHero()" title="Show venue hero">🏛 Venue</button>
     <button class="hdr-btn btn-help" onclick="openHelpGuide()">? Help</button>
     <button class="hdr-btn btn-fs" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
     <button class="hdr-btn btn-green-hdr" onclick="newQuote()">+ New</button>
@@ -1839,6 +2106,14 @@ input[type=range]{
     <span class="sn-num"><span class="sn-num-txt">4</span></span>
     <span class="sn-lbl">Quote &amp; Export</span>
   </div>
+  <div class="sn-beam-wrap" id="sn-beam-5">
+    <div class="sn-beam-track"></div>
+    <div class="sn-beam-head"></div>
+  </div>
+  <div class="sn-step" id="sn5" onclick="focusStep(5)">
+    <span class="sn-num"><span class="sn-num-txt">📅</span></span>
+    <span class="sn-lbl">Bookings</span>
+  </div>
   <!-- Progress track -->
   <div class="sn-progress-track" style="pointer-events:none">
     <div class="sn-progress-fill" id="snProgressFill" style="width:25%"></div>
@@ -1860,6 +2135,18 @@ input[type=range]{
         <button onclick="loadDemoData()" style="margin-top:8px;padding:5px 12px;font-size:10px;border-radius:20px;border:1px solid rgba(0,230,255,.4);background:rgba(0,230,255,.08);color:var(--cyan);cursor:pointer;letter-spacing:.06em">✨ Load Demo Data</button>
       </div>
       <div class="panel-body">
+        <!-- NEXT EVENT HERO CARD -->
+        <div class="next-event-card" id="nextEventCard">
+          <div class="nec-label">◈ Next Upcoming Event</div>
+          <div class="nec-name" id="necName">Loading…</div>
+          <div class="nec-date" id="necDate">—</div>
+          <div class="nec-pills">
+            <span class="nec-pill cyan" id="necBookings">— bookings</span>
+            <span class="nec-pill gold" id="necRevenue">—</span>
+            <span class="nec-pill green" id="necItems">— items</span>
+          </div>
+          <div class="nec-days"><div class="nec-days-num" id="necDays">—</div><div class="nec-days-lbl">days away</div></div>
+        </div>
         <div class="field-row">
           <div class="field">
             <label>Client Name</label>
@@ -2077,6 +2364,16 @@ input[type=range]{
             <button class="btn-sm" onclick="clearEquipmentLayout()" style="font-size:10px;padding:6px 10px;background:rgba(255,68,102,.1);border:1px solid rgba(255,68,102,.3);color:var(--red);font-family:var(--font);font-weight:700;border-radius:7px;cursor:pointer">🗑 Clear</button>
           </div>
         </div>
+        <!-- EQUIPMENT AVAILABILITY WIDGET -->
+        <div class="eq-avail-widget" id="eqAvailWidget">
+          <div class="eaw-title">🧰 Equipment Availability</div>
+          <div id="eawRows"><!-- populated by JS --></div>
+          <div class="eaw-footer">
+            <span id="eawConflictMsg" style="color:var(--red);font-size:9px;display:none">⚠ Conflict detected</span>
+            <span style="flex:1"></span>
+            <button class="eaw-edit-btn" onclick="openEqInventoryEditor()">Edit Inventory</button>
+          </div>
+        </div>
         <button class="btn btn-primary btn-generate-cta" onclick="buildQuote();focusStep(4)">⚡ Generate Quote →</button>
       </div>
     </div>
@@ -2111,6 +2408,52 @@ input[type=range]{
           <button class="btn-sm btn-green" style="flex:1;padding:9px" onclick="saveQuote()">💾 Save</button>
           <button class="btn-sm" style="flex:1;padding:9px;background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.3);color:#25d366;font-family:var(--font);font-weight:700;border-radius:7px;cursor:pointer" onclick="sendWhatsApp()">💬 WhatsApp</button>
           <button class="btn-sm" style="flex:1;padding:9px;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.25);color:var(--gold);font-family:var(--font);font-weight:700;border-radius:7px;cursor:pointer" onclick="openModal('timelineModal');buildTimeline()">📅 Timeline</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5: BOOKINGS CALENDAR -->
+    <div id="step5" class="step-panel">
+      <div class="panel-head">
+        <div class="panel-title">◈ BOOKINGS CALENDAR</div>
+        <div class="panel-sub">View confirmed bookings, tentative quotes, and setup days.</div>
+      </div>
+      <div class="bk-cal-wrap">
+        <!-- Utilisation + New Booking -->
+        <div class="bk-util-bar">
+          <div class="bk-util-pct">Utilisation: <strong id="bkUtilPct">0%</strong> this month</div>
+          <button class="bk-add-btn" onclick="openNewBookingModal()">+ New Booking</button>
+        </div>
+        <!-- Calendar nav -->
+        <div class="bk-cal-nav">
+          <button class="bk-cal-arrow" onclick="bkCalPrev()">&#8249;</button>
+          <div class="bk-cal-month" id="bkCalMonthLabel">June 2026</div>
+          <button class="bk-cal-arrow" onclick="bkCalNext()">&#8250;</button>
+        </div>
+        <!-- Day of week headers -->
+        <div class="bk-cal-grid" id="bkCalGrid">
+          <div class="bk-cal-dow">Mon</div>
+          <div class="bk-cal-dow">Tue</div>
+          <div class="bk-cal-dow">Wed</div>
+          <div class="bk-cal-dow">Thu</div>
+          <div class="bk-cal-dow">Fri</div>
+          <div class="bk-cal-dow">Sat</div>
+          <div class="bk-cal-dow">Sun</div>
+          <!-- Day cells injected by JS -->
+        </div>
+        <!-- Legend -->
+        <div class="bk-legend">
+          <div class="bk-legend-item"><div class="bk-legend-dot" style="background:rgba(0,230,255,.5)"></div>Confirmed</div>
+          <div class="bk-legend-item"><div class="bk-legend-dot" style="background:transparent;border:1px dashed rgba(255,215,0,.6)"></div>Tentative</div>
+          <div class="bk-legend-item"><div class="bk-legend-dot" style="background:rgba(255,140,0,.5)"></div>Setup day</div>
+        </div>
+        <!-- Event detail panel -->
+        <div class="bk-detail" id="bkDetail">
+          <div class="bk-detail-head">
+            <div class="bk-detail-name" id="bkDetailName">—</div>
+            <button class="bk-detail-close" onclick="closeBkDetail()">✕</button>
+          </div>
+          <div class="bk-detail-rows" id="bkDetailRows"></div>
         </div>
       </div>
     </div>
@@ -7102,6 +7445,52 @@ function printLayout() {
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════════════════
+     NEW BOOKING MODAL
+══════════════════════════════════════════════════════ -->
+<div id="newBookingModal">
+  <div class="nbm-wrap">
+    <div class="nbm-title">+ New Booking</div>
+    <div class="field">
+      <label>Event Name</label>
+      <input id="nbmEventName" type="text" placeholder="e.g. Smith Wedding">
+    </div>
+    <div class="field">
+      <label>Client Name</label>
+      <input id="nbmClient" type="text" placeholder="Full name">
+    </div>
+    <div class="nbm-row">
+      <div class="field" style="flex:1">
+        <label>Event Date</label>
+        <input id="nbmDate" type="date">
+      </div>
+      <div class="field" style="flex:1;margin-left:10px">
+        <label>Status</label>
+        <select id="nbmStatus">
+          <option value="confirmed">Confirmed</option>
+          <option value="tentative">Tentative</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Guest Count</label>
+      <input id="nbmGuests" type="number" placeholder="100" min="1" max="500">
+    </div>
+    <div class="field">
+      <label>Equipment Notes</label>
+      <textarea id="nbmEquip" placeholder="e.g. 12m x 9m marquee, 80 chairs, 10 round tables..."></textarea>
+    </div>
+    <div class="field">
+      <label>Revenue ($)</label>
+      <input id="nbmRevenue" type="number" placeholder="2500" min="0">
+    </div>
+    <div class="nbm-actions">
+      <button class="btn-sm" onclick="closeNewBookingModal()" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:var(--muted);font-family:var(--font);font-weight:700;border-radius:7px;cursor:pointer;padding:8px 18px">Cancel</button>
+      <button class="btn-sm btn-primary" onclick="saveNewBooking()" style="padding:8px 22px">Save Booking</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════════ WHETŪ FOOTER ═══════════════════ -->
 <footer class="whetu-footer">
   <!-- Left: Business identity -->
@@ -7146,5 +7535,468 @@ function printLayout() {
 </script>
 
 <script src="./whetu_upgrade.js"></script>
+
+<!-- ══════════════════════════════════════════════════════
+     V6 JS: CINEMATIC HERO · BOOKING CALENDAR · EQUIPMENT DASHBOARD · NEXT-EVENT CARD
+══════════════════════════════════════════════════════ -->
+<script>
+(function(){
+'use strict';
+
+/* ═══════════════════════════════
+   1. CINEMATIC HERO
+═══════════════════════════════ */
+var HERO_DISMISSED = localStorage.getItem('ep_hero_dismissed') === '1';
+
+function buildHeroStars(){
+  var c = document.getElementById('vhStars');
+  if(!c) return;
+  var html = '';
+  for(var i=0;i<80;i++){
+    var x=Math.random()*100, y=Math.random()*80;
+    var sz=Math.random()*2+1;
+    var delay=(Math.random()*4).toFixed(2);
+    var dur=(Math.random()*2+1.5).toFixed(2);
+    var lo=(Math.random()*.15+.05).toFixed(2);
+    var hi=(Math.random()*.7+.3).toFixed(2);
+    html+='<div class="vh-star" style="left:'+x+'%;top:'+y+'%;width:'+sz+'px;height:'+sz+'px;--d:'+dur+'s;--lo:'+lo+';--hi:'+hi+';animation-delay:'+delay+'s"></div>';
+  }
+  c.innerHTML = html;
+}
+
+function buildHeroHeadline(){
+  var el = document.getElementById('vhHeadline');
+  if(!el) return;
+  var text = 'TRANSFORM YOUR SPACE';
+  var html = '';
+  var delay = 0;
+  for(var i=0;i<text.length;i++){
+    var ch = text[i] === ' ' ? '&nbsp;' : text[i];
+    html += '<span style="animation-delay:'+delay.toFixed(2)+'s">'+ch+'</span>';
+    if(text[i] !== ' ') delay += 0.04;
+  }
+  el.innerHTML = html;
+}
+
+function dismissHero(){
+  var el = document.getElementById('venueHero');
+  if(el){ el.classList.add('hero-hidden'); }
+  localStorage.setItem('ep_hero_dismissed','1');
+  // Auto-scroll to floor plan
+  setTimeout(function(){ var sb=document.querySelector('.sidebar'); if(sb) sb.scrollTop=0; },300);
+}
+
+window.showHero = function(){
+  var el = document.getElementById('venueHero');
+  if(el){ el.classList.remove('hero-hidden'); }
+  localStorage.setItem('ep_hero_dismissed','0');
+};
+
+// Init hero
+buildHeroStars();
+buildHeroHeadline();
+
+// Auto-dismiss after 5 seconds if not dismissed before
+if(!HERO_DISMISSED){
+  setTimeout(dismissHero, 5000);
+} else {
+  // Already dismissed in a previous session — hide immediately
+  var heroEl = document.getElementById('venueHero');
+  if(heroEl) heroEl.classList.add('hero-hidden');
+}
+
+
+/* ═══════════════════════════════
+   2. SAMPLE BOOKINGS DATA
+═══════════════════════════════ */
+var SAMPLE_BOOKINGS = [
+  {id:'bk1',name:'Smith Wedding',client:'James Smith',date:'2026-06-07',status:'confirmed',guests:120,equipment:'12m×9m marquee · 120 chairs · 15 round tables · dance floor',revenue:4800},
+  {id:'bk2',name:'Patel Birthday',client:'Priya Patel',date:'2026-06-14',status:'confirmed',guests:80,equipment:'9m×9m marquee · 80 chairs · 10 trestle tables',revenue:2200},
+  {id:'bk3',name:'Henderson Corporate',client:'BNZ Ltd',date:'2026-06-21',status:'tentative',guests:150,equipment:'15m×9m marquee · 150 chairs · stage · AV package',revenue:7500},
+  {id:'bk4',name:'Williams Family Reunion',client:'Sue Williams',date:'2026-06-28',status:'confirmed',guests:60,equipment:'9m×6m marquee · 60 chairs · 8 trestle tables',revenue:1800},
+  {id:'bk5',name:'NZ College Graduation',client:'Waikato College',date:'2026-07-05',status:'tentative',guests:200,equipment:'15m×12m marquee · 200 chairs · 2× stages',revenue:9200},
+  {id:'bk6',name:'Thompson Wedding',client:'Emma Thompson',date:'2026-07-12',status:'confirmed',guests:100,equipment:'12m×9m marquee · 100 chairs · dance floor · lighting rig',revenue:5500},
+  {id:'bk7',name:'Kaipara Market Day',client:'Kaipara Events',date:'2026-07-18',status:'confirmed',guests:300,equipment:'3× 6m×6m stalls · 60 trestle tables',revenue:3300},
+  {id:'bk8',name:'Riverbend 21st',client:'Lana Rivers',date:'2026-07-25',status:'tentative',guests:45,equipment:'6m×9m marquee · 45 chairs · 5 round tables',revenue:1200}
+];
+
+// Merge with localStorage saved bookings
+function loadBookings(){
+  var saved = [];
+  try{ saved = JSON.parse(localStorage.getItem('ep_bookings')||'[]'); }catch(e){}
+  // Merge: prefer saved, fallback to sample
+  var ids = saved.map(function(b){return b.id;});
+  var merged = saved.slice();
+  SAMPLE_BOOKINGS.forEach(function(s){
+    if(ids.indexOf(s.id)===-1) merged.push(s);
+  });
+  return merged;
+}
+
+function saveBookings(arr){
+  localStorage.setItem('ep_bookings', JSON.stringify(arr));
+}
+
+
+/* ═══════════════════════════════
+   3. BOOKING CALENDAR
+═══════════════════════════════ */
+var bkYear = 2026;
+var bkMonth = 5; // 0-indexed, 5 = June
+
+function bkRenderCal(){
+  var bookings = loadBookings();
+  var grid = document.getElementById('bkCalGrid');
+  var monthLabel = document.getElementById('bkCalMonthLabel');
+  if(!grid || !monthLabel) return;
+
+  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  monthLabel.textContent = months[bkMonth] + ' ' + bkYear;
+
+  // Build day cells (keeping DOW headers)
+  var dowHtml = '<div class="bk-cal-dow">Mon</div><div class="bk-cal-dow">Tue</div><div class="bk-cal-dow">Wed</div><div class="bk-cal-dow">Thu</div><div class="bk-cal-dow">Fri</div><div class="bk-cal-dow">Sat</div><div class="bk-cal-dow">Sun</div>';
+
+  // First day of month (JS 0=Sun, convert to Mon=0)
+  var firstDay = new Date(bkYear, bkMonth, 1).getDay();
+  var startOffset = (firstDay === 0) ? 6 : firstDay - 1;
+  var daysInMonth = new Date(bkYear, bkMonth+1, 0).getDate();
+  var today = new Date();
+  var todayStr = today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+
+  // Build date→status map
+  var dateMap = {};
+  bookings.forEach(function(bk){
+    var d = bk.date;
+    dateMap[d] = {status:bk.status, booking:bk};
+    // Setup day = day before event
+    var dtPrev = new Date(d);
+    dtPrev.setDate(dtPrev.getDate()-1);
+    var prev = dtPrev.getFullYear()+'-'+String(dtPrev.getMonth()+1).padStart(2,'0')+'-'+String(dtPrev.getDate()).padStart(2,'0');
+    if(!dateMap[prev]) dateMap[prev] = {status:'setup', booking:bk};
+  });
+
+  var html = dowHtml;
+
+  // Prev month padding
+  var prevDays = new Date(bkYear, bkMonth, 0).getDate();
+  for(var i=0;i<startOffset;i++){
+    var d = prevDays - startOffset + 1 + i;
+    html += '<div class="bk-day other-month">'+d+'</div>';
+  }
+
+  // Current month days
+  for(var day=1;day<=daysInMonth;day++){
+    var dateStr = bkYear+'-'+String(bkMonth+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');
+    var info = dateMap[dateStr];
+    var cls = 'bk-day';
+    var dot = '';
+    if(dateStr === todayStr) cls += ' today';
+    if(info){
+      if(info.status === 'confirmed') { cls += ' booked'; dot='<div class="bk-day-dot" style="background:var(--cyan)"></div>'; }
+      else if(info.status === 'tentative') { cls += ' tentative'; dot='<div class="bk-day-dot" style="background:var(--gold)"></div>'; }
+      else if(info.status === 'setup') { cls += ' setup'; }
+    }
+    var dataAttr = info ? ' data-date="'+dateStr+'"' : '';
+    var clickAttr = info ? ' onclick="bkDayClick(\''+dateStr+'\')"' : '';
+    html += '<div class="'+cls+'"'+dataAttr+clickAttr+'>'+day+dot+'</div>';
+  }
+
+  // Next month padding
+  var totalCells = startOffset + daysInMonth;
+  var remaining = (7 - (totalCells % 7)) % 7;
+  for(var n=1;n<=remaining;n++){
+    html += '<div class="bk-day other-month">'+n+'</div>';
+  }
+
+  grid.innerHTML = html;
+
+  // Utilisation %
+  var bookingDays = Object.keys(dateMap).filter(function(d){
+    var parts = d.split('-');
+    return parseInt(parts[0])===bkYear && parseInt(parts[1])-1===bkMonth && dateMap[d].status==='confirmed';
+  }).length;
+  var pct = Math.round((bookingDays/daysInMonth)*100);
+  var utilEl = document.getElementById('bkUtilPct');
+  if(utilEl) utilEl.textContent = pct + '%';
+}
+
+window.bkCalPrev = function(){
+  bkMonth--;
+  if(bkMonth < 0){ bkMonth=11; bkYear--; }
+  bkRenderCal();
+};
+window.bkCalNext = function(){
+  bkMonth++;
+  if(bkMonth > 11){ bkMonth=0; bkYear++; }
+  bkRenderCal();
+};
+
+window.bkDayClick = function(dateStr){
+  var bookings = loadBookings();
+  var bk = null;
+  bookings.forEach(function(b){ if(b.date===dateStr) bk=b; });
+  // Also check if it's a setup day
+  if(!bk){
+    var dtNext = new Date(dateStr);
+    dtNext.setDate(dtNext.getDate()+1);
+    var nextStr = dtNext.getFullYear()+'-'+String(dtNext.getMonth()+1).padStart(2,'0')+'-'+String(dtNext.getDate()).padStart(2,'0');
+    bookings.forEach(function(b){ if(b.date===nextStr) bk=b; });
+  }
+  if(!bk) return;
+  showBkDetail(bk, dateStr);
+};
+
+function showBkDetail(bk, dateStr){
+  var panel = document.getElementById('bkDetail');
+  var nameEl = document.getElementById('bkDetailName');
+  var rowsEl = document.getElementById('bkDetailRows');
+  if(!panel || !nameEl || !rowsEl) return;
+  nameEl.textContent = bk.name;
+  var statusBadge = bk.status==='confirmed'
+    ? '<span class="bk-detail-status bk-status-confirmed">● Confirmed</span>'
+    : '<span class="bk-detail-status bk-status-tentative">◌ Tentative</span>';
+  var isSetup = (bk.date !== dateStr);
+  if(isSetup) statusBadge = '<span class="bk-detail-status bk-status-setup">🔧 Setup Day</span>';
+  rowsEl.innerHTML = [
+    '<div class="bk-detail-row"><span class="bdk">Client</span><span class="bdv">'+bk.client+'</span></div>',
+    '<div class="bk-detail-row"><span class="bdk">Event Date</span><span class="bdv">'+bk.date+'</span></div>',
+    '<div class="bk-detail-row"><span class="bdk">Guests</span><span class="bdv">'+bk.guests+'</span></div>',
+    '<div class="bk-detail-row"><span class="bdk">Equipment</span><span class="bdv" style="max-width:160px;text-align:right;font-size:10px;white-space:normal;line-height:1.4">'+bk.equipment+'</span></div>',
+    '<div class="bk-detail-row"><span class="bdk">Revenue</span><span class="bdv" style="color:var(--gold)">$'+Number(bk.revenue).toLocaleString()+'</span></div>',
+    statusBadge
+  ].join('');
+  panel.classList.add('visible');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+window.closeBkDetail = function(){
+  var panel = document.getElementById('bkDetail');
+  if(panel) panel.classList.remove('visible');
+};
+
+
+/* ═══════════════════════════════
+   4. NEW BOOKING MODAL
+═══════════════════════════════ */
+window.openNewBookingModal = function(){
+  var m = document.getElementById('newBookingModal');
+  if(m) m.classList.add('open');
+};
+window.closeNewBookingModal = function(){
+  var m = document.getElementById('newBookingModal');
+  if(m) m.classList.remove('open');
+};
+window.saveNewBooking = function(){
+  var name = (document.getElementById('nbmEventName')||{}).value||'';
+  var client = (document.getElementById('nbmClient')||{}).value||'';
+  var date = (document.getElementById('nbmDate')||{}).value||'';
+  var status = (document.getElementById('nbmStatus')||{}).value||'confirmed';
+  var guests = parseInt((document.getElementById('nbmGuests')||{}).value||'0');
+  var equip = (document.getElementById('nbmEquip')||{}).value||'';
+  var rev = parseFloat((document.getElementById('nbmRevenue')||{}).value||'0');
+
+  if(!name || !date){
+    alert('Please fill in Event Name and Date.');
+    return;
+  }
+  var bookings = loadBookings();
+  bookings.push({
+    id:'bk'+Date.now(),
+    name:name, client:client, date:date, status:status,
+    guests:guests, equipment:equip, revenue:rev
+  });
+  saveBookings(bookings);
+  closeNewBookingModal();
+  bkRenderCal();
+  updateNextEventCard();
+  // Clear form
+  ['nbmEventName','nbmClient','nbmDate','nbmGuests','nbmEquip','nbmRevenue'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value='';
+  });
+};
+
+// Close modal on backdrop click
+document.addEventListener('click',function(e){
+  var m=document.getElementById('newBookingModal');
+  if(m && e.target===m) closeNewBookingModal();
+});
+
+
+/* ═══════════════════════════════
+   5. NEXT-EVENT HERO CARD
+═══════════════════════════════ */
+function updateNextEventCard(){
+  var bookings = loadBookings();
+  var today = new Date();
+  today.setHours(0,0,0,0);
+
+  // Future confirmed/tentative, sorted by date
+  var future = bookings.filter(function(b){
+    var d = new Date(b.date);
+    return d >= today;
+  }).sort(function(a,b){ return new Date(a.date)-new Date(b.date); });
+
+  var nameEl = document.getElementById('necName');
+  var dateEl = document.getElementById('necDate');
+  var daysEl = document.getElementById('necDays');
+  var bookEl = document.getElementById('necBookings');
+  var revEl  = document.getElementById('necRevenue');
+  var itmEl  = document.getElementById('necItems');
+  if(!nameEl) return;
+
+  if(future.length > 0){
+    var next = future[0];
+    var d = new Date(next.date);
+    var diff = Math.round((d-today)/(1000*60*60*24));
+    var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    nameEl.textContent = next.name;
+    dateEl.textContent = d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear()+' · '+next.client;
+    daysEl.textContent = diff;
+  } else {
+    nameEl.textContent = 'No upcoming events';
+    dateEl.textContent = 'Add a booking in the Bookings tab';
+    daysEl.textContent = '—';
+  }
+
+  // Month stats
+  var now = new Date();
+  var mBookings = bookings.filter(function(b){
+    var d=new Date(b.date);
+    return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
+  });
+  var mRev = mBookings.reduce(function(s,b){return s+(b.revenue||0);},0);
+  var mGuests = mBookings.reduce(function(s,b){return s+(b.guests||0);},0);
+
+  if(bookEl) bookEl.textContent = mBookings.length+' booking'+(mBookings.length!==1?'s':'')+' this month';
+  if(revEl) revEl.textContent = '$'+mRev.toLocaleString()+' revenue';
+  if(itmEl) itmEl.textContent = mGuests+' total guests';
+}
+
+
+/* ═══════════════════════════════
+   6. EQUIPMENT AVAILABILITY WIDGET
+═══════════════════════════════ */
+var DEFAULT_INVENTORY = {
+  'Chairs':         {icon:'🪑', total:150},
+  'Round Tables':   {icon:'🍽', total:20},
+  'Trestle Tables': {icon:'📋', total:15},
+  'Dance Floor Panels': {icon:'💃', total:24},
+  'Lighting Rigs':  {icon:'💡', total:4},
+  'Stages':         {icon:'🎤', total:2},
+  'Bar Stations':   {icon:'🍸', total:3}
+};
+
+function getInventory(){
+  try{
+    var saved = JSON.parse(localStorage.getItem('ep_inventory')||'null');
+    return saved || DEFAULT_INVENTORY;
+  }catch(e){ return DEFAULT_INVENTORY; }
+}
+function saveInventory(inv){ localStorage.setItem('ep_inventory',JSON.stringify(inv)); }
+
+function getCurrentBookingNeeds(){
+  // Read from current step 3 selections
+  var chairs = parseInt((document.getElementById('chairQty')||{}).textContent||'0');
+  var tables = parseInt((document.getElementById('tableQty')||{}).textContent||'0');
+  return {'Chairs':chairs,'Round Tables':tables};
+}
+
+function renderEqWidget(){
+  var inv = getInventory();
+  var needs = getCurrentBookingNeeds();
+  var rows = document.getElementById('eawRows');
+  var conflictMsg = document.getElementById('eawConflictMsg');
+  if(!rows) return;
+  var html = '';
+  var hasConflict = false;
+  Object.keys(inv).forEach(function(k){
+    var item = inv[k];
+    var total = item.total;
+    var needed = needs[k] || 0;
+    var available = total - needed;
+    var pct = Math.min(100, Math.round((needed/total)*100)) || 0;
+    var state = 'ok';
+    if(needed > total){ state='crit'; hasConflict=true; }
+    else if(pct > 70) state='warn';
+    var conflict = (needed > total) ? '<span class="eaw-conflict-badge">OVER</span>' : '';
+    html += '<div class="eaw-row">';
+    html += '<span class="eaw-icon">'+item.icon+'</span>';
+    html += '<span class="eaw-name">'+k+'</span>';
+    html += '<span class="eaw-count '+state+'" style="margin-right:4px">'+available+'/'+total+'</span>';
+    html += conflict;
+    html += '<div class="eaw-bar-track"><div class="eaw-bar-fill '+state+'" style="width:'+pct+'%"></div></div>';
+    html += '</div>';
+  });
+  rows.innerHTML = html;
+  if(conflictMsg) conflictMsg.style.display = hasConflict ? 'block' : 'none';
+}
+
+window.openEqInventoryEditor = function(){
+  var inv = getInventory();
+  var lines = Object.keys(inv).map(function(k){ return k+': '+inv[k].total; }).join('\n');
+  var input = prompt('Edit inventory (Name: Count per line):\n', lines);
+  if(input===null) return;
+  var newInv = {};
+  input.split('\n').forEach(function(line){
+    var parts = line.split(':');
+    if(parts.length>=2){
+      var name = parts[0].trim();
+      var count = parseInt(parts[1].trim());
+      if(name && !isNaN(count)){
+        newInv[name] = {icon:(inv[name]?inv[name].icon:'📦'), total:count};
+      }
+    }
+  });
+  if(Object.keys(newInv).length > 0){
+    saveInventory(newInv);
+    renderEqWidget();
+  }
+};
+
+
+/* ═══════════════════════════════
+   7. focusStep EXTENSION (add step 5)
+═══════════════════════════════ */
+// Patch focusStep to handle step 5
+var _origFocusStep = window.focusStep;
+window.focusStep = function(n){
+  if(n===5){
+    // Deactivate all panels + steps
+    document.querySelectorAll('.step-panel').forEach(function(p){ p.classList.remove('active'); });
+    document.querySelectorAll('.sn-step').forEach(function(s){ s.classList.remove('active'); });
+    var p5=document.getElementById('step5');
+    var s5=document.getElementById('sn5');
+    if(p5) p5.classList.add('active');
+    if(s5) s5.classList.add('active');
+    bkRenderCal();
+    return;
+  }
+  if(typeof _origFocusStep === 'function') _origFocusStep(n);
+};
+
+
+/* ═══════════════════════════════
+   8. INIT
+═══════════════════════════════ */
+// Wait for DOM + existing scripts to settle
+setTimeout(function(){
+  updateNextEventCard();
+  renderEqWidget();
+  // Set calendar to current month
+  var now = new Date();
+  bkMonth = now.getMonth();
+  bkYear = now.getFullYear();
+  bkRenderCal();
+}, 800);
+
+// Re-render equipment widget whenever step 3 furniture qty changes
+document.addEventListener('click', function(e){
+  if(e.target && (e.target.classList.contains('qty-btn'))){
+    setTimeout(renderEqWidget, 200);
+  }
+});
+
+})();
+</script>
 </body>
 </html>
