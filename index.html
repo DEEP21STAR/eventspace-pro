@@ -21,7 +21,7 @@
 }
 </script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 /* ═══════════════════════════════════════════════════════════
    EVENTSPACE PRO — Whetū Digital · 2026
    ═══════════════════════════════════════════════════════════ */
@@ -31,7 +31,7 @@
   --cyan:#00e6ff;--gold:#ffd700;--green:#00ff88;
   --red:#ff4466;--purple:#c060ff;--orange:#ff8c00;
   --text:#e0f0ff;--muted:#5a7a90;--border:#1a2a40;
-  --font:'Inter','Segoe UI',system-ui,sans-serif;
+  --font:'Inter','Segoe UI',system-ui,sans-serif;--font-head:'Space Grotesk','Inter',system-ui,sans-serif;
   --sidebar:400px;--header:58px;--steps:46px;--status:38px;--footer:52px;
 }
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font)}
@@ -899,6 +899,50 @@ input[type=range]{
 .fp-pi-ic svg{width:100%;height:100%;display:block}
 .fp-pi-nm{font-size:9px;font-weight:600;line-height:1.1;text-align:center;color:var(--text)}
 .fp-pi-dm{font-size:8px;color:var(--muted);letter-spacing:.3px}
+
+/* ── ROW PLACEMENT BAR (in palette) ── */
+.fp-row-bar{display:flex;align-items:center;gap:4px;margin-bottom:7px;background:rgba(0,230,255,.06);border:1px solid rgba(0,230,255,.2);border-radius:8px;padding:5px 7px}
+.fp-row-bar select{flex:1;min-width:0;background:transparent;border:none;color:var(--cyan);font-family:var(--font);font-size:9px;font-weight:700;outline:none;cursor:pointer}
+.fp-row-bar select option{background:#0a0f28;color:var(--text)}
+.fp-row-cnt{display:flex;align-items:center;gap:3px;font-size:12px;font-weight:900;color:var(--cyan)}
+.fp-row-cnt span{min-width:20px;text-align:center;font-variant-numeric:tabular-nums}
+.fp-row-cnt button{width:18px;height:18px;border-radius:5px;border:1px solid rgba(0,230,255,.3);background:rgba(0,230,255,.1);color:var(--cyan);cursor:pointer;font-size:14px;line-height:1;padding:0;display:flex;align-items:center;justify-content:center;font-family:var(--font);transition:all .15s}
+.fp-row-cnt button:hover{background:rgba(0,230,255,.25);border-color:rgba(0,230,255,.6)}
+.fp-row-go{background:rgba(0,230,255,.18);border:1px solid rgba(0,230,255,.45);color:var(--cyan);font-family:var(--font);font-size:9px;font-weight:900;padding:5px 9px;border-radius:6px;cursor:pointer;letter-spacing:1px;white-space:nowrap;transition:all .18s;text-shadow:0 0 8px rgba(0,230,255,.4)}
+.fp-row-go:hover{background:rgba(0,230,255,.32);box-shadow:0 0 12px rgba(0,230,255,.35);transform:translateY(-1px)}
+/* same row-bar style for eq-palette on satellite map */
+.eq-row-bar{display:flex;align-items:center;gap:3px;margin-bottom:6px;background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.2);border-radius:8px;padding:5px 6px;flex-wrap:wrap}
+.eq-row-bar select{flex:1;min-width:0;background:transparent;border:none;color:var(--gold);font-family:var(--font);font-size:8.5px;font-weight:700;outline:none;cursor:pointer}
+.eq-row-bar select option{background:#0a0f28;color:var(--text)}
+.eq-row-cnt{display:flex;align-items:center;gap:2px;font-size:11px;font-weight:800;color:var(--gold)}
+.eq-row-cnt span{min-width:16px;text-align:center}
+.eq-row-cnt button{width:16px;height:16px;border-radius:4px;border:1px solid rgba(255,215,0,.3);background:rgba(255,215,0,.08);color:var(--gold);cursor:pointer;font-size:12px;line-height:1;padding:0;display:flex;align-items:center;justify-content:center;font-family:var(--font)}
+.eq-row-go{background:rgba(255,215,0,.14);border:1px solid rgba(255,215,0,.4);color:var(--gold);font-family:var(--font);font-size:8.5px;font-weight:900;padding:4px 7px;border-radius:6px;cursor:pointer;letter-spacing:1px;white-space:nowrap;transition:all .15s}
+.eq-row-go:hover{background:rgba(255,215,0,.28);box-shadow:0 0 10px rgba(255,215,0,.3)}
+
+/* ── MAP EXPAND BUTTON ── */
+.map-expand-btn{
+  position:absolute;bottom:60px;right:14px;z-index:600;
+  background:linear-gradient(135deg,rgba(0,230,255,.15),rgba(0,180,255,.08));
+  border:1px solid rgba(0,230,255,.4);border-radius:10px;
+  padding:8px 14px;color:var(--cyan);font-family:var(--font);
+  font-size:10.5px;font-weight:800;letter-spacing:1.5px;cursor:pointer;
+  display:flex;align-items:center;gap:7px;transition:all .22s;
+  backdrop-filter:blur(12px);box-shadow:0 4px 18px rgba(0,0,0,.45),0 0 16px rgba(0,230,255,.1)
+}
+.map-expand-btn:hover{background:linear-gradient(135deg,rgba(0,230,255,.28),rgba(0,180,255,.18));box-shadow:0 6px 24px rgba(0,0,0,.55),0 0 22px rgba(0,230,255,.28);transform:translateY(-1px)}
+.map-expand-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+/* Fullscreen map overrides */
+.map-wrap:-webkit-full-screen{border-radius:0}
+.map-wrap:fullscreen{border-radius:0}
+.map-wrap:-webkit-full-screen #map{height:100vh!important}
+.map-wrap:fullscreen #map{height:100vh!important}
+
+/* ── ENHANCED EQUIPMENT MARKERS (Leaflet map) ── */
+.eq-marker-bg{padding:5px;border-radius:11px;border-width:2.5px}
+.eq-marker-bg svg{display:block;width:34px;height:34px}
+.eq-marker-wrap.selected .eq-marker-bg{border-width:3px}
+
 .fp-canvas-col{display:flex;flex-direction:column;gap:8px}
 .fp-canvas-wrap{
   position:relative;background:radial-gradient(ellipse at center,#0c1832 0%,#04050f 80%);
@@ -1924,6 +1968,125 @@ input[type=range]{
 .wes-l1{position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 25% 35%,rgba(195,11,130,.14) 0%,transparent 65%),radial-gradient(ellipse 50% 70% at 75% 65%,rgba(0,230,255,.10) 0%,transparent 60%);transition:transform .1s linear}
 .wes-l2{position:absolute;inset:0;background:radial-gradient(ellipse 55% 40% at 60% 30%,rgba(255,215,0,.07) 0%,transparent 60%);transition:transform .1s linear}
 .wes-l3{position:absolute;inset:0;background:radial-gradient(ellipse 40% 55% at 40% 70%,rgba(195,11,130,.05) 0%,transparent 55%);transition:transform .1s linear}
+
+/* ══════════════════════════════════════════════════════════
+   V6 VISUAL UPGRADE — EventSpace Pro · Whetū Digital 2026
+   ══════════════════════════════════════════════════════════ */
+
+/* Space Grotesk premium heading font */
+.panel-title,.hdr-logo-text,.help-title,.apw-title,.apv-title,.aps-title,.fp-palette-title,.eq-palette-title,.fp-3d-lbl,.td-brand,.vh-headline,.ks-title,.apw-eyebrow{font-family:var(--font-head)}
+
+/* Custom scrollbar — 4px cyan */
+*::-webkit-scrollbar{width:4px;height:4px}
+*::-webkit-scrollbar-track{background:transparent}
+*::-webkit-scrollbar-thumb{background:rgba(0,230,255,.22);border-radius:2px}
+*::-webkit-scrollbar-thumb:hover{background:rgba(0,230,255,.45)}
+
+/* Equipment palette search */
+.eq-search-wrap{padding:5px 0 3px;margin-bottom:3px}
+.eq-search{
+  width:100%;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,215,0,.18);border-radius:8px;
+  color:var(--text);font-family:var(--font);font-size:11px;
+  padding:6px 10px;outline:none;transition:all .2s}
+.eq-search:focus{border-color:rgba(255,215,0,.5);background:rgba(255,215,0,.06);
+  box-shadow:0 0 0 2px rgba(255,215,0,.1)}
+.eq-search::placeholder{color:var(--muted);font-size:10px}
+
+/* FP palette search */
+.fp-palette-search{
+  width:100%;background:rgba(0,230,255,.04);
+  border:1px solid rgba(0,230,255,.16);border-radius:7px;
+  color:var(--text);font-family:var(--font);font-size:10px;
+  padding:5px 9px;outline:none;margin-bottom:8px;transition:all .2s}
+.fp-palette-search:focus{border-color:rgba(0,230,255,.45);box-shadow:0 0 0 2px rgba(0,230,255,.1)}
+.fp-palette-search::placeholder{color:var(--muted);font-size:9px}
+
+/* Floor plan zoom buttons */
+.fp-tool-zoom{padding:7px 10px;font-size:15px;letter-spacing:0;
+  background:rgba(0,230,255,.05);border-color:rgba(0,230,255,.18);color:var(--cyan)}
+.fp-tool-zoom:hover:not(:disabled){background:rgba(0,230,255,.14);border-color:rgba(0,230,255,.45);
+  box-shadow:0 0 10px rgba(0,230,255,.2);transform:translateY(-1px)}
+
+/* Keyboard shortcut hint button */
+.fp-tool-kb{padding:7px 10px;
+  background:rgba(192,96,255,.07);border-color:rgba(192,96,255,.28);color:var(--purple)}
+.fp-tool-kb:hover:not(:disabled){background:rgba(192,96,255,.16);border-color:rgba(192,96,255,.55);
+  box-shadow:0 0 10px rgba(192,96,255,.25)}
+
+/* Global eq-btn tooltip element */
+.eq-tip-global{
+  position:fixed;z-index:3000;
+  background:rgba(4,5,15,.97);border:1px solid rgba(0,230,255,.3);
+  border-radius:7px;padding:5px 10px;font-size:9px;font-weight:700;
+  color:var(--text);white-space:nowrap;pointer-events:none;
+  letter-spacing:.3px;box-shadow:0 4px 14px rgba(0,0,0,.6),0 0 8px rgba(0,230,255,.12);
+  opacity:0;transition:opacity .14s;transform:translate(-50%,-100%)}
+.eq-tip-global.show{opacity:1}
+
+/* Skeleton shimmer on eq-btn (initial load) */
+@keyframes eqShimmer{
+  0%{background-position:200% 0}100%{background-position:-200% 0}}
+.eq-btn.shimmer{
+  background:linear-gradient(90deg,rgba(255,255,255,.04) 25%,rgba(255,255,255,.08) 50%,rgba(255,255,255,.04) 75%) !important;
+  background-size:200% 100%;animation:eqShimmer .9s ease-in-out;border-color:rgba(255,255,255,.06) !important}
+
+/* Keyboard Shortcuts Modal */
+.ks-overlay{
+  display:none;position:fixed;inset:0;z-index:8000;
+  background:rgba(0,0,0,.88);backdrop-filter:blur(14px);
+  align-items:center;justify-content:center}
+.ks-overlay.open{display:flex;animation:ksFadeIn .28s}
+@keyframes ksFadeIn{from{opacity:0}to{opacity:1}}
+.ks-modal{
+  width:min(560px,96vw);max-height:90vh;overflow-y:auto;
+  background:linear-gradient(160deg,rgba(10,14,32,.99),rgba(6,9,22,.99));
+  border:1px solid rgba(192,96,255,.3);border-radius:20px;
+  box-shadow:0 0 60px rgba(192,96,255,.18),0 40px 80px rgba(0,0,0,.7);
+  padding:28px 28px 20px;
+  animation:ksModalIn .3s cubic-bezier(.22,1,.36,1)}
+@keyframes ksModalIn{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.ks-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;
+  padding-bottom:14px;border-bottom:1px solid rgba(192,96,255,.15)}
+.ks-title{font-size:14px;font-weight:800;letter-spacing:2px;color:var(--purple)}
+.ks-close{width:30px;height:30px;border-radius:8px;border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.05);color:var(--muted);cursor:pointer;font-size:14px;
+  font-family:var(--font);display:flex;align-items:center;justify-content:center;transition:all .2s}
+.ks-close:hover{background:rgba(255,68,102,.2);color:var(--red);border-color:rgba(255,68,102,.4)}
+.ks-section{margin-bottom:18px}
+.ks-section-title{font-size:8.5px;letter-spacing:2.5px;color:var(--muted);text-transform:uppercase;
+  margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.ks-section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(192,96,255,.25),transparent)}
+.ks-rows{display:flex;flex-direction:column;gap:4px}
+.ks-row{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;
+  border-radius:7px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05);
+  transition:background .15s}
+.ks-row:hover{background:rgba(255,255,255,.04)}
+.ks-desc{font-size:11px;color:rgba(255,255,255,.75)}
+.ks-key{display:inline-flex;gap:4px}
+.ks-kbd{display:inline-flex;align-items:center;justify-content:center;padding:3px 8px;
+  border-radius:5px;background:rgba(0,230,255,.1);border:1px solid rgba(0,230,255,.3);
+  color:var(--cyan);font-size:9.5px;font-weight:700;
+  font-family:'JetBrains Mono','Consolas',monospace;letter-spacing:.4px;
+  box-shadow:0 2px 4px rgba(0,0,0,.3);min-width:26px;text-align:center}
+.ks-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;
+  border-radius:12px;background:rgba(0,230,255,.08);border:1px solid rgba(0,230,255,.18);
+  font-size:9px;color:var(--cyan);font-weight:700;letter-spacing:1px;margin-left:10px}
+
+/* Enhanced modal open/close animation (global) */
+.modal-box{animation:modalBoxIn .25s cubic-bezier(.22,1,.36,1)}
+@keyframes modalBoxIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+/* Print button prominence in header */
+.hdr-btn.btn-print{
+  background:linear-gradient(135deg,rgba(0,255,136,.15),rgba(0,200,100,.08));
+  border-color:rgba(0,255,136,.35);color:var(--green);font-weight:800}
+.hdr-btn.btn-print:hover{box-shadow:0 4px 20px rgba(0,255,136,.3);border-color:rgba(0,255,136,.6)}
+
+/* Items placed badge enhancement on floor plan canvas */
+.fp-canvas-stats{transition:all .3s}
+.fp-canvas-stats.has-items{border-color:rgba(0,230,255,.35);background:rgba(4,5,15,.92);
+  box-shadow:0 0 12px rgba(0,230,255,.15)}
 </style>
 <!-- WDS-SGM SCORE: 8.0/10 · SEAL: EVENTSPACE-SGMDS-2026-05 · Target 8.5+ -->
 </head>
@@ -2526,6 +2689,12 @@ input[type=range]{
       🖨️ Print Layout
     </button>
 
+    <!-- ═══ MAP EXPAND BUTTON ═══ -->
+    <button class="map-expand-btn" id="mapExpandBtn" onclick="toggleMapExpand()" title="Expand map to fullscreen">
+      <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+      EXPAND VIEW
+    </button>
+
     <!-- ═══════════ EQUIPMENT LAYOUT PALETTE ═══════════ -->
     <div class="eq-palette" id="eqPalette" role="region" aria-label="Equipment Layout Palette">
       <div class="eq-palette-head">
@@ -2534,6 +2703,9 @@ input[type=range]{
           <div class="eq-palette-sub">Tap to place inside the marquee</div>
         </div>
         <button class="eq-palette-close" onclick="toggleEquipmentPalette(false)" title="Hide palette" aria-label="Close palette">×</button>
+      </div>
+      <div class="eq-search-wrap">
+        <input class="eq-search" id="eqSearch" type="search" placeholder="🔍 Search equipment…" oninput="filterEqPalette(this.value)" autocomplete="off">
       </div>
       <div id="eqPaletteBody"></div>
       <div class="eq-palette-foot">
@@ -2679,6 +2851,7 @@ input[type=range]{
     <div class="fp-grid">
       <aside class="fp-palette-col" id="fpPaletteCol">
         <div class="fp-palette-title">EQUIPMENT</div>
+        <input class="fp-palette-search" id="fpSearch" type="search" placeholder="🔍 Filter items…" oninput="filterFpPalette(this.value)" autocomplete="off">
         <div id="fpPaletteBody" class="fp-palette-body"></div>
       </aside>
       <div class="fp-canvas-col">
@@ -2700,7 +2873,12 @@ input[type=range]{
           <button class="fp-tool fp-tool-danger" onclick="fpDeleteSelected()" id="fpDelBtn" disabled title="Delete selected">✕ Delete</button>
           <button class="fp-tool fp-tool-danger" onclick="clearEquipmentLayout()" title="Clear layout">⌫ Clear</button>
           <button class="fp-tool fp-tool-auto" onclick="openAutoPlanWizard()" title="Auto-design my layout">⚡ AUTO-PLAN</button>
+          <button class="fp-tool" onclick="fpToggleRowBar()" title="Place a row of chairs or tables" style="border-color:rgba(0,230,255,.35);color:var(--cyan)">≡ ROW</button>
           <button class="fp-tool fp-tool-share" onclick="openShareModal()" title="Share with client">📲 SHARE</button>
+          <button class="fp-tool fp-tool-zoom" onclick="fpZoomIn()" title="Zoom in (+)">＋</button>
+          <button class="fp-tool fp-tool-zoom" onclick="fpZoomOut()" title="Zoom out (-)">－</button>
+          <button class="fp-tool fp-tool-zoom" onclick="fpZoomReset()" title="Fit to canvas (0)">⊡</button>
+          <button class="fp-tool fp-tool-kb" onclick="openKbShortcuts()" title="Keyboard shortcuts (?)">?</button>
           <div class="fp-spacer"></div>
           <button class="fp-tool fp-tool-3d" onclick="open3DWalkthrough()" title="3D Walk-through">🎮 3D WALK</button>
         </div>
@@ -3079,6 +3257,8 @@ var FURNITURE = [
 // ── EQUIPMENT PALETTE — placeable layout items (visual only, sizes in metres) ──
 var EQUIPMENT_PALETTE = [
   // SEATING
+  { id:'chair_simple', name:'Simple Chair',           short:'Chair',     w:0.5, d:0.5, group:'Seating',     color:'#00e6ff', shape:'chair',
+    svg:'<rect x="10" y="8" width="28" height="7" rx="3" fill="currentColor" opacity=".85"/><rect x="9" y="17" width="30" height="22" rx="4" fill="currentColor" opacity=".28"/><rect x="9" y="17" width="30" height="22" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="14" cy="36" r="2.2" fill="currentColor" opacity=".7"/><circle cx="34" cy="36" r="2.2" fill="currentColor" opacity=".7"/><circle cx="14" cy="20" r="2.2" fill="currentColor" opacity=".7"/><circle cx="34" cy="20" r="2.2" fill="currentColor" opacity=".7"/>' },
   { id:'r_table_10', name:'Round Table · 10 guests', short:'Round 10p', w:1.8, d:1.8, group:'Seating',     color:'#ffd700', shape:'round',
     svg:'<circle cx="24" cy="24" r="14" fill="currentColor" opacity=".22"/><circle cx="24" cy="24" r="14" fill="none" stroke="currentColor" stroke-width="2"/><g stroke="currentColor" stroke-width="2" fill="none" opacity=".75"><circle cx="24" cy="6" r="3"/><circle cx="24" cy="42" r="3"/><circle cx="6" cy="24" r="3"/><circle cx="42" cy="24" r="3"/><circle cx="9" cy="9" r="3"/><circle cx="39" cy="9" r="3"/><circle cx="9" cy="39" r="3"/><circle cx="39" cy="39" r="3"/></g>' },
   { id:'r_table_8',  name:'Round Table · 8 guests',  short:'Round 8p',  w:1.5, d:1.5, group:'Seating',     color:'#ffd700', shape:'round',
@@ -3089,6 +3269,8 @@ var EQUIPMENT_PALETTE = [
     svg:'<rect x="4" y="18" width="40" height="12" rx="2" fill="currentColor" opacity=".22"/><rect x="4" y="18" width="40" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><g stroke="currentColor" stroke-width="2" fill="none" opacity=".75"><circle cx="9" cy="13" r="2.4"/><circle cx="19" cy="13" r="2.4"/><circle cx="29" cy="13" r="2.4"/><circle cx="39" cy="13" r="2.4"/><circle cx="9" cy="35" r="2.4"/><circle cx="19" cy="35" r="2.4"/><circle cx="29" cy="35" r="2.4"/><circle cx="39" cy="35" r="2.4"/></g>' },
   { id:'banquet_18', name:'Banquet Table 1.8m',      short:'Banquet 1.8m', w:1.8, d:0.75, group:'Seating',  color:'#ffd700', shape:'rect',
     svg:'<rect x="6" y="18" width="36" height="12" rx="2" fill="currentColor" opacity=".22"/><rect x="6" y="18" width="36" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><g stroke="currentColor" stroke-width="2" fill="none" opacity=".75"><circle cx="11" cy="13" r="2.3"/><circle cx="21" cy="13" r="2.3"/><circle cx="31" cy="13" r="2.3"/><circle cx="11" cy="35" r="2.3"/><circle cx="21" cy="35" r="2.3"/><circle cx="31" cy="35" r="2.3"/></g>' },
+  { id:'trestle_fold', name:'Trestle Table 1.8m',   short:'Trestle',    w:1.8, d:0.76, group:'Seating',    color:'#ffd700', shape:'rect',
+    svg:'<rect x="4" y="15" width="40" height="18" rx="3" fill="currentColor" opacity=".22"/><rect x="4" y="15" width="40" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><line x1="24" y1="15" x2="24" y2="33" stroke="currentColor" stroke-width="1.2" stroke-dasharray="3 2" opacity=".6"/><line x1="10" y1="33" x2="8" y2="41" stroke="currentColor" stroke-width="2" opacity=".55"/><line x1="38" y1="33" x2="40" y2="41" stroke="currentColor" stroke-width="2" opacity=".55"/><line x1="10" y1="15" x2="8" y2="7" stroke="currentColor" stroke-width="2" opacity=".55"/><line x1="38" y1="15" x2="40" y2="7" stroke="currentColor" stroke-width="2" opacity=".55"/><rect x="18" y="22" width="12" height="4" rx="2" fill="currentColor" opacity=".5"/>' },
   { id:'cocktail',   name:'Cocktail / Bar Leaner',   short:'Cocktail',  w:0.7, d:0.7, group:'Seating',     color:'#ffd700', shape:'round',
     svg:'<circle cx="24" cy="24" r="7" fill="currentColor" opacity=".22"/><circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="2"/><line x1="24" y1="24" x2="24" y2="42" stroke="currentColor" stroke-width="2"/><rect x="14" y="42" width="20" height="2" rx="1" fill="currentColor"/>' },
 
@@ -3123,8 +3305,8 @@ var EQUIPMENT_PALETTE = [
     svg:'<path d="M8 36 L8 22 Q24 4 40 22 L40 36" fill="currentColor" opacity=".22"/><path d="M8 36 L8 22 Q24 4 40 22 L40 36" fill="none" stroke="currentColor" stroke-width="2"/><g fill="currentColor" opacity=".7"><circle cx="12" cy="14" r="2"/><circle cx="20" cy="9" r="2"/><circle cx="28" cy="9" r="2"/><circle cx="36" cy="14" r="2"/></g>' },
 
   // UTILITY
-  { id:'heater_col', name:'Patio Heater',            short:'Heater',    w:0.55, d:0.55, group:'Utility',  color:'#ff4466', shape:'round',
-    svg:'<circle cx="24" cy="24" r="9" fill="currentColor" opacity=".22"/><circle cx="24" cy="24" r="9" fill="none" stroke="currentColor" stroke-width="2"/><g fill="none" stroke="currentColor" stroke-width="1.6"><path d="M24 18 C20 22 24 24 24 28"/><path d="M28 19 C25 23 29 25 28 30"/><path d="M20 19 C18 22 20 25 20 30"/></g>' },
+  { id:'heater_col', name:'Gas Patio Heater',         short:'Heater',    w:0.55, d:0.55, group:'Utility',  color:'#ff7030', shape:'heater_ring',
+    svg:'<circle cx="24" cy="24" r="17" fill="currentColor" opacity=".12"/><circle cx="24" cy="24" r="17" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="24" r="11" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".55"/><circle cx="24" cy="24" r="5.5" fill="currentColor" opacity=".45"/><circle cx="24" cy="24" r="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="24" cy="24" r="2" fill="currentColor"/><line x1="24" y1="7" x2="24" y2="18" stroke="currentColor" stroke-width="1" opacity=".38"/><line x1="24" y1="30" x2="24" y2="41" stroke="currentColor" stroke-width="1" opacity=".38"/><line x1="7" y1="24" x2="18" y2="24" stroke="currentColor" stroke-width="1" opacity=".38"/><line x1="30" y1="24" x2="41" y2="24" stroke="currentColor" stroke-width="1" opacity=".38"/>' },
   { id:'lighting',   name:'Lighting / Chandelier',   short:'Lights',    w:0.5, d:0.5, group:'Utility',    color:'#ff4466', shape:'round',
     svg:'<circle cx="24" cy="24" r="9" fill="currentColor" opacity=".22"/><circle cx="24" cy="24" r="9" fill="none" stroke="currentColor" stroke-width="2"/><g fill="currentColor"><circle cx="24" cy="24" r="2.5"/><circle cx="18" cy="20" r="1.4" opacity=".8"/><circle cx="30" cy="20" r="1.4" opacity=".8"/><circle cx="18" cy="28" r="1.4" opacity=".8"/><circle cx="30" cy="28" r="1.4" opacity=".8"/></g>' },
   { id:'speaker',    name:'PA Speaker',              short:'Speaker',   w:0.5, d:0.5, group:'Utility',    color:'#ff4466', shape:'round',
@@ -3634,9 +3816,18 @@ function renderEquipmentPalette() {
   });
   var html = '';
   order.forEach(function(g){
-    html += '<div class="eq-group"><div class="eq-group-lbl">' + g + '</div><div class="eq-grid">';
+    html += '<div class="eq-group"><div class="eq-group-lbl">' + g + '</div>';
+    if (g === 'Seating') {
+      var opts = groups[g].map(function(it){ return '<option value="' + it.id + '">' + it.short + '</option>'; }).join('');
+      html += '<div class="eq-row-bar" title="Place a row of items">' +
+              '<select id="eqRowSel" title="Item">' + opts + '</select>' +
+              '<div class="eq-row-cnt"><button onclick="_eqRowAdj(-1);event.stopPropagation()">−</button><span id="eqRowNum">4</span><button onclick="_eqRowAdj(1);event.stopPropagation()">+</button></div>' +
+              '<button class="eq-row-go" onclick="eqPlaceRowFromBar()">≡ ROW</button>' +
+              '</div>';
+    }
+    html += '<div class="eq-grid">';
     groups[g].forEach(function(it){
-      html += '<button class="eq-btn" style="--eq-c:' + it.color + '" onclick="placeEquipment(\'' + it.id + '\')" title="' + it.name + ' · ' + it.w + 'm × ' + it.d + 'm">' +
+      html += '<button class="eq-btn" style="--eq-c:' + it.color + '" onclick="placeEquipment(\'' + it.id + '\')" title="' + it.name + ' · ' + it.w + 'm × ' + it.d + 'm" data-name="' + it.name + '" data-dims="' + it.w + 'm × ' + it.d + 'm">' +
                 '<div class="eq-btn-icon"><svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">' + it.svg + '</svg></div>' +
                 '<div class="eq-btn-name">' + it.short + '</div>' +
               '</button>';
@@ -4981,6 +5172,62 @@ function fpDrawItem(ctx, eq) {
     ctx.strokeStyle = sel ? '#ffffff' : it.color;
     ctx.lineWidth = sel ? 2.5 : 1.8;
     ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2); ctx.stroke();
+  } else if (it.shape === 'chair') {
+    // Top-down chair: backrest at top, seat below, 4 leg dots
+    var seatW = pw;
+    var seatH = ph * 0.60;
+    var backH = Math.max(4, ph * 0.22);
+    var backGap = Math.max(2, ph * 0.06);
+    var totalH = backH + backGap + seatH;
+    var topY = -totalH / 2;
+    // Backrest
+    ctx.fillStyle = it.color + 'bb';
+    fpRoundRect(ctx, -seatW * 0.40, topY, seatW * 0.80, backH, 3); ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = sel ? '#ffffff' : it.color;
+    ctx.lineWidth = sel ? 2 : 1.5;
+    fpRoundRect(ctx, -seatW * 0.40, topY, seatW * 0.80, backH, 3); ctx.stroke();
+    // Seat
+    var seatY = topY + backH + backGap;
+    ctx.fillStyle = it.color + '42';
+    fpRoundRect(ctx, -seatW / 2, seatY, seatW, seatH, 4); ctx.fill();
+    ctx.strokeStyle = sel ? '#ffffff' : it.color;
+    ctx.lineWidth = sel ? 2 : 1.6;
+    fpRoundRect(ctx, -seatW / 2, seatY, seatW, seatH, 4); ctx.stroke();
+    // Leg dots
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = it.color + 'cc';
+    var lr = Math.max(2, seatW * 0.07);
+    var lpad = seatW * 0.16;
+    var legCoords = [[-seatW/2+lpad, seatY+5],[seatW/2-lpad, seatY+5],[-seatW/2+lpad, seatY+seatH-5],[seatW/2-lpad, seatY+seatH-5]];
+    for (var li = 0; li < 4; li++) {
+      ctx.beginPath(); ctx.arc(legCoords[li][0], legCoords[li][1], lr, 0, Math.PI*2); ctx.fill();
+    }
+  } else if (it.shape === 'heater_ring') {
+    // Top-down mushroom patio heater — concentric rings
+    var r = Math.max(pw, ph) / 2;
+    // Outer canopy glow
+    ctx.fillStyle = it.color + '1a';
+    ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2); ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = sel ? '#ffffff' : it.color;
+    ctx.lineWidth = sel ? 2.5 : 1.8;
+    ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2); ctx.stroke();
+    // Middle ring (heating element)
+    ctx.strokeStyle = it.color;
+    ctx.lineWidth = 1.2;
+    ctx.globalAlpha = 0.6;
+    ctx.beginPath(); ctx.arc(0,0,r*0.62,0,Math.PI*2); ctx.stroke();
+    ctx.globalAlpha = 1;
+    // Inner element
+    ctx.fillStyle = it.color + '55';
+    ctx.beginPath(); ctx.arc(0,0,r*0.35,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle = sel ? '#ffffff' : it.color;
+    ctx.lineWidth = 1.8;
+    ctx.beginPath(); ctx.arc(0,0,r*0.35,0,Math.PI*2); ctx.stroke();
+    // Centre pole
+    ctx.fillStyle = it.color;
+    ctx.beginPath(); ctx.arc(0,0,Math.max(1.5,r*0.09),0,Math.PI*2); ctx.fill();
   } else {
     ctx.fillStyle = it.color + '40';
     fpRoundRect(ctx, -pw/2, -ph/2, pw, ph, 4); ctx.fill();
@@ -5155,7 +5402,21 @@ function fpRenderPalette() {
   });
   var html = '';
   order.forEach(function(g){
-    html += '<div class="fp-pg"><div class="fp-pg-lbl">' + g + '</div><div class="fp-pg-grid">';
+    html += '<div class="fp-pg"><div class="fp-pg-lbl">' + g + '</div>';
+    // Row placement quick bar for Seating group
+    if (g === 'Seating') {
+      var opts = groups[g].map(function(it){ return '<option value="' + it.id + '">' + it.short + '</option>'; }).join('');
+      html += '<div class="fp-row-bar" title="Place multiple items in a straight row">' +
+              '<select id="fpRowSel" title="Item">' + opts + '</select>' +
+              '<div class="fp-row-cnt">' +
+                '<button onclick="_fpRowAdj(-1);event.stopPropagation()">−</button>' +
+                '<span id="fpRowNum">4</span>' +
+                '<button onclick="_fpRowAdj(1);event.stopPropagation()">+</button>' +
+              '</div>' +
+              '<button class="fp-row-go" onclick="fpPlaceRowFromBar()">≡ ROW</button>' +
+              '</div>';
+    }
+    html += '<div class="fp-pg-grid">';
     groups[g].forEach(function(it){
       html += '<button class="fp-pi" style="--eq-c:' + it.color + '" onclick="fpPlaceFromPalette(\'' + it.id + '\')" title="' + it.name + ' · ' + it.w + 'm × ' + it.d + 'm">' +
                 '<div class="fp-pi-ic" style="color:' + it.color + '"><svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">' + it.svg + '</svg></div>' +
@@ -5188,6 +5449,76 @@ function fpFlashHint(msg) {
   h.classList.add('show');
   clearTimeout(h._t);
   h._t = setTimeout(function(){ h.classList.remove('show'); }, 2400);
+}
+
+// ── ROW PLACEMENT ──────────────────────────────────────────────
+var _fpRowCount = 4;
+var _eqRowCount = 4;
+
+function _fpRowAdj(d) {
+  _fpRowCount = Math.max(1, Math.min(30, _fpRowCount + d));
+  var el = document.getElementById('fpRowNum');
+  if (el) el.textContent = _fpRowCount;
+}
+function _eqRowAdj(d) {
+  _eqRowCount = Math.max(1, Math.min(30, _eqRowCount + d));
+  var el = document.getElementById('eqRowNum');
+  if (el) el.textContent = _eqRowCount;
+}
+
+function fpPlaceRowFromBar() {
+  var sel = document.getElementById('fpRowSel');
+  var paletteId = sel ? sel.value : 'chair_simple';
+  fpPlaceRow(paletteId, _fpRowCount, 'h');
+}
+function eqPlaceRowFromBar() {
+  var sel = document.getElementById('eqRowSel');
+  var paletteId = sel ? sel.value : 'chair_simple';
+  eqPlaceRow(paletteId, _eqRowCount);
+}
+
+function fpPlaceRow(paletteId, count, axis) {
+  var item = _eqByPaletteId(paletteId);
+  if (!item) return;
+  if (!state.marqueeRect) { alert('Select a marquee first.'); return; }
+  count = Math.max(1, Math.min(30, parseInt(count) || 4));
+  axis = axis || 'h';
+  var bounds = state.marqueeRect.getBounds();
+  var center = bounds.getCenter();
+  var latPerM = 1 / 111111;
+  var lngPerM = 1 / (111111 * Math.cos(center.lat * Math.PI / 180));
+  var gap = 0.07;
+  var span = count * item.w + (count - 1) * gap;
+  var mLat = (bounds.getNorth() - bounds.getSouth()) * 0.06;
+  var mLng = (bounds.getEast()  - bounds.getWest())  * 0.06;
+  for (var i = 0; i < count; i++) {
+    var lat, lng;
+    if (axis === 'h') {
+      lat = center.lat;
+      lng = center.lng + (-span/2 + item.w/2 + i*(item.w+gap)) * lngPerM;
+    } else {
+      lat = center.lat + (span/2 - item.d/2 - i*(item.d+gap)) * latPerM;
+      lng = center.lng;
+    }
+    lat = Math.max(bounds.getSouth()+mLat, Math.min(bounds.getNorth()-mLat, lat));
+    lng = Math.max(bounds.getWest()+mLng,  Math.min(bounds.getEast()-mLng,  lng));
+    var uid = _eqUid();
+    var marker = L.marker([lat,lng],{icon:_eqMakeIcon(item,0),draggable:true,autoPan:true,zIndexOffset:1000}).addTo(_eqEnsureGroup());
+    var eq = {uid:uid,paletteId:paletteId,latlng:[lat,lng],rotation:0,marker:marker,item:item};
+    state.equipment.push(eq);
+    _eqAttachMarkerEvents(eq);
+  }
+  if (state.equipment.length) { FP.selectedUid = state.equipment[state.equipment.length-1].uid; selectEquipment(FP.selectedUid); }
+  renderLayoutSummary();
+  saveEquipmentLayout();
+  fpUpdateLabels();
+  fpRequestDraw();
+  fpFlashHint('Row of ' + count + ' ' + item.short + ' placed · drag to reposition');
+}
+
+function eqPlaceRow(paletteId, count) {
+  // Row placement via satellite palette (horizontal)
+  fpPlaceRow(paletteId, count, 'h');
 }
 
 // Backwards-compat — keep the old function name as a thin wrapper
@@ -7333,6 +7664,40 @@ function printLayout() {
   }, 400);
 }
 
+// ── MAP EXPAND / FULLSCREEN ─────────────────────────────────────────────
+function toggleMapExpand() {
+  var wrap = document.getElementById('mapWrap') || document.querySelector('.map-wrap');
+  if (!wrap) return;
+  var btn = document.getElementById('mapExpandBtn');
+  var isFs = document.fullscreenElement || document.webkitFullscreenElement;
+  if (isFs) {
+    (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    if (btn) btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg> EXPAND VIEW';
+  } else {
+    var req = wrap.requestFullscreen || wrap.webkitRequestFullscreen;
+    if (req) req.call(wrap);
+    if (btn) btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg> EXIT FULL';
+    setTimeout(function(){ if (typeof map !== 'undefined') map.invalidateSize(); }, 350);
+  }
+}
+document.addEventListener('fullscreenchange', function(){
+  var btn = document.getElementById('mapExpandBtn');
+  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+    if (btn) btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg> EXPAND VIEW';
+    setTimeout(function(){ if (typeof map !== 'undefined') map.invalidateSize(); }, 350);
+  }
+});
+
+// ── ROW BAR TOGGLE (floor plan toolbar) ─────────────────────────────────
+function fpToggleRowBar() {
+  var bar = document.querySelector('#fpPaletteBody .fp-row-bar');
+  if (!bar) return;
+  bar.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  bar.style.transition = 'box-shadow .25s';
+  bar.style.boxShadow = '0 0 0 2px rgba(0,230,255,.8), 0 0 20px rgba(0,230,255,.4)';
+  setTimeout(function(){ bar.style.boxShadow = ''; }, 1400);
+}
+
 // ── HOOK INTO adjQty AND setQtyTo ───────────────────────────────────────
 // Wrap the existing functions to trigger icon re-render
 (function() {
@@ -7996,6 +8361,180 @@ document.addEventListener('click', function(e){
   }
 });
 
+})();
+</script>
+
+<!-- ══ V6: Global eq-btn tooltip ══ -->
+<div id="eqTipGlobal" class="eq-tip-global"></div>
+
+<!-- ══ V6: Keyboard Shortcuts Modal ══ -->
+<div class="ks-overlay" id="ksOverlay" onclick="if(event.target===this)closeKbShortcuts()">
+  <div class="ks-modal" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts">
+    <div class="ks-header">
+      <span class="ks-title">KEYBOARD SHORTCUTS <span class="ks-badge">PRO</span></span>
+      <button class="ks-close" onclick="closeKbShortcuts()" aria-label="Close">✕</button>
+    </div>
+
+    <div class="ks-section">
+      <div class="ks-section-title">Floor Plan Editor</div>
+      <div class="ks-rows">
+        <div class="ks-row"><span class="ks-desc">Zoom in</span><span class="ks-key"><span class="ks-kbd">+</span></span></div>
+        <div class="ks-row"><span class="ks-desc">Zoom out</span><span class="ks-key"><span class="ks-kbd">−</span></span></div>
+        <div class="ks-row"><span class="ks-desc">Fit canvas</span><span class="ks-key"><span class="ks-kbd">0</span></span></div>
+        <div class="ks-row"><span class="ks-desc">Rotate selected</span><span class="ks-key"><span class="ks-kbd">R</span></span></div>
+        <div class="ks-row"><span class="ks-desc">Delete selected</span><span class="ks-key"><span class="ks-kbd">Del</span></span></div>
+        <div class="ks-row"><span class="ks-desc">Search equipment</span><span class="ks-key"><span class="ks-kbd">Ctrl</span><span class="ks-kbd">F</span></span></div>
+        <div class="ks-row"><span class="ks-desc">Toggle grid</span><span class="ks-key"><span class="ks-kbd">G</span></span></div>
+        <div class="ks-row"><span class="ks-desc">Close modal / ESC</span><span class="ks-key"><span class="ks-kbd">Esc</span></span></div>
+      </div>
+    </div>
+
+    <div class="ks-section">
+      <div class="ks-section-title">Layout Palette</div>
+      <div class="ks-rows">
+        <div class="ks-row"><span class="ks-desc">Search palette</span><span class="ks-key"><span class="ks-kbd">Ctrl</span><span class="ks-kbd">F</span></span></div>
+        <div class="ks-row"><span class="ks-desc">Clear all items</span><span class="ks-key"><span class="ks-kbd">Ctrl</span><span class="ks-kbd">⌫</span></span></div>
+      </div>
+    </div>
+
+    <div class="ks-section">
+      <div class="ks-section-title">General</div>
+      <div class="ks-rows">
+        <div class="ks-row"><span class="ks-desc">Keyboard shortcuts</span><span class="ks-key"><span class="ks-kbd">?</span></span></div>
+        <div class="ks-row"><span class="ks-desc">Print layout</span><span class="ks-key"><span class="ks-kbd">Ctrl</span><span class="ks-kbd">P</span></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ V6: New feature functions ══ -->
+<script>
+// ── Equipment palette search filter ────────────────────────────────────────
+function filterEqPalette(q) {
+  var body = document.getElementById('eqPaletteBody');
+  if (!body) return;
+  var term = (q || '').toLowerCase().trim();
+  var btns = body.querySelectorAll('.eq-btn-wrap, .eq-btn, .eq-pg');
+  if (!term) {
+    btns.forEach(function(el) { el.style.display = ''; });
+    return;
+  }
+  // hide group headers, show only matching btns
+  body.querySelectorAll('.eq-pg').forEach(function(pg) {
+    var vis = false;
+    pg.querySelectorAll('.eq-btn-wrap, .eq-btn').forEach(function(b) {
+      var name = (b.dataset.name || b.title || b.textContent || '').toLowerCase();
+      var show = name.indexOf(term) !== -1;
+      b.style.display = show ? '' : 'none';
+      if (show) vis = true;
+    });
+    pg.style.display = vis ? '' : 'none';
+  });
+}
+
+// ── FP palette search filter ────────────────────────────────────────────────
+function filterFpPalette(q) {
+  var body = document.getElementById('fpPaletteBody');
+  if (!body) return;
+  var term = (q || '').toLowerCase().trim();
+  if (!term) {
+    body.querySelectorAll('.fp-pg, .fp-pe, .fp-pg-title').forEach(function(el) { el.style.display = ''; });
+    return;
+  }
+  body.querySelectorAll('.fp-pg').forEach(function(pg) {
+    var vis = false;
+    pg.querySelectorAll('.fp-pe').forEach(function(pe) {
+      var name = (pe.dataset.name || pe.querySelector('.fp-pe-name,span')?.textContent || pe.textContent || '').toLowerCase();
+      var show = name.indexOf(term) !== -1;
+      pe.style.display = show ? '' : 'none';
+      if (show) vis = true;
+    });
+    var title = pg.querySelector('.fp-pg-title');
+    if (title) title.style.display = vis ? '' : 'none';
+    pg.style.display = vis ? '' : 'none';
+  });
+}
+
+// ── Floor plan zoom ─────────────────────────────────────────────────────────
+function _fpApplyZoom(factor) {
+  if (typeof FP === 'undefined') return;
+  var prevScale = FP.scale || 1;
+  var newScale = Math.min(6, Math.max(0.15, prevScale * factor));
+  var centerX = FP.mqX + FP.mqW / 2;
+  var centerY = FP.mqY + FP.mqH / 2;
+  FP.scale = newScale;
+  var ratio = newScale / prevScale;
+  FP.mqW = FP.mqW * ratio;
+  FP.mqH = FP.mqH * ratio;
+  FP.mqX = centerX - FP.mqW / 2;
+  FP.mqY = centerY - FP.mqH / 2;
+  if (typeof fpDraw === 'function') fpDraw();
+}
+function fpZoomIn()    { _fpApplyZoom(1.25); }
+function fpZoomOut()   { _fpApplyZoom(0.8); }
+function fpZoomReset() {
+  if (typeof FP === 'undefined') return;
+  if (typeof fpFitCanvas === 'function') { fpFitCanvas(); if (typeof fpDraw === 'function') fpDraw(); return; }
+  FP.scale = 1;
+  if (typeof fpDraw === 'function') fpDraw();
+}
+
+// ── Keyboard shortcuts modal ────────────────────────────────────────────────
+function openKbShortcuts() {
+  var el = document.getElementById('ksOverlay');
+  if (el) el.classList.add('open');
+}
+function closeKbShortcuts() {
+  var el = document.getElementById('ksOverlay');
+  if (el) el.classList.remove('open');
+}
+
+// ── Global keyboard listeners ───────────────────────────────────────────────
+document.addEventListener('keydown', function(e) {
+  var tag = (e.target.tagName || '').toLowerCase();
+  var inInput = tag === 'input' || tag === 'textarea' || e.target.isContentEditable;
+  // ESC closes overlay
+  if (e.key === 'Escape') { closeKbShortcuts(); return; }
+  if (inInput) return;
+  // ? opens shortcuts
+  if (e.key === '?' || e.key === '/') { openKbShortcuts(); e.preventDefault(); return; }
+  // floor-plan zoom when FP modal is open
+  var fpModal = document.getElementById('fpModal');
+  var fpOpen = fpModal && fpModal.style.display !== 'none' && fpModal.classList.contains('open');
+  if (fpOpen || (fpModal && fpModal.offsetParent !== null)) {
+    if (e.key === '+' || e.key === '=') { fpZoomIn(); e.preventDefault(); return; }
+    if (e.key === '-' || e.key === '_') { fpZoomOut(); e.preventDefault(); return; }
+    if (e.key === '0') { fpZoomReset(); e.preventDefault(); return; }
+  }
+  // Ctrl+F focuses search (eq or fp palette, whichever is visible)
+  if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+    var eqS = document.getElementById('eqSearch');
+    var fpS = document.getElementById('fpSearch');
+    if (eqS && eqS.offsetParent) { e.preventDefault(); eqS.focus(); eqS.select(); return; }
+    if (fpS && fpS.offsetParent) { e.preventDefault(); fpS.focus(); fpS.select(); return; }
+  }
+});
+
+// ── Global eq-btn tooltip (overflow:hidden workaround) ─────────────────────
+(function() {
+  var tip = document.getElementById('eqTipGlobal');
+  if (!tip) return;
+  document.addEventListener('mouseover', function(e) {
+    var btn = e.target.closest('.eq-btn');
+    if (!btn) return;
+    var name = btn.dataset.name || btn.title || '';
+    if (!name) return;
+    var dims = btn.dataset.dims || '';
+    tip.textContent = dims ? name + ' · ' + dims : name;
+    var r = btn.getBoundingClientRect();
+    tip.style.left = (r.left + r.width / 2) + 'px';
+    tip.style.top  = (r.top - 8) + 'px';
+    tip.classList.add('show');
+  });
+  document.addEventListener('mouseout', function(e) {
+    if (!e.target.closest('.eq-btn')) return;
+    tip.classList.remove('show');
+  });
 })();
 </script>
 </body>
