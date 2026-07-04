@@ -50,6 +50,12 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
 <!-- ScrollReveal.js 4.0.9 — scroll-triggered reveals -->
 <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js"></script>
+<!-- Sal.js 0.8.5 — lightweight scroll animation library (UI_STANDARD 2026-07-04) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sal.js@0.8.5/dist/sal.css">
+<script src="https://cdn.jsdelivr.net/npm/sal.js@0.8.5/dist/sal.min.js"></script>
+<!-- tsParticles 3.7.1 — ambient background particles -->
+<script src="https://cdn.jsdelivr.net/npm/@tsparticles/engine@3.7.1/tsparticles.engine.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tsparticles/preset-links@3.7.1/tsparticles.preset.links.min.js"></script>
 <!-- ──────────────────────────────────────────────────────────────────── -->
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
@@ -9184,17 +9190,65 @@ updateTotal = function() {
   });
 })();
 
-// ── GSAP + AOS + Mo.js init ────────────────────────────────────────────────
+// ── ANIMATION STACK INIT — v2 2026-07-04 ─────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
-  AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 20 });
 
-  if (window.gsap) {
-    gsap.registerPlugin(ScrollTrigger);
-    gsap.from('.hero-title, .wes-logo', { duration: 1.1, y: 28, opacity: 0, ease: 'power3.out', delay: 0.2, stagger: 0.12 });
-    gsap.from('.hero-subtitle, .hero-meta', { duration: 0.9, y: 18, opacity: 0, ease: 'power3.out', delay: 0.5, stagger: 0.1 });
-    gsap.from('.step-panel:first-child .panel-head', { scrollTrigger: { trigger: '.step-panel', start: 'top 88%' }, duration: 0.8, y: 24, opacity: 0, ease: 'power2.out' });
+  // ① AOS init (existing)
+  if (typeof AOS !== 'undefined') {
+    AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 20 });
   }
 
+  // ② Sal.js scroll reveals
+  if (typeof sal !== 'undefined') {
+    sal({ threshold: 0.1, once: true });
+  }
+
+  // ③ Splitting.js char-split on hero titles
+  if (typeof Splitting !== 'undefined') {
+    Splitting({ target: '.hero-title', by: 'words' });
+  }
+
+  // ④ GSAP entrance animations + ScrollTrigger
+  if (window.gsap) {
+    gsap.registerPlugin(ScrollTrigger, SplitText, Flip);
+    gsap.from('.hero-title .word', { duration: 0.75, y: 28, opacity: 0, ease: 'power3.out', delay: 0.15, stagger: 0.08 });
+    gsap.from('.hero-subtitle, .hero-meta', { duration: 0.9, y: 18, opacity: 0, ease: 'power3.out', delay: 0.5, stagger: 0.1 });
+    gsap.from('.step-panel:first-child .panel-head', { scrollTrigger: { trigger: '.step-panel', start: 'top 88%' }, duration: 0.8, y: 24, opacity: 0, ease: 'power2.out' });
+    // Animate step number badges
+    gsap.from('.step-badge, .step-num', { duration: 0.5, scale: 0, opacity: 0, stagger: 0.1, ease: 'back.out(2)', delay: 0.3 });
+  }
+
+  // ⑤ ScrollReveal on sidebar panels and cards
+  if (typeof ScrollReveal !== 'undefined') {
+    ScrollReveal().reveal('.pkg-card, .eq-card, .option-card', {
+      distance: '18px', origin: 'bottom', duration: 500, interval: 50, easing: 'ease-out', reset: false
+    });
+  }
+
+  // ⑥ tsParticles ambient background
+  if (typeof tsParticles !== 'undefined') {
+    const pEl = document.createElement('div');
+    pEl.id = 'es-particles';
+    pEl.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:0';
+    document.body.insertBefore(pEl, document.body.firstChild);
+    tsParticles.load({
+      id: 'es-particles',
+      options: {
+        preset: 'links',
+        background: { color: { value: 'transparent' } },
+        particles: {
+          number: { value: 22 },
+          color: { value: '#00e6ff' },
+          links: { color: '#00e6ff', opacity: 0.04, distance: 140 },
+          opacity: { value: 0.05 },
+          size: { value: 1 },
+          move: { speed: 0.25 }
+        }
+      }
+    }).catch(() => {});
+  }
+
+  // ⑦ Mo.js package burst (existing — preserved)
   if (window.mojs) {
     var _pkgBurst = null;
     var _origApplyPackage = window.applyPackage;
