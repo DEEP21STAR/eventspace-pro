@@ -27,11 +27,12 @@
    ═══════════════════════════════════════════════════════════ */
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#04050f;--card:#080c1e;--card2:#0c1228;
+  --bg:#060d17;--card:#0d1b2a;--card2:rgba(13,27,42,.85);
   --cyan:#00e6ff;--gold:#ffd700;--green:#00ff88;
   --red:#ff4466;--purple:#c060ff;--orange:#ff8c00;
-  --text:#e0f0ff;--muted:#5a7a90;--border:#1a2a40;
-  --font:'Inter','Segoe UI',system-ui,sans-serif;--font-head:'Space Grotesk','Inter',system-ui,sans-serif;
+  --text:#e8f4f8;--muted:#6b8ba0;--border:rgba(0,230,255,.12);
+  --font:'Space Grotesk','Inter',system-ui,sans-serif;--font-head:'Space Grotesk','Inter',system-ui,sans-serif;
+  --glow-cyan:0 0 20px rgba(0,230,255,.4);--glow-gold:0 0 20px rgba(255,215,0,.4);--font-mono:'JetBrains Mono',monospace;
   --sidebar:400px;--header:58px;--steps:46px;--status:38px;--footer:52px;
 }
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font)}
@@ -86,6 +87,13 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   background:linear-gradient(135deg,rgba(0,230,255,.45),rgba(192,96,255,.38));
   box-shadow:0 4px 32px rgba(0,230,255,.5),0 0 20px rgba(0,230,255,.3)}
 
+/* ── HEADER ANIMATED SEPARATOR ── */
+.hdr::after{
+  content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--cyan) 30%,var(--purple) 70%,transparent);
+  background-size:200% 100%;animation:hdrSepFlow 4s linear infinite;z-index:1;pointer-events:none}
+@keyframes hdrSepFlow{0%{background-position:100% 0}100%{background-position:-100% 0}}
+
 /* ── HELP BUTTON NEON PULSE ── */
 .hdr-btn.btn-help{
   background:linear-gradient(135deg,rgba(0,230,255,.2),rgba(192,96,255,.15));
@@ -139,9 +147,11 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
   background:rgba(0,230,255,.12);border:1px solid rgba(0,230,255,.3);
   border-radius:20px;padding:5px 14px;width:fit-content}
 .help-step-num{
-  width:22px;height:22px;border-radius:50%;background:var(--cyan);
+  width:22px;height:22px;border-radius:50%;
+  background:linear-gradient(135deg,var(--cyan),var(--purple));
   color:#000;font-size:.75rem;font-weight:900;
-  display:flex;align-items:center;justify-content:center}
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 8px rgba(0,230,255,.4)}
 .help-step-label{font-size:.72rem;letter-spacing:2px;color:var(--cyan);font-weight:700}
 .help-slide-title{font-size:1.15rem;font-weight:800;color:var(--text)}
 .help-slide-body{font-size:.88rem;color:rgba(255,255,255,.7);line-height:1.75}
@@ -290,10 +300,10 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .btn-primary{
   background:linear-gradient(135deg,rgba(0,230,255,.35),rgba(192,96,255,.28));
   border:1px solid rgba(0,230,255,.55);color:var(--cyan);
-  box-shadow:0 4px 20px rgba(0,230,255,.2),inset 0 1px 0 rgba(255,255,255,.1)}
+  box-shadow:var(--glow-cyan),0 4px 20px rgba(0,230,255,.2),inset 0 1px 0 rgba(255,255,255,.1)}
 .btn-primary:hover{
   background:linear-gradient(135deg,rgba(0,230,255,.5),rgba(192,96,255,.42));
-  box-shadow:0 6px 32px rgba(0,230,255,.45),0 0 20px rgba(0,230,255,.25),inset 0 1px 0 rgba(255,255,255,.15)}
+  box-shadow:0 6px 32px rgba(0,230,255,.5),var(--glow-cyan),inset 0 1px 0 rgba(255,255,255,.15)}
 .btn-gold{
   background:linear-gradient(135deg,rgba(255,215,0,.3),rgba(255,140,0,.22));
   border:1px solid rgba(255,215,0,.55);color:var(--gold);
@@ -1607,28 +1617,45 @@ input[type=range]{
 /* ── LAYOUT SUMMARY (in step 3 panel) ── */
 .layout-summary{
   margin-top:14px;padding:12px 14px;border-radius:12px;
-  background:linear-gradient(135deg,rgba(255,215,0,.06),rgba(192,96,255,.04));
-  border:1px solid rgba(255,215,0,.22);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 4px 14px rgba(0,0,0,.18);
-  position:relative
+  background:linear-gradient(135deg,rgba(0,230,255,.05),rgba(192,96,255,.04));
+  border:1px solid rgba(0,230,255,.15);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 4px 24px rgba(0,0,0,.28);
+  backdrop-filter:blur(10px);position:relative;transition:box-shadow .3s
 }
+.layout-summary:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 4px 28px rgba(0,0,0,.32),0 0 20px rgba(0,230,255,.08)}
+/* top shimmer line */
 .layout-summary::before{
   content:'';position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(255,215,0,.5),transparent)
+  background:linear-gradient(90deg,transparent,rgba(0,230,255,.55),transparent)
 }
-.layout-summary-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.layout-summary-title{font-size:10px;letter-spacing:2.5px;color:var(--gold);font-weight:900;text-transform:uppercase;text-shadow:0 0 10px rgba(255,215,0,.35)}
-.layout-summary-count{font-size:9.5px;font-weight:800;color:#000;background:linear-gradient(135deg,var(--gold),#ffe680);padding:2px 8px;border-radius:99px;letter-spacing:.5px}
+/* bottom-right corner accent */
+.layout-summary::after{
+  content:'';position:absolute;bottom:0;right:0;width:18px;height:18px;
+  border-bottom:2px solid rgba(0,230,255,.45);border-right:2px solid rgba(0,230,255,.45);
+  border-radius:0 0 12px 0;pointer-events:none
+}
+.layout-summary-head{display:flex;align-items:center;gap:6px;justify-content:space-between;margin-bottom:10px}
+.layout-summary-title{font-size:10px;letter-spacing:2.5px;color:var(--cyan);font-weight:900;text-transform:uppercase;text-shadow:0 0 10px rgba(0,230,255,.35)}
+.layout-summary-count{font-size:9.5px;font-weight:800;color:#000;background:linear-gradient(135deg,var(--cyan),#80f0ff);padding:2px 8px;border-radius:99px;letter-spacing:.5px}
+/* expand button */
+.ls-expand-btn{
+  background:none;border:1px solid rgba(0,230,255,.25);border-radius:6px;
+  color:var(--cyan);cursor:pointer;font-size:12px;line-height:1;padding:2px 6px;
+  transition:all .2s;opacity:.8;margin-left:auto;flex-shrink:0}
+.ls-expand-btn:hover{opacity:1;background:rgba(0,230,255,.12);border-color:rgba(0,230,255,.5);box-shadow:0 0 8px rgba(0,230,255,.25)}
 .layout-summary-empty{font-size:11px;color:var(--muted);text-align:center;padding:14px 4px;line-height:1.55}
-.layout-summary-empty strong{color:var(--gold);font-weight:700}
-.layout-summary-list{display:flex;flex-direction:column;gap:5px;margin-top:6px;max-height:200px;overflow-y:auto}
+.layout-summary-empty strong{color:var(--cyan);font-weight:700}
+.layout-summary-list{display:flex;flex-direction:column;gap:5px;margin-top:6px;max-height:200px;overflow-y:auto;transition:max-height .3s ease}
+.layout-summary.expanded .layout-summary-list{max-height:none}
 .layout-summary-list::-webkit-scrollbar{width:4px}
-.layout-summary-list::-webkit-scrollbar-thumb{background:rgba(255,215,0,.25);border-radius:2px}
+.layout-summary-list::-webkit-scrollbar-thumb{background:rgba(0,230,255,.25);border-radius:2px}
 .layout-summary-item{display:flex;align-items:center;gap:8px;padding:6px 9px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05);border-radius:7px;font-size:11px;transition:all .15s;cursor:pointer}
-.layout-summary-item:hover{background:rgba(255,215,0,.07);border-color:rgba(255,215,0,.28);transform:translateX(2px)}
-.layout-summary-item-dot{width:8px;height:8px;border-radius:50%;background:var(--eq-c,#ffd700);box-shadow:0 0 8px var(--eq-c,#ffd700);flex-shrink:0}
+.layout-summary-item:hover{background:rgba(0,230,255,.07);border-color:rgba(0,230,255,.28);transform:translateX(2px)}
+.layout-summary-item-icon{width:28px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.layout-summary-item-icon svg{width:28px;height:28px;display:block}
+.layout-summary-item-dot{width:8px;height:8px;border-radius:50%;background:var(--eq-c,#00e6ff);box-shadow:0 0 8px var(--eq-c,#00e6ff);flex-shrink:0}
 .layout-summary-item-name{flex:1;color:var(--text);font-weight:600;letter-spacing:.2px}
-.layout-summary-item-qty{color:var(--gold);font-weight:800;font-variant-numeric:tabular-nums;font-size:11px}
+.layout-summary-item-qty{color:var(--cyan);font-weight:800;font-variant-numeric:tabular-nums;font-size:11px}
 .layout-summary-foot{display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06)}
 .layout-summary-foot button{flex:1}
 
@@ -2515,6 +2542,7 @@ input[type=range]{
           <div class="layout-summary-head">
             <div class="layout-summary-title">◈ Equipment Layout</div>
             <div class="layout-summary-count" id="layoutSummaryCount">0 items</div>
+            <button class="ls-expand-btn" id="lsExpandBtn" onclick="toggleLayoutSummaryExpand()" title="Expand / collapse">⤢</button>
           </div>
           <div id="layoutSummaryBody">
             <div class="layout-summary-empty">
@@ -2869,12 +2897,16 @@ input[type=range]{
         </div>
         <div class="fp-toolbar">
           <button class="fp-tool" onclick="fpToggleGrid()" id="fpGridBtn" title="Toggle 0.5m grid">▦ Grid</button>
-          <button class="fp-tool" onclick="fpRotateSelected()" id="fpRotBtn" disabled title="Rotate 45°">↻ Rotate</button>
+          <button class="fp-tool" onclick="fpRotateSelected()" id="fpRotBtn" disabled title="Rotate 45° (R) — or drag the ↻ handle above the item for free angle">↻ Rotate</button>
           <button class="fp-tool fp-tool-danger" onclick="fpDeleteSelected()" id="fpDelBtn" disabled title="Delete selected">✕ Delete</button>
           <button class="fp-tool fp-tool-danger" onclick="clearEquipmentLayout()" title="Clear layout">⌫ Clear</button>
           <button class="fp-tool fp-tool-auto" onclick="openAutoPlanWizard()" title="Auto-design my layout">⚡ AUTO-PLAN</button>
           <button class="fp-tool" onclick="fpToggleRowBar()" title="Place a row of chairs or tables" style="border-color:rgba(0,230,255,.35);color:var(--cyan)">≡ ROW</button>
           <button class="fp-tool fp-tool-share" onclick="openShareModal()" title="Share with client">📲 SHARE</button>
+          <button class="fp-tool fp-tool-sat" onclick="fpToggleSatellite()" id="fpSatBtn" title="Toggle satellite photo background" style="opacity:.5">🛰 SAT</button>
+          <button class="fp-tool" onclick="fpCopySelected()" id="fpCopyBtn" disabled title="Copy selected (Ctrl+C)" style="border-color:rgba(0,230,255,.35);color:var(--cyan)">⎘ Copy</button>
+          <button class="fp-tool" onclick="fpPasteClipboard()" id="fpPasteBtn" title="Paste copy (Ctrl+V)" style="opacity:.5;border-color:rgba(0,230,255,.35);color:var(--cyan)">⎗ Paste</button>
+          <button class="fp-tool" onclick="fpUndo()" title="Undo (Ctrl+Z)" style="border-color:rgba(255,165,0,.35);color:rgba(255,165,0,.9)">↩ Undo</button>
           <button class="fp-tool fp-tool-zoom" onclick="fpZoomIn()" title="Zoom in (+)">＋</button>
           <button class="fp-tool fp-tool-zoom" onclick="fpZoomOut()" title="Zoom out (-)">－</button>
           <button class="fp-tool fp-tool-zoom" onclick="fpZoomReset()" title="Fit to canvas (0)">⊡</button>
@@ -3837,6 +3869,14 @@ function renderEquipmentPalette() {
   body.innerHTML = html;
 }
 
+function toggleLayoutSummaryExpand() {
+  var el = document.getElementById('layoutSummary');
+  var btn = document.getElementById('lsExpandBtn');
+  if (!el) return;
+  var expanded = el.classList.toggle('expanded');
+  if (btn) btn.textContent = expanded ? '⤡' : '⤢';
+}
+
 function renderLayoutSummary() {
   var body = document.getElementById('layoutSummaryBody');
   var count = document.getElementById('layoutSummaryCount');
@@ -3861,8 +3901,11 @@ function renderLayoutSummary() {
   var html = '<div class="layout-summary-list">';
   order.forEach(function(pid){
     var g = grouped[pid];
+    var iconHtml = g.item.svg
+      ? '<div class="layout-summary-item-icon"><svg viewBox="0 0 48 48" style="color:' + g.item.color + ';filter:drop-shadow(0 0 4px ' + g.item.color + '88)">' + g.item.svg + '</svg></div>'
+      : '<div class="layout-summary-item-icon"><div class="layout-summary-item-dot"></div></div>';
     html += '<div class="layout-summary-item" style="--eq-c:' + g.item.color + '" onclick="zoomToFirstEquipment(\'' + pid + '\')" title="Click to focus on map">' +
-              '<div class="layout-summary-item-dot"></div>' +
+              iconHtml +
               '<div class="layout-summary-item-name">' + g.item.name + '</div>' +
               '<div class="layout-summary-item-qty">×' + g.count + '</div>' +
             '</div>';
@@ -4960,6 +5003,9 @@ var FP = {
   dragUid:null, dragOffX:0, dragOffY:0,
   hoverUid:null, selectedUid:null,
   showGrid:true, bound:false, pendingRAF:false,
+  showSatellite:false, tileCache:{}, tileImages:[], satZoom:19,
+  rotateDragUid:null, rotateStartAngle:0, rotateStartRot:0,
+  undoStack:[], clipboard:null,
 };
 
 function openFloorPlan() {
@@ -4985,6 +5031,7 @@ function fpInit() {
   FP.canvas.addEventListener('mousemove', fpOnMouseMoveCanvas);
   FP.canvas.addEventListener('contextmenu', fpOnContext);
   FP.canvas.addEventListener('dblclick', fpOnDblClick);
+  FP.canvas.addEventListener('wheel', fpOnWheel, { passive: false });
   window.addEventListener('resize', function(){
     var modal = document.getElementById('floorPlanModal');
     if (modal && modal.classList.contains('open')) fpFitCanvas();
@@ -4994,9 +5041,12 @@ function fpInit() {
     var modal = document.getElementById('floorPlanModal');
     if (!modal || !modal.classList.contains('open')) return;
     if (e.target && (e.target.tagName==='INPUT' || e.target.tagName==='TEXTAREA')) return;
-    if (e.key === 'Delete' || e.key === 'Backspace') { if (FP.selectedUid) { fpDeleteSelected(); e.preventDefault(); } }
-    if (e.key === 'r' || e.key === 'R') { if (FP.selectedUid) fpRotateSelected(); }
+    if (e.key === 'Delete' || e.key === 'Backspace') { if (FP.selectedUid) { fpPushUndo(); fpDeleteSelected(); e.preventDefault(); } }
+    if (e.key === 'r' || e.key === 'R') { if (FP.selectedUid) { fpPushUndo(); fpRotateSelected(); } }
     if (e.key === 'g' || e.key === 'G') fpToggleGrid();
+    if ((e.ctrlKey || e.metaKey) && e.key === 'c') { fpCopySelected(); e.preventDefault(); }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'v') { fpPasteClipboard(); e.preventDefault(); }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'z') { fpUndo(); e.preventDefault(); }
   });
   FP.bound = true;
 }
@@ -5026,6 +5076,7 @@ function fpComputeMarquee() {
   FP.mqH = mq.d * FP.scale;
   FP.mqX = (FP.cssW - FP.mqW) / 2;
   FP.mqY = (FP.cssH - FP.mqH) / 2;
+  if (FP.showSatellite) { FP.tileImages = []; fpLoadSatTiles(); }
 }
 
 function fpUpdateLabels() {
@@ -5049,6 +5100,8 @@ function fpUpdateLabels() {
   var hasSel = !!FP.selectedUid;
   var rb = document.getElementById('fpRotBtn'); if (rb) rb.disabled = !hasSel;
   var db = document.getElementById('fpDelBtn'); if (db) db.disabled = !hasSel;
+  var cb = document.getElementById('fpCopyBtn'); if (cb) { cb.disabled = !hasSel; cb.style.opacity = hasSel ? '1' : '.5'; }
+  var pb = document.getElementById('fpPasteBtn'); if (pb) pb.style.opacity = FP.clipboard ? '1' : '.5';
 }
 
 function fpLatLngToXY(lat, lng) {
@@ -5091,10 +5144,18 @@ function fpDraw() {
   ctx.clearRect(0, 0, FP.cssW, FP.cssH);
   if (!state.selectedMarquee) return;
 
-  // Marquee floor — green-tinted with soft inner glow
+  // Satellite photo background (must draw before gradient overlay)
+  if (FP.showSatellite) fpDrawSatelliteTiles(ctx);
+
+  // Marquee floor — green-tinted or transparent overlay when satellite is active
   var grad = ctx.createLinearGradient(FP.mqX, FP.mqY, FP.mqX, FP.mqY + FP.mqH);
-  grad.addColorStop(0, 'rgba(0,255,136,.10)');
-  grad.addColorStop(1, 'rgba(0,180,100,.04)');
+  if (FP.showSatellite) {
+    grad.addColorStop(0, 'rgba(0,255,136,.04)');
+    grad.addColorStop(1, 'rgba(0,180,100,.02)');
+  } else {
+    grad.addColorStop(0, 'rgba(0,255,136,.10)');
+    grad.addColorStop(1, 'rgba(0,180,100,.04)');
+  }
   ctx.fillStyle = grad;
   fpRoundRect(ctx, FP.mqX, FP.mqY, FP.mqW, FP.mqH, 10);
   ctx.fill();
@@ -5256,6 +5317,30 @@ function fpDrawItem(ctx, eq) {
     ctx.lineWidth = 1;
     ctx.setLineDash([4,4]);
     ctx.beginPath(); ctx.arc(0,0,dashR,0,Math.PI*2); ctx.stroke();
+    ctx.setLineDash([]);
+    // Rotation handle — positioned above the item in its local rotated space
+    var handleDist = dashR + 20;
+    ctx.rotate(rot);
+    // Stem line
+    ctx.strokeStyle = 'rgba(255,255,255,.55)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([3,4]);
+    ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(0, -handleDist); ctx.stroke();
+    ctx.setLineDash([]);
+    // Handle circle
+    var isRotating = (FP.rotateDragUid === eq.uid);
+    ctx.beginPath(); ctx.arc(0, -handleDist, 8, 0, Math.PI*2);
+    ctx.fillStyle = isRotating ? 'rgba(255,107,107,.95)' : 'rgba(255,255,255,.92)';
+    ctx.fill();
+    ctx.strokeStyle = isRotating ? '#ff6b6b' : 'rgba(255,107,107,.9)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    // Rotation arrow icon
+    ctx.fillStyle = isRotating ? '#fff' : '#c0392b';
+    ctx.font = 'bold 9px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('↻', 0, -handleDist);
     ctx.restore();
   }
 }
@@ -5289,10 +5374,26 @@ function fpMouseCoords(e) {
 function fpOnMouseDown(e) {
   if (e.button === 2) return;
   var pt = fpMouseCoords(e);
+  // Check rotation handle first (only when an item is selected)
+  if (FP.selectedUid && fpRotHandleHit(pt.x, pt.y)) {
+    var eq = state.equipment.find(function(x){ return x.uid === FP.selectedUid; });
+    if (eq) {
+      fpPushUndo();
+      var pos2 = fpLatLngToXY(eq.latlng[0], eq.latlng[1]);
+      FP.rotateDragUid = eq.uid;
+      FP.rotateStartAngle = Math.atan2(pt.x - pos2.x, -(pt.y - pos2.y));
+      FP.rotateStartRot = eq.rotation || 0;
+      FP.canvas.classList.add('fp-drag');
+      e.preventDefault();
+      fpRequestDraw();
+      return;
+    }
+  }
   var hit = fpHitTest(pt.x, pt.y);
   if (hit) {
     FP.selectedUid = hit.uid;
     FP.dragUid = hit.uid;
+    fpPushUndo();
     var pos = fpLatLngToXY(hit.latlng[0], hit.latlng[1]);
     FP.dragOffX = pt.x - pos.x;
     FP.dragOffY = pt.y - pos.y;
@@ -5320,6 +5421,22 @@ function fpOnMouseMoveCanvas(e) {
 }
 
 function fpOnMouseMoveWin(e) {
+  // Free-angle rotation drag
+  if (FP.rotateDragUid) {
+    var pt0 = fpMouseCoords(e);
+    var eq0 = state.equipment.find(function(x){ return x.uid === FP.rotateDragUid; });
+    if (eq0) {
+      var pos0 = fpLatLngToXY(eq0.latlng[0], eq0.latlng[1]);
+      var curAngle = Math.atan2(pt0.x - pos0.x, -(pt0.y - pos0.y));
+      var delta = (curAngle - FP.rotateStartAngle) * 180 / Math.PI;
+      var newRot = (FP.rotateStartRot + delta) % 360;
+      if (newRot < 0) newRot += 360;
+      eq0.rotation = newRot;
+      if (eq0.marker) eq0.marker.setIcon(_eqMakeIcon(eq0.item, Math.round(newRot)));
+      fpRequestDraw();
+    }
+    return;
+  }
   if (!FP.dragUid) return;
   var pt = fpMouseCoords(e);
   var eq = state.equipment.find(function(x){ return x.uid === FP.dragUid; });
@@ -5340,6 +5457,14 @@ function fpOnMouseMoveWin(e) {
 }
 
 function fpOnMouseUpWin(e) {
+  if (FP.rotateDragUid) {
+    FP.canvas.classList.remove('fp-drag');
+    FP.rotateDragUid = null;
+    saveEquipmentLayout();
+    fpUpdateLabels();
+    fpRequestDraw();
+    return;
+  }
   if (FP.dragUid) {
     FP.canvas.classList.remove('fp-drag');
     FP.dragUid = null;
@@ -5379,6 +5504,7 @@ function fpToggleGrid() {
 
 function fpRotateSelected() {
   if (!FP.selectedUid) return;
+  fpPushUndo();
   rotateEquipment(FP.selectedUid);
   fpUpdateLabels();
   fpRequestDraw();
@@ -5388,6 +5514,184 @@ function fpDeleteSelected() {
   if (!FP.selectedUid) return;
   removeEquipment(FP.selectedUid);
   FP.selectedUid = null;
+  fpUpdateLabels();
+  fpRequestDraw();
+}
+
+// ── Rotation handle hit-test ─────────────────────────────────────────────────
+function fpRotHandleHit(x, y) {
+  if (!FP.selectedUid) return false;
+  var eq = state.equipment.find(function(e){ return e.uid === FP.selectedUid; });
+  if (!eq) return false;
+  var pos = fpLatLngToXY(eq.latlng[0], eq.latlng[1]);
+  var pw = eq.item.w * FP.scale;
+  var ph = eq.item.d * FP.scale;
+  var dashR = Math.max(pw, ph) * 0.6 + 8;
+  var handleDist = dashR + 20;
+  var rot = (eq.rotation || 0) * Math.PI / 180;
+  // Rotate (0, -handleDist) by rot: x' = handleDist*sin(rot), y' = -handleDist*cos(rot)
+  var hx = pos.x + handleDist * Math.sin(rot);
+  var hy = pos.y - handleDist * Math.cos(rot);
+  var dx = x - hx, dy = y - hy;
+  return dx*dx + dy*dy <= 14*14;
+}
+
+// ── Scroll-wheel zoom ────────────────────────────────────────────────────────
+function fpOnWheel(e) {
+  e.preventDefault();
+  _fpApplyZoom(e.deltaY < 0 ? 1.12 : 0.89);
+}
+
+// ── Satellite photo background ───────────────────────────────────────────────
+function fpToggleSatellite() {
+  FP.showSatellite = !FP.showSatellite;
+  var btn = document.getElementById('fpSatBtn');
+  if (btn) btn.style.opacity = FP.showSatellite ? '1' : '.5';
+  if (FP.showSatellite) { FP.tileImages = []; fpLoadSatTiles(); }
+  else fpRequestDraw();
+}
+
+function fpGetTileXY(lat, lng, zoom) {
+  var z = Math.pow(2, zoom);
+  var x = Math.floor((lng + 180) / 360 * z);
+  var latR = lat * Math.PI / 180;
+  var y = Math.floor((1 - Math.log(Math.tan(latR) + 1 / Math.cos(latR)) / Math.PI) / 2 * z);
+  return { x: x, y: y };
+}
+
+function fpTileTopLeft(tx, ty, zoom) {
+  var z = Math.pow(2, zoom);
+  var lng = tx / z * 360 - 180;
+  var n = Math.PI - 2 * Math.PI * ty / z;
+  var lat = 180 / Math.PI * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n)));
+  return { lat: lat, lng: lng };
+}
+
+function fpLoadSatTiles() {
+  if (!state.marqueeRect || !FP.showSatellite) return;
+  var b = state.marqueeRect.getBounds();
+  // Pick the smallest zoom where tiles cover the area in ≤6×6
+  var zoom = 19;
+  for (var z = 21; z >= 13; z--) {
+    var t1 = fpGetTileXY(b.getNorth(), b.getWest(), z);
+    var t2 = fpGetTileXY(b.getSouth(), b.getEast(), z);
+    if (Math.abs(t2.x - t1.x) + 1 <= 6 && Math.abs(t2.y - t1.y) + 1 <= 6) { zoom = z; break; }
+  }
+  FP.satZoom = zoom;
+  var t1 = fpGetTileXY(b.getNorth(), b.getWest(), zoom);
+  var t2 = fpGetTileXY(b.getSouth(), b.getEast(), zoom);
+  var minX = Math.min(t1.x, t2.x), maxX = Math.max(t1.x, t2.x);
+  var minY = Math.min(t1.y, t2.y), maxY = Math.max(t1.y, t2.y);
+  var total = (maxX - minX + 1) * (maxY - minY + 1);
+  var loaded = 0;
+  FP.tileImages = [];
+  for (var ty2 = minY; ty2 <= maxY; ty2++) {
+    for (var tx2 = minX; tx2 <= maxX; tx2++) {
+      (function(tx, ty) {
+        var key = zoom + '/' + tx + '/' + ty;
+        if (FP.tileCache[key]) {
+          FP.tileImages.push({ img: FP.tileCache[key], tx: tx, ty: ty });
+          loaded++;
+          if (loaded >= total) fpRequestDraw();
+          return;
+        }
+        var img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = function() {
+          FP.tileCache[key] = img;
+          FP.tileImages.push({ img: img, tx: tx, ty: ty });
+          loaded++;
+          if (loaded >= total) fpRequestDraw();
+        };
+        img.onerror = function() { loaded++; if (loaded >= total) fpRequestDraw(); };
+        img.src = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/' + zoom + '/' + ty + '/' + tx;
+      })(tx2, ty2);
+    }
+  }
+}
+
+function fpDrawSatelliteTiles(ctx) {
+  if (!FP.tileImages || !FP.tileImages.length) {
+    // Draw placeholder while loading
+    ctx.save();
+    fpRoundRect(ctx, FP.mqX, FP.mqY, FP.mqW, FP.mqH, 10);
+    ctx.fillStyle = 'rgba(20,30,20,.7)';
+    ctx.fill();
+    ctx.fillStyle = 'rgba(0,255,136,.4)';
+    ctx.font = '13px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('Loading satellite imagery…', FP.mqX + FP.mqW / 2, FP.mqY + FP.mqH / 2);
+    ctx.restore();
+    return;
+  }
+  ctx.save();
+  fpRoundRect(ctx, FP.mqX, FP.mqY, FP.mqW, FP.mqH, 10);
+  ctx.clip();
+  FP.tileImages.forEach(function(t) {
+    var tl = fpTileTopLeft(t.tx, t.ty, FP.satZoom);
+    var br = fpTileTopLeft(t.tx + 1, t.ty + 1, FP.satZoom);
+    var tlXY = fpLatLngToXY(tl.lat, tl.lng);
+    var brXY = fpLatLngToXY(br.lat, br.lng);
+    var tw = brXY.x - tlXY.x, th = brXY.y - tlXY.y;
+    if (tw > 0 && th > 0) {
+      try { ctx.drawImage(t.img, tlXY.x, tlXY.y, tw, th); } catch(ex) {}
+    }
+  });
+  // Darkening overlay so grid and equipment remain legible
+  ctx.fillStyle = 'rgba(0,0,0,0.38)';
+  ctx.fillRect(FP.mqX, FP.mqY, FP.mqW, FP.mqH);
+  ctx.restore();
+}
+
+// ── Undo / Copy / Paste ──────────────────────────────────────────────────────
+function fpPushUndo() {
+  var snap = state.equipment.map(function(eq){
+    return { uid: eq.uid, latlng: eq.latlng.slice(), rotation: eq.rotation || 0 };
+  });
+  FP.undoStack.push(snap);
+  if (FP.undoStack.length > 25) FP.undoStack.shift();
+}
+
+function fpUndo() {
+  var snap = FP.undoStack.pop();
+  if (!snap) return;
+  snap.forEach(function(s) {
+    var eq = state.equipment.find(function(x){ return x.uid === s.uid; });
+    if (!eq) return;
+    eq.latlng = s.latlng.slice();
+    eq.rotation = s.rotation;
+    if (eq.marker) {
+      eq.marker.setLatLng(s.latlng);
+      eq.marker.setIcon(_eqMakeIcon(eq.item, Math.round(s.rotation)));
+    }
+  });
+  saveEquipmentLayout();
+  fpUpdateLabels();
+  fpRequestDraw();
+}
+
+function fpCopySelected() {
+  if (!FP.selectedUid) return;
+  var eq = state.equipment.find(function(x){ return x.uid === FP.selectedUid; });
+  if (!eq) return;
+  FP.clipboard = { paletteId: eq.paletteId, rotation: eq.rotation || 0 };
+  var btn = document.getElementById('fpCopyBtn');
+  if (btn) { var orig = btn.textContent; btn.textContent = '✓ Copied'; setTimeout(function(){ btn.textContent = orig; }, 1100); }
+  var pb = document.getElementById('fpPasteBtn'); if (pb) pb.style.opacity = '1';
+}
+
+function fpPasteClipboard() {
+  if (!FP.clipboard || !state.selectedMarquee) return;
+  fpPushUndo();
+  placeEquipment(FP.clipboard.paletteId);
+  var newEq = state.equipment.find(function(x){ return x.uid === state.equipmentSelected; });
+  if (newEq && FP.clipboard.rotation) {
+    newEq.rotation = FP.clipboard.rotation;
+    if (newEq.marker) newEq.marker.setIcon(_eqMakeIcon(newEq.item, Math.round(FP.clipboard.rotation)));
+  }
+  if (state.equipmentSelected) FP.selectedUid = state.equipmentSelected;
+  saveEquipmentLayout();
   fpUpdateLabels();
   fpRequestDraw();
 }
