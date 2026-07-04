@@ -668,16 +668,23 @@ input[type=range]{
 
 /* ── PACKAGE BUNDLES ── */
 .pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-.pkg-card{border-radius:12px;padding:10px 8px;cursor:pointer;text-align:center;transition:all .25s;border:1px solid var(--border);position:relative;overflow:hidden}
-.pkg-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .25s}
-.pkg-card:hover{transform:translateY(-3px)}
-.pkg-card.active{transform:translateY(-3px)}
-.pkg-silver{background:linear-gradient(135deg,rgba(192,192,192,.08),rgba(150,150,150,.03))}
-.pkg-silver.active,.pkg-silver:hover{border-color:rgba(180,180,180,.5);box-shadow:0 0 20px rgba(180,180,180,.15)}
-.pkg-gold-card{background:linear-gradient(135deg,rgba(255,215,0,.1),rgba(255,140,0,.04))}
-.pkg-gold-card.active,.pkg-gold-card:hover{border-color:rgba(255,215,0,.5);box-shadow:0 0 24px rgba(255,215,0,.2)}
-.pkg-plat{background:linear-gradient(135deg,rgba(192,96,255,.1),rgba(0,230,255,.04))}
-.pkg-plat.active,.pkg-plat:hover{border-color:rgba(192,96,255,.5);box-shadow:0 0 24px rgba(192,96,255,.2)}
+.pkg-card{border-radius:14px;padding:10px 8px;cursor:pointer;text-align:center;transition:all .3s cubic-bezier(0.34,1.56,0.64,1);border:1px solid var(--border);position:relative;overflow:hidden;backdrop-filter:blur(12px) saturate(180%)}
+.pkg-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;background:linear-gradient(135deg,rgba(255,255,255,0.05),transparent 60%)}
+.pkg-card:hover::before,.pkg-card.active::before{opacity:1}
+.pkg-card:hover{transform:translateY(-5px) scale(1.03)}
+.pkg-card.active{transform:translateY(-5px) scale(1.03)}
+.pkg-silver{background:linear-gradient(135deg,rgba(192,192,192,.10),rgba(150,150,150,.04))}
+.pkg-silver.active,.pkg-silver:hover{
+  border-color:rgba(200,200,200,.6);
+  box-shadow:0 12px 40px rgba(0,0,0,.5),0 0 28px rgba(200,200,200,.3),0 0 60px rgba(200,200,200,.08),inset 0 1px 0 rgba(255,255,255,.1)}
+.pkg-gold-card{background:linear-gradient(135deg,rgba(255,215,0,.12),rgba(255,140,0,.05))}
+.pkg-gold-card.active,.pkg-gold-card:hover{
+  border-color:rgba(255,215,0,.65);
+  box-shadow:0 12px 40px rgba(0,0,0,.5),0 0 32px rgba(255,215,0,.4),0 0 70px rgba(255,215,0,.12),inset 0 1px 0 rgba(255,215,0,.15)}
+.pkg-plat{background:linear-gradient(135deg,rgba(192,96,255,.12),rgba(0,230,255,.05))}
+.pkg-plat.active,.pkg-plat:hover{
+  border-color:rgba(192,96,255,.65);
+  box-shadow:0 12px 40px rgba(0,0,0,.5),0 0 32px rgba(192,96,255,.4),0 0 70px rgba(0,230,255,.10),inset 0 1px 0 rgba(192,96,255,.15)}
 .pkg-icon{font-size:20px;margin-bottom:4px}
 .pkg-name{font-size:9px;font-weight:800;letter-spacing:2px;margin-bottom:3px}
 .pkg-price{font-size:16px;font-weight:900;line-height:1.2}
@@ -2167,6 +2174,14 @@ input[type=range]{
 .hdr-btn.btn-dup:hover{box-shadow:0 4px 20px rgba(255,215,0,.35);border-color:rgba(255,215,0,.6)}
 </style>
 <!-- WDS-SGM SCORE: 8.0/10 · SEAL: EVENTSPACE-SGMDS-2026-05 · Target 8.5+ -->
+<!-- GSAP + ScrollTrigger (all free Apr 2025) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/ScrollTrigger.min.js"></script>
+<!-- AOS -->
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<!-- Mo.js particle burst -->
+<script src="https://cdn.jsdelivr.net/npm/@mojs/core" defer></script>
 </head>
 <body class="wes-grain">
 <div class="wes-bg"><div class="wes-l1"></div><div class="wes-l2"></div><div class="wes-l3"></div></div>
@@ -2534,19 +2549,19 @@ input[type=range]{
         <!-- PACKAGE BUNDLES -->
         <div style="font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase">◈ Quick Packages</div>
         <div class="pkg-grid">
-          <div class="pkg-card pkg-silver" id="pkgSilver" onclick="applyPackage('silver')">
+          <div class="pkg-card pkg-silver" id="pkgSilver" onclick="applyPackage('silver')" data-aos="fade-up" data-aos-delay="0">
             <div class="pkg-icon">🥈</div>
             <div class="pkg-name" style="color:silver">SILVER</div>
             <div class="pkg-price" style="color:silver">$950</div>
             <div class="pkg-desc">Up to 30 guests · 6×9m · Chairs + Tables</div>
           </div>
-          <div class="pkg-card pkg-gold-card" id="pkgGold" onclick="applyPackage('gold')">
+          <div class="pkg-card pkg-gold-card" id="pkgGold" onclick="applyPackage('gold')" data-aos="fade-up" data-aos-delay="100">
             <div class="pkg-icon">🥇</div>
             <div class="pkg-name" style="color:var(--gold)">GOLD</div>
             <div class="pkg-price" style="color:var(--gold)">$1,650</div>
             <div class="pkg-desc">Up to 60 guests · 9×12m · Full setup + Lights</div>
           </div>
-          <div class="pkg-card pkg-plat" id="pkgPlat" onclick="applyPackage('platinum')">
+          <div class="pkg-card pkg-plat" id="pkgPlat" onclick="applyPackage('platinum')" data-aos="fade-up" data-aos-delay="200">
             <div class="pkg-icon">💎</div>
             <div class="pkg-name" style="color:var(--purple)">PLATINUM</div>
             <div class="pkg-price" style="color:var(--purple)">$2,980</div>
@@ -9137,6 +9152,38 @@ updateTotal = function() {
     tip.classList.remove('show');
   });
 })();
+
+// ── GSAP + AOS + Mo.js init ────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 20 });
+
+  if (window.gsap) {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.from('.hero-title, .wes-logo', { duration: 1.1, y: 28, opacity: 0, ease: 'power3.out', delay: 0.2, stagger: 0.12 });
+    gsap.from('.hero-subtitle, .hero-meta', { duration: 0.9, y: 18, opacity: 0, ease: 'power3.out', delay: 0.5, stagger: 0.1 });
+    gsap.from('.step-panel:first-child .panel-head', { scrollTrigger: { trigger: '.step-panel', start: 'top 88%' }, duration: 0.8, y: 24, opacity: 0, ease: 'power2.out' });
+  }
+
+  if (window.mojs) {
+    var _pkgBurst = null;
+    var _origApplyPackage = window.applyPackage;
+    window.applyPackage = function(pkg) {
+      if (!_pkgBurst) {
+        _pkgBurst = new mojs.Burst({
+          radius: { 20: 80 }, count: 10,
+          children: { shape: 'circle', radius: { 8: 0 }, fill: ['#ffd700','#00e5ff','#c060ff','#00ff88','#ff6b35'], duration: 750, easing: 'expo.out' }
+        });
+      }
+      var cardId = pkg === 'silver' ? 'pkgSilver' : pkg === 'gold' ? 'pkgGold' : 'pkgPlat';
+      var card = document.getElementById(cardId);
+      if (card) {
+        var r = card.getBoundingClientRect();
+        _pkgBurst.tune({ x: r.left + r.width / 2, y: r.top + r.height / 2 }).replay();
+      }
+      if (_origApplyPackage) _origApplyPackage.apply(this, arguments);
+    };
+  }
+});
 </script>
 </body>
 </html>
