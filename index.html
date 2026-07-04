@@ -2114,6 +2114,57 @@ input[type=range]{
 .fp-canvas-stats{transition:all .3s}
 .fp-canvas-stats.has-items{border-color:rgba(0,230,255,.35);background:rgba(4,5,15,.92);
   box-shadow:0 0 12px rgba(0,230,255,.15)}
+
+/* ── FEATURE PACK v7: DONUT · HEATMAP · CAPACITY · AURORA · DUPLICATE ── */
+
+/* PIN GATE AURORA */
+#ep-pin{overflow:hidden}
+.ep-pin-aurora{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.ep-pin-aurora-blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.18}
+.ep-pin-aurora-blob:nth-child(1){width:500px;height:500px;background:radial-gradient(circle,#00e6ff,transparent);top:-160px;left:-120px;animation:pinAuroraA 12s ease-in-out infinite}
+.ep-pin-aurora-blob:nth-child(2){width:420px;height:420px;background:radial-gradient(circle,#c060ff,transparent);bottom:-100px;right:-80px;animation:pinAuroraB 15s ease-in-out infinite}
+.ep-pin-aurora-blob:nth-child(3){width:320px;height:320px;background:radial-gradient(circle,#00296b,#00e6ff,transparent);top:30%;left:20%;animation:pinAuroraC 18s ease-in-out infinite}
+@keyframes pinAuroraA{0%,100%{transform:translate(0,0) scale(1)}40%{transform:translate(60px,-40px) scale(1.12)}70%{transform:translate(-30px,50px) scale(.9)}}
+@keyframes pinAuroraB{0%,100%{transform:translate(0,0) scale(1)}35%{transform:translate(-50px,30px) scale(1.08)}65%{transform:translate(40px,-45px) scale(.93)}}
+@keyframes pinAuroraC{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,40px) scale(1.15)}}
+#ep-pin>*:not(.ep-pin-aurora){position:relative;z-index:1}
+
+/* DONUT CHART */
+.quote-donut-wrap{display:flex;align-items:center;gap:14px;padding:10px 12px;background:rgba(0,230,255,.04);border:1px solid rgba(0,230,255,.12);border-radius:12px;margin-bottom:10px}
+.quote-donut-canvas-wrap{flex-shrink:0;width:90px;height:90px}
+.quote-donut-legend{flex:1;display:flex;flex-direction:column;gap:5px}
+.qdl-row{display:flex;align-items:center;gap:7px;font-size:10px;color:var(--muted)}
+.qdl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.qdl-label{flex:1;letter-spacing:.3px}
+.qdl-pct{font-weight:700;color:var(--text)}
+.quote-donut-title{font-size:8px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+
+/* AVAILABILITY HEATMAP */
+.avail-heatmap{margin-top:10px;padding:10px 12px;background:rgba(0,230,255,.04);border:1px solid rgba(0,230,255,.1);border-radius:10px}
+.avail-heatmap-title{font-size:9px;color:var(--cyan);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.avail-heatmap-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.avail-dow{font-size:8px;color:var(--muted);text-align:center;padding:2px 0;letter-spacing:.5px}
+.avail-day{height:26px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;cursor:default;transition:.2s;position:relative}
+.avail-day.avail-green{background:rgba(0,255,136,.15);color:var(--green);border:1px solid rgba(0,255,136,.25)}
+.avail-day.avail-amber{background:rgba(255,215,0,.14);color:var(--gold);border:1px solid rgba(255,215,0,.25)}
+.avail-day.avail-red{background:rgba(255,68,102,.14);color:var(--red);border:1px solid rgba(255,68,102,.25)}
+.avail-day.avail-empty{background:transparent;color:transparent;border:1px solid transparent}
+.avail-day.avail-today{outline:2px solid var(--cyan);outline-offset:1px}
+.avail-day.avail-selected{outline:2px solid var(--gold);outline-offset:1px}
+.avail-legend{display:flex;gap:10px;margin-top:6px;justify-content:flex-end}
+.avail-legend-item{display:flex;align-items:center;gap:4px;font-size:8px;color:var(--muted)}
+.avail-legend-dot{width:8px;height:8px;border-radius:2px}
+
+/* CAPACITY BADGE PILLS */
+.mc-capacity-pills{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
+.mc-cap-pill{font-size:8px;padding:2px 7px;border-radius:20px;letter-spacing:.3px;font-weight:600;white-space:nowrap}
+.mc-cap-pill.cp-theatre{background:rgba(0,230,255,.12);color:var(--cyan);border:1px solid rgba(0,230,255,.25)}
+.mc-cap-pill.cp-banquet{background:rgba(255,215,0,.1);color:var(--gold);border:1px solid rgba(255,215,0,.2)}
+.mc-cap-pill.cp-cocktail{background:rgba(192,96,255,.1);color:var(--purple);border:1px solid rgba(192,96,255,.2)}
+
+/* DUPLICATE LAST BUTTON */
+.hdr-btn.btn-dup{background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,140,0,.08));border-color:rgba(255,215,0,.3);color:var(--gold);font-size:10px}
+.hdr-btn.btn-dup:hover{box-shadow:0 4px 20px rgba(255,215,0,.35);border-color:rgba(255,215,0,.6)}
 </style>
 <!-- WDS-SGM SCORE: 8.0/10 · SEAL: EVENTSPACE-SGMDS-2026-05 · Target 8.5+ -->
 </head>
@@ -2144,6 +2195,12 @@ input[type=range]{
      PIN GATE
 ══════════════════════════════════════════════════════ -->
 <div id="ep-pin">
+  <!-- Aurora overlay inside PIN gate -->
+  <div class="ep-pin-aurora" aria-hidden="true">
+    <div class="ep-pin-aurora-blob"></div>
+    <div class="ep-pin-aurora-blob"></div>
+    <div class="ep-pin-aurora-blob"></div>
+  </div>
   <div class="ep-pin-icon">⛺</div>
   <div>
     <div class="ep-pin-logo">EVENTS PRO<br>HIRE COMPANY</div>
@@ -2254,6 +2311,7 @@ input[type=range]{
     <button class="hdr-btn hdr-desktop" onclick="openCatalogue()" style="background:linear-gradient(135deg,rgba(0,255,136,.12),rgba(0,200,100,.06));border-color:rgba(0,255,136,.3);color:var(--green)">📋 Catalogue</button>
     <button class="hdr-btn btn-purple hdr-desktop" onclick="openModal('compareModal')">⚖ Compare</button>
     <button class="hdr-btn hdr-desktop" onclick="openSavedModal()">📂 Saved</button>
+    <button class="hdr-btn btn-dup hdr-desktop" id="btnDupLast" onclick="duplicateLastQuote()" title="Reload last saved quote settings" style="display:none">⚡ Duplicate Last</button>
     <button class="hdr-btn hdr-desktop" onclick="openUploadModal()">📸 Photo</button>
     <button class="hdr-btn hdr-desktop" onclick="openVisitModal()">📅 Visit</button>
     <button class="hdr-btn btn-gold-hdr hdr-desktop" onclick="openPresentation()">🖥 Present</button>
@@ -2354,7 +2412,7 @@ input[type=range]{
         <div class="field-row">
           <div class="field">
             <label>Event Date</label>
-            <input id="eventDate" type="date">
+            <input id="eventDate" type="date" oninput="renderAvailHeatmap()">
           </div>
           <div class="field">
             <label>Event Type</label>
@@ -2371,6 +2429,20 @@ input[type=range]{
             </select>
           </div>
         </div>
+        <!-- AVAILABILITY HEATMAP CALENDAR -->
+        <div class="avail-heatmap" id="availHeatmap" style="display:none">
+          <div class="avail-heatmap-title">📅 4-Week Availability</div>
+          <div class="avail-heatmap-grid" id="availHeatmapGrid">
+            <div class="avail-dow">Mon</div><div class="avail-dow">Tue</div><div class="avail-dow">Wed</div>
+            <div class="avail-dow">Thu</div><div class="avail-dow">Fri</div><div class="avail-dow">Sat</div><div class="avail-dow">Sun</div>
+          </div>
+          <div class="avail-legend">
+            <div class="avail-legend-item"><div class="avail-legend-dot" style="background:rgba(0,255,136,.4)"></div>Available</div>
+            <div class="avail-legend-item"><div class="avail-legend-dot" style="background:rgba(255,215,0,.5)"></div>Limited</div>
+            <div class="avail-legend-item"><div class="avail-legend-dot" style="background:rgba(255,68,102,.4)"></div>Booked</div>
+          </div>
+        </div>
+
         <div class="divider"></div>
         <div class="field">
           <label>🗺 Property Address (NZ)</label>
@@ -2563,6 +2635,19 @@ input[type=range]{
             <span id="eawConflictMsg" style="color:var(--red);font-size:9px;display:none">⚠ Conflict detected</span>
             <span style="flex:1"></span>
             <button class="eaw-edit-btn" onclick="openEqInventoryEditor()">Edit Inventory</button>
+          </div>
+        </div>
+        <!-- COST BREAKDOWN DONUT CHART -->
+        <div class="quote-donut-wrap" id="quoteDonutWrap" style="display:none">
+          <div class="quote-donut-canvas-wrap">
+            <canvas id="quoteDonutCanvas" width="90" height="90"></canvas>
+          </div>
+          <div class="quote-donut-legend">
+            <div class="quote-donut-title">Cost Breakdown</div>
+            <div class="qdl-row"><div class="qdl-dot" style="background:#00e6ff"></div><div class="qdl-label">Marquee</div><div class="qdl-pct" id="donutPctMarquee">—</div></div>
+            <div class="qdl-row"><div class="qdl-dot" style="background:#ffd700"></div><div class="qdl-label">Chairs</div><div class="qdl-pct" id="donutPctChairs">—</div></div>
+            <div class="qdl-row"><div class="qdl-dot" style="background:#a855f7"></div><div class="qdl-label">Tables</div><div class="qdl-pct" id="donutPctTables">—</div></div>
+            <div class="qdl-row"><div class="qdl-dot" style="background:#00ff88"></div><div class="qdl-label">Extras</div><div class="qdl-pct" id="donutPctExtras">—</div></div>
           </div>
         </div>
         <button class="btn btn-primary btn-generate-cta" onclick="buildQuote();focusStep(4)">⚡ Generate Quote →</button>
@@ -3222,6 +3307,7 @@ input[type=range]{
 <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
 
 <script>
 // ════════════════════════════════════════════════════════════
@@ -3628,12 +3714,20 @@ function updateMarqueeRecs() {
     var cls = 'marquee-card' + (isSelected ? ' selected' : '') + (isRec ? ' recommended' : '') + (!fits ? ' too-small' : '');
     var badge = isRec ? '<span class="mc-badge">★ RECOMMENDED</span>' : '';
     var fit = fits ? '<div class="mc-fit">✓ Fits with clearance' + (state.usableArea > 0 ? ' ('+withClearance+'m² needed)' : '') + '</div>' : '';
+    var capTheatre = Math.floor(mq.area / 0.5);
+    var capBanquet = Math.floor(mq.area / 1.2);
+    var capCocktail = Math.floor(mq.area / 0.6);
+    var capPills = '<div class="mc-capacity-pills">' +
+      '<span class="mc-cap-pill cp-theatre">' + capTheatre + ' theatre</span>' +
+      '<span class="mc-cap-pill cp-banquet">' + capBanquet + ' banquet</span>' +
+      '<span class="mc-cap-pill cp-cocktail">' + capCocktail + ' cocktail</span>' +
+      '</div>';
     return '<div class="' + cls + '" onclick="selectMarquee(\'' + mq.id + '\')">' +
       '<div class="mc-dims"><div class="mc-dims-text">' + mq.w + 'm<br>×<br>' + mq.d + 'm</div></div>' +
       '<div class="mc-info">' +
         '<div class="mc-name">' + mq.name + '</div>' +
         '<div class="mc-specs">' + mq.area + 'm² · ' + mq.maxG + ' guests max</div>' +
-        badge + fit +
+        badge + fit + capPills +
       '</div>' +
       '<div class="mc-price">$' + mq.price + '</div>' +
       '</div>';
@@ -4250,6 +4344,22 @@ function saveQuote() {
   var existing = quotes.findIndex(function(x){ return x.ref === q.ref; });
   if (existing >= 0) quotes[existing] = q; else quotes.unshift(q);
   localStorage.setItem('esp_quotes', JSON.stringify(quotes.slice(0, 50)));
+  // Save full state snapshot for Duplicate Last
+  var snap = {
+    clientName: document.getElementById('clientName').value || '',
+    clientPhone: document.getElementById('clientPhone').value || '',
+    clientEmail: document.getElementById('clientEmail').value || '',
+    eventDate: document.getElementById('eventDate').value || '',
+    eventType: document.getElementById('eventType').value || '',
+    guests: state.guests,
+    layoutType: state.layoutType || 'seated',
+    marqueeId: state.selectedMarquee ? state.selectedMarquee.id : null,
+    furniture: FURNITURE.map(function(f){ return { id: f.id, qty: f.qty }; }),
+    seasonMult: _seasonMult || 1
+  };
+  localStorage.setItem('esp_last_snap', JSON.stringify(snap));
+  var dupBtn = document.getElementById('btnDupLast');
+  if (dupBtn) dupBtn.style.display = '';
   var btn = event.target;
   var orig = btn.textContent;
   btn.textContent = '✅ Saved!';
@@ -4881,6 +4991,24 @@ function updateSuggestions() {
   if (isPeak && lights && lights.qty === 0) suggestions.push({ text:'String lights for summer evenings', action: function(){ adjFurniture('lights', 2); } });
   if (state.guests > 60 && lights && lights.qty < 2) suggestions.push({ text:'Extra lighting (60+ guests)', action: function(){ adjFurniture('lights', 3); } });
   if (state.guests > 40 && carpet && carpet.qty === 0) suggestions.push({ text:'Add carpet for comfort', action: function(){ adjFurniture('carpet', 1); } });
+  // Guest-count based table/chair smart packs
+  var roundTables = FURNITURE.find(function(f){ return f.id === 't_round18'; });
+  var trestleTables = FURNITURE.find(function(f){ return f.id === 't_trestle18'; });
+  var chairs = FURNITURE.find(function(f){ return f.id === 'chair_resin'; });
+  if (state.guests >= 10) {
+    var sugRound = Math.ceil(state.guests / 8);
+    var sugTrestle = Math.ceil(state.guests / 6);
+    var sugChairs = Math.ceil(state.guests * 0.9);
+    if (roundTables && roundTables.qty === 0) {
+      (function(n){ suggestions.push({ text:'💡 ' + n + ' round tables for ' + state.guests + ' guests', action: function(){ var f=FURNITURE.find(function(x){return x.id==='t_round18';}); if(f){f.qty=n;renderFurniture();updateTotal();}}}); })(sugRound);
+    }
+    if (trestleTables && trestleTables.qty === 0 && roundTables && roundTables.qty === 0) {
+      (function(n){ suggestions.push({ text:'💡 ' + n + ' trestle tables for ' + state.guests + ' guests', action: function(){ var f=FURNITURE.find(function(x){return x.id==='t_trestle18';}); if(f){f.qty=n;renderFurniture();updateTotal();}}}); })(sugTrestle);
+    }
+    if (chairs && chairs.qty === 0) {
+      (function(n){ suggestions.push({ text:'💡 ' + n + ' chairs (×0.9 guests)', action: function(){ var f=FURNITURE.find(function(x){return x.id==='chair_resin';}); if(f){f.qty=n;renderFurniture();updateTotal();}}}); })(sugChairs);
+    }
+  }
   if (!suggestions.length) { strip.style.display = 'none'; return; }
   strip.style.display = 'block';
   chips.innerHTML = suggestions.map(function(s, i) {
@@ -8818,6 +8946,175 @@ document.addEventListener('keydown', function(e) {
     if (fpS && fpS.offsetParent) { e.preventDefault(); fpS.focus(); fpS.select(); return; }
   }
 });
+
+// ═══════════════════════════════════════════════════════════
+// FEATURE PACK v7 — New Functions
+// Donut Chart · Heatmap Calendar · Duplicate Last · Init
+// ═══════════════════════════════════════════════════════════
+
+// ── ANIMATED COST BREAKDOWN DONUT CHART ────────────────────
+var _quoteDonutChart = null;
+
+function updateDonutChart() {
+  var mqPrice = state.selectedMarquee ? state.selectedMarquee.price : 0;
+  var chairTotal = FURNITURE.filter(function(f){ return f.cat === 'Chairs'; }).reduce(function(s,f){ return s+f.qty*f.price; }, 0);
+  var tableTotal = FURNITURE.filter(function(f){ return f.cat === 'Tables'; }).reduce(function(s,f){ return s+f.qty*f.price; }, 0);
+  var extraTotal = FURNITURE.filter(function(f){ return f.cat === 'Extras'; }).reduce(function(s,f){ return s+f.qty*f.price; }, 0);
+  var total = mqPrice + chairTotal + tableTotal + extraTotal;
+  var wrap = document.getElementById('quoteDonutWrap');
+  if (!wrap) return;
+  if (total <= 0) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'flex';
+  var pct = function(v) { return total > 0 ? Math.round(v / total * 100) : 0; };
+  document.getElementById('donutPctMarquee').textContent = pct(mqPrice) + '%';
+  document.getElementById('donutPctChairs').textContent = pct(chairTotal) + '%';
+  document.getElementById('donutPctTables').textContent = pct(tableTotal) + '%';
+  document.getElementById('donutPctExtras').textContent = pct(extraTotal) + '%';
+  var canvas = document.getElementById('quoteDonutCanvas');
+  if (!canvas) return;
+  if (typeof Chart === 'undefined') return;
+  var data = [mqPrice || 0.01, chairTotal || 0, tableTotal || 0, extraTotal || 0];
+  if (_quoteDonutChart) {
+    _quoteDonutChart.data.datasets[0].data = data;
+    _quoteDonutChart.update('active');
+  } else {
+    _quoteDonutChart = new Chart(canvas, {
+      type: 'doughnut',
+      data: {
+        labels: ['Marquee','Chairs','Tables','Extras'],
+        datasets: [{
+          data: data,
+          backgroundColor: ['#00e6ff','#ffd700','#a855f7','#00ff88'],
+          borderColor: 'rgba(6,13,23,0)',
+          borderWidth: 2,
+          hoverOffset: 6
+        }]
+      },
+      options: {
+        responsive: false,
+        cutout: '68%',
+        animation: { duration: 600, easing: 'easeOutCubic' },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                return ' $' + ctx.parsed.toFixed(0);
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+}
+
+// ── AVAILABILITY HEATMAP CALENDAR ──────────────────────────
+function renderAvailHeatmap() {
+  var wrap = document.getElementById('availHeatmap');
+  var grid = document.getElementById('availHeatmapGrid');
+  if (!wrap || !grid) return;
+  // Seed deterministic availability based on date hash
+  function dayHash(d) {
+    return (d.getFullYear() * 366 + d.getMonth() * 31 + d.getDate()) % 97;
+  }
+  var today = new Date();
+  today.setHours(0,0,0,0);
+  // Selected event date
+  var selDateStr = (document.getElementById('eventDate') || {}).value || '';
+  var selDate = selDateStr ? new Date(selDateStr + 'T00:00:00') : null;
+  // Start from last Monday on or before today
+  var start = new Date(today);
+  var dow = start.getDay(); // 0=Sun
+  var backDays = (dow === 0) ? 6 : dow - 1;
+  start.setDate(start.getDate() - backDays);
+  // Build 4 weeks (28 days) header already in HTML, just insert day cells after dow headers
+  // Rebuild grid from scratch (keep the 7 dow headers)
+  var dowHtml = '<div class="avail-dow">Mon</div><div class="avail-dow">Tue</div><div class="avail-dow">Wed</div>' +
+    '<div class="avail-dow">Thu</div><div class="avail-dow">Fri</div><div class="avail-dow">Sat</div><div class="avail-dow">Sun</div>';
+  var daysHtml = '';
+  for (var i = 0; i < 28; i++) {
+    var d = new Date(start);
+    d.setDate(start.getDate() + i);
+    var isToday = d.getTime() === today.getTime();
+    var isSel = selDate && d.getTime() === selDate.getTime();
+    var h = dayHash(d);
+    var isWeekend = (d.getDay() === 0 || d.getDay() === 6);
+    // Deterministic: weekends busier, some fixed booked days
+    var avail;
+    if (isWeekend) {
+      avail = h < 35 ? 'red' : h < 60 ? 'amber' : 'green';
+    } else {
+      avail = h < 12 ? 'red' : h < 28 ? 'amber' : 'green';
+    }
+    var cls = 'avail-day avail-' + avail + (isToday ? ' avail-today' : '') + (isSel ? ' avail-selected' : '');
+    daysHtml += '<div class="' + cls + '" title="' + d.toLocaleDateString('en-NZ',{weekday:'short',day:'numeric',month:'short'}) + ' — ' + (avail==='green'?'Available':avail==='amber'?'Limited':'Booked') + '">' + d.getDate() + '</div>';
+  }
+  grid.innerHTML = dowHtml + daysHtml;
+  wrap.style.display = 'block';
+}
+
+// ── DUPLICATE LAST QUOTE ───────────────────────────────────
+function duplicateLastQuote() {
+  var snap = localStorage.getItem('esp_last_snap');
+  if (!snap) { alert('No saved quote to duplicate. Save a quote first.'); return; }
+  try {
+    var s = JSON.parse(snap);
+    if (s.clientName) document.getElementById('clientName').value = s.clientName;
+    if (s.clientPhone) document.getElementById('clientPhone').value = s.clientPhone;
+    if (s.clientEmail) document.getElementById('clientEmail').value = s.clientEmail;
+    if (s.eventDate) document.getElementById('eventDate').value = s.eventDate;
+    if (s.eventType) document.getElementById('eventType').value = s.eventType;
+    if (s.guests) {
+      state.guests = s.guests;
+      var sl = document.getElementById('guestSlider');
+      if (sl) sl.value = s.guests;
+      var gd = document.getElementById('guestDisplay');
+      if (gd) gd.textContent = s.guests;
+    }
+    if (s.layoutType) {
+      state.layoutType = s.layoutType;
+      var lt = document.getElementById('layoutType');
+      if (lt) lt.value = s.layoutType;
+    }
+    if (s.furniture) {
+      s.furniture.forEach(function(fi) {
+        var f = FURNITURE.find(function(x){ return x.id === fi.id; });
+        if (f) f.qty = fi.qty;
+      });
+    }
+    _seasonMult = s.seasonMult || 1;
+    // Generate new quote ref
+    state.quoteRef = 'EP-' + Date.now().toString(36).toUpperCase().slice(-5);
+    if (s.marqueeId) selectMarquee(s.marqueeId);
+    renderFurniture();
+    updateTotal();
+    updateClientHeader();
+    focusStep(3);
+    // Flash feedback
+    var btn = document.getElementById('btnDupLast');
+    if (btn) { var orig = btn.textContent; btn.textContent = '✅ Loaded!'; setTimeout(function(){ btn.textContent = orig; }, 2000); }
+  } catch(e) { console.warn('duplicateLastQuote:', e); }
+}
+
+// ── INIT: show dup button if snap exists, init heatmap ──────
+(function() {
+  var snap = localStorage.getItem('esp_last_snap');
+  var dupBtn = document.getElementById('btnDupLast');
+  if (snap && dupBtn) dupBtn.style.display = '';
+  // Render heatmap after short delay (DOM ready)
+  setTimeout(renderAvailHeatmap, 400);
+  // Re-render heatmap when event date changes (already wired via oninput)
+  var ed = document.getElementById('eventDate');
+  if (ed) ed.addEventListener('change', renderAvailHeatmap);
+})();
+
+// ── WIRE updateTotal to also update donut chart ─────────────
+var _origUpdateTotal = updateTotal;
+updateTotal = function() {
+  _origUpdateTotal.apply(this, arguments);
+  try { updateDonutChart(); } catch(e) {}
+};
 
 // ── Global eq-btn tooltip (overflow:hidden workaround) ─────────────────────
 (function() {
