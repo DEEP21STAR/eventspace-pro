@@ -2282,6 +2282,129 @@ input[type=range]{
 #step3 .panel-head{border-left:3px solid rgba(255,215,0,.5)}
 #step4 .panel-head{border-left:3px solid rgba(0,255,136,.5)}
 #step5 .panel-head{border-left:3px solid rgba(255,140,0,.5)}
+
+/* ══════════════════════════════════════════
+   ELEVATION v3 — ONBOARDING + STEP 1 + HELP
+   ══════════════════════════════════════════ */
+/* ── WELCOME RIBBON ── */
+#welcomeRibbon{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(90deg,rgba(0,230,255,.08),rgba(192,96,255,.08),rgba(0,230,255,.08));background-size:200% 100%;animation:ribbonFlow 6s linear infinite;border-bottom:1px solid rgba(0,230,255,.2);padding:7px 20px;font-size:11px;color:rgba(255,255,255,.7);z-index:590;position:relative}
+@keyframes ribbonFlow{0%{background-position:100% 0}100%{background-position:-100% 0}}
+#welcomeRibbon.hidden{display:none}
+.ribbon-text b{color:var(--cyan)}
+.ribbon-actions{display:flex;align-items:center;gap:10px}
+.ribbon-help{color:var(--cyan);cursor:pointer;font-weight:700;font-size:11px;text-decoration:underline;text-underline-offset:2px}
+.ribbon-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:0 4px;transition:color .2s}
+.ribbon-close:hover{color:var(--red)}
+/* ── WELCOME OVERLAY ── */
+#welcomeOverlay{display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.92);backdrop-filter:blur(16px);align-items:center;justify-content:center}
+#welcomeOverlay.open{display:flex;animation:ovFadeIn .4s ease}
+@keyframes ovFadeIn{from{opacity:0}to{opacity:1}}
+.ov-wrap{width:min(720px,96vw);background:linear-gradient(160deg,rgba(10,12,30,.98),rgba(6,8,18,.98));border:1px solid rgba(0,230,255,.2);border-radius:24px;overflow:hidden;box-shadow:0 0 80px rgba(0,230,255,.12),0 0 160px rgba(192,96,255,.06)}
+.ov-head{padding:28px 32px 20px;text-align:center;background:linear-gradient(180deg,rgba(0,230,255,.06),transparent);border-bottom:1px solid rgba(0,230,255,.1)}
+.ov-logo{font-size:28px;margin-bottom:10px}
+.ov-title{font-size:1.5rem;font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.ov-sub{font-size:.82rem;color:var(--muted);margin-top:4px;letter-spacing:.5px}
+.ov-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:24px 28px}
+@media(max-width:600px){.ov-steps{grid-template-columns:1fr 1fr}}
+.ov-step{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:16px 12px;text-align:center;transition:all .3s}
+.ov-step:hover{background:rgba(0,230,255,.06);border-color:rgba(0,230,255,.2);transform:translateY(-3px)}
+.ov-step-num{width:32px;height:32px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:900;color:#000;background:linear-gradient(135deg,var(--cyan),var(--purple));box-shadow:0 0 12px rgba(0,230,255,.3)}
+.ov-step-icon{font-size:20px;margin-bottom:8px}
+.ov-step-name{font-size:.7rem;font-weight:700;letter-spacing:1.5px;color:var(--cyan);text-transform:uppercase;margin-bottom:4px}
+.ov-step-desc{font-size:.68rem;color:var(--muted);line-height:1.5}
+.ov-foot{padding:20px 28px 24px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,.05)}
+.ov-begin{padding:12px 32px;border-radius:12px;border:1px solid rgba(0,230,255,.5);background:linear-gradient(135deg,rgba(0,230,255,.25),rgba(192,96,255,.18));color:var(--cyan);font-weight:800;font-size:.9rem;letter-spacing:1px;cursor:pointer;font-family:var(--font);transition:all .25s;box-shadow:0 0 20px rgba(0,230,255,.2)}
+.ov-begin:hover{background:linear-gradient(135deg,rgba(0,230,255,.4),rgba(192,96,255,.3));box-shadow:0 6px 30px rgba(0,230,255,.4);transform:translateY(-2px)}
+.ov-skip{font-size:.75rem;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+/* ── STEP 1 HERO BANNER ── */
+.s1-hero{margin-bottom:14px;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,rgba(0,230,255,.08),rgba(192,96,255,.06));border:1px solid rgba(0,230,255,.2);padding:12px 14px 12px 16px;display:flex;align-items:center;justify-content:space-between;animation:s1HeroPulse 3s ease-in-out infinite}
+@keyframes s1HeroPulse{0%,100%{border-color:rgba(0,230,255,.2);box-shadow:0 0 0 0 rgba(0,230,255,0)}50%{border-color:rgba(0,230,255,.45);box-shadow:0 0 18px rgba(0,230,255,.12)}}
+.s1-hero-badge{font-size:.6rem;letter-spacing:2px;color:var(--cyan);text-transform:uppercase;font-weight:700;margin-bottom:3px}
+.s1-hero-title{font-size:.88rem;font-weight:800;color:var(--text)}
+.s1-hero-sub{font-size:.7rem;color:var(--muted);margin-top:2px}
+.s1-hero-arrow{font-size:22px;animation:arrowBounce 1.2s ease-in-out infinite;flex-shrink:0}
+@keyframes arrowBounce{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+.s1-hero-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:0 2px 0 10px;transition:color .2s;align-self:flex-start}
+.s1-hero-close:hover{color:var(--text)}
+/* ── FIELD PROGRESS ── */
+.s1-progress{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:8px 12px;background:rgba(255,255,255,.025);border-radius:8px;border:1px solid rgba(255,255,255,.06)}
+.s1-prog-track{flex:1;height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}
+.s1-prog-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--cyan),var(--green));transition:width .4s ease;box-shadow:0 0 6px rgba(0,255,136,.4)}
+.s1-prog-text{font-size:.65rem;color:var(--muted);letter-spacing:.5px;white-space:nowrap;font-weight:600}
+.s1-prog-pct{font-size:.65rem;color:var(--green);font-weight:800;min-width:24px;text-align:right}
+/* ── FIELD CHECKMARKS ── */
+.field-wrap{position:relative}
+.field-check{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:18px;height:18px;border-radius:50%;background:rgba(0,255,136,.15);border:1px solid rgba(0,255,136,.4);color:var(--green);font-size:10px;font-weight:900;display:none;align-items:center;justify-content:center;animation:checkPop .25s cubic-bezier(.34,1.56,.64,1)}
+.field-check.show{display:flex}
+@keyframes checkPop{from{transform:translateY(-50%) scale(0)}to{transform:translateY(-50%) scale(1)}}
+/* ── QUICK-FILL CHIPS ── */
+.qf-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.qf-chip{padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:rgba(255,255,255,.6);font-size:.7rem;cursor:pointer;font-family:var(--font);font-weight:600;transition:all .18s}
+.qf-chip:hover,.qf-chip.active{background:rgba(0,230,255,.12);border-color:rgba(0,230,255,.4);color:var(--cyan)}
+/* ── BUSINESS DASHBOARD COLLAPSIBLE ── */
+.biz-dash-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:10px;color:var(--muted);font-size:.68rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;transition:color .2s;user-select:none}
+.biz-dash-toggle:hover{color:var(--cyan)}
+.biz-dash-arrow{transition:transform .25s;font-size:10px}
+.biz-dash-arrow.open{transform:rotate(180deg)}
+#bizDashContent{display:none}
+#bizDashContent.open{display:block;animation:fadeUp .3s ease}
+/* ── CONTINUE BUTTON STATES ── */
+.btn-continue-locked{background:rgba(255,255,255,.04)!important;border-color:rgba(255,255,255,.1)!important;color:var(--muted)!important;cursor:default!important;box-shadow:none!important;transform:none!important}
+.btn-continue-ready{background:linear-gradient(135deg,rgba(0,230,255,.35),rgba(192,96,255,.28))!important;border-color:rgba(0,230,255,.55)!important;color:var(--cyan)!important;animation:continuePulse 2s ease-in-out infinite}
+@keyframes continuePulse{0%,100%{box-shadow:var(--glow-cyan),0 4px 20px rgba(0,230,255,.2)}50%{box-shadow:0 0 32px rgba(0,230,255,.55),0 6px 30px rgba(0,230,255,.35)}}
+.btn-continue-done{background:linear-gradient(135deg,rgba(0,255,136,.28),rgba(0,200,100,.2))!important;border-color:rgba(0,255,136,.5)!important;color:var(--green)!important;animation:none!important}
+/* ── TOOLS DROPDOWN ── */
+.tools-dropdown{position:relative;display:inline-block}
+.tools-menu{display:none;position:absolute;top:calc(100% + 8px);right:0;background:rgba(8,12,30,.98);border:1px solid rgba(0,230,255,.18);border-radius:12px;padding:6px;min-width:180px;z-index:700;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 30px rgba(0,230,255,.08);backdrop-filter:blur(16px)}
+.tools-menu.open{display:block;animation:menuDrop .2s cubic-bezier(.34,1.56,.64,1)}
+@keyframes menuDrop{from{transform:translateY(-8px) scale(.95);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+.tools-menu-item{display:flex;align-items:center;gap:9px;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:.78rem;font-weight:600;color:rgba(255,255,255,.7);transition:all .15s;border:none;background:none;font-family:var(--font);width:100%;text-align:left}
+.tools-menu-item:hover{background:rgba(0,230,255,.1);color:var(--cyan)}
+.tools-menu-sep{height:1px;background:rgba(255,255,255,.06);margin:4px 6px}
+/* ── STEP TOOLTIPS ── */
+.sn-tooltip{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:rgba(8,12,30,.98);border:1px solid rgba(0,230,255,.2);border-radius:8px;padding:6px 10px;font-size:.65rem;color:var(--text);white-space:nowrap;z-index:600;box-shadow:0 8px 24px rgba(0,0,0,.5);pointer-events:none;letter-spacing:.3px}
+.sn-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:rgba(0,230,255,.2)}
+.sn-step:hover .sn-tooltip{display:block;animation:ttFadeIn .18s ease}
+@keyframes ttFadeIn{from{opacity:0;transform:translateX(-50%) translateY(4px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+/* ── MAP GUIDANCE OVERLAY ── */
+#mapGuideOverlay{position:absolute;bottom:60px;left:50%;transform:translateX(-50%);background:rgba(8,12,30,.92);border:1px solid rgba(0,230,255,.3);border-radius:10px;padding:9px 16px;font-size:.78rem;color:var(--cyan);pointer-events:none;z-index:450;backdrop-filter:blur(8px);display:none;animation:mapGuideIn .4s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+#mapGuideOverlay.show{display:block}
+@keyframes mapGuideIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+/* ── HELP MODAL DEMO SCREENS ── */
+.help-wrap{max-height:92vh;display:flex;flex-direction:column}
+.help-slides{flex:1;overflow:hidden}
+.hslide-demo{margin-top:12px;border-radius:12px;overflow:hidden;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.08);position:relative}
+.hslide-demo-screen{background:rgba(4,6,18,.9);padding:14px;min-height:110px;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden}
+.demo-anim-bar{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;margin-bottom:4px}
+.demo-anim-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--cyan),var(--purple));animation:demoBarFill 3s ease-in-out infinite}
+@keyframes demoBarFill{0%{width:0%}60%{width:100%}100%{width:100%}}
+.demo-field-row{display:flex;gap:6px}
+.demo-field{flex:1;height:28px;border-radius:6px;border:1px solid rgba(0,230,255,.25);background:rgba(0,230,255,.06);display:flex;align-items:center;padding:0 8px;font-size:.65rem;color:rgba(255,255,255,.5)}
+.demo-typed-text{color:var(--text);overflow:hidden;animation:typeReveal 2s steps(20,end) infinite;white-space:nowrap}
+@keyframes typeReveal{0%{max-width:0}60%,100%{max-width:200px}}
+.demo-cursor{display:inline-block;width:2px;height:14px;background:var(--cyan);margin-left:2px;animation:typeCursor .7s step-end infinite;vertical-align:middle}
+@keyframes typeCursor{0%,100%{opacity:1}50%{opacity:0}}
+.demo-map-preview{height:70px;background:linear-gradient(135deg,rgba(30,60,30,.6),rgba(20,40,20,.4));border-radius:8px;border:1px solid rgba(0,255,136,.15);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.demo-pin{font-size:20px;animation:pinDrop .8s cubic-bezier(.34,1.56,.64,1) 1s both infinite;display:block}
+@keyframes pinDrop{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-4px) scale(1.1)}}
+.demo-marquee-cards{display:flex;gap:6px}
+.demo-mq-card{flex:1;padding:8px 6px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);text-align:center;transition:all .2s}
+.demo-mq-card.hl{border-color:var(--gold);background:rgba(255,215,0,.08);animation:cardPulseGold 1.5s ease-in-out infinite}
+@keyframes cardPulseGold{0%,100%{box-shadow:0 0 0 0 rgba(255,215,0,0)}50%{box-shadow:0 0 12px rgba(255,215,0,.4)}}
+.demo-mq-name{font-size:.6rem;font-weight:800;letter-spacing:1px}
+.demo-mq-price{font-size:.65rem;color:var(--gold)}
+.demo-quote-row{display:flex;justify-content:space-between;align-items:center;padding:5px 8px;background:rgba(255,255,255,.03);border-radius:6px}
+.demo-q-lbl{font-size:.62rem;color:var(--muted)}
+.demo-q-val{font-size:.68rem;font-weight:700;color:var(--gold)}
+.demo-total{padding:8px 10px;border-radius:8px;text-align:center;background:rgba(0,230,255,.06);border:1px solid rgba(0,230,255,.2)}
+.demo-total-val{font-size:1.1rem;font-weight:900;color:var(--gold)}
+.demo-btn-row{display:flex;gap:6px;margin-top:6px}
+.demo-btn{flex:1;padding:6px;border-radius:6px;font-size:.6rem;font-weight:700;text-align:center}
+.demo-btn.green{background:rgba(0,255,136,.15);border:1px solid rgba(0,255,136,.3);color:var(--green)}
+.demo-btn.gold{background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.3);color:var(--gold)}
+.demo-btn.cyan{background:rgba(0,230,255,.12);border:1px solid rgba(0,230,255,.3);color:var(--cyan)}
+.hslide-shortcut{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.hslide-shortcut-tag{padding:3px 8px;border-radius:20px;font-size:.62rem;font-weight:700;background:rgba(0,230,255,.08);border:1px solid rgba(0,230,255,.2);color:var(--cyan);letter-spacing:.5px}
 </style>
 <!-- WDS-SGM SCORE: 8.0/10 · SEAL: EVENTSPACE-SGMDS-2026-05 · Target 8.5+ -->
 <!-- GSAP already loaded at top of <head> (lines 25-31) — duplicates removed -->
@@ -2352,6 +2475,37 @@ input[type=range]{
   </div>
   <div class="ep-pin-error" id="ep-pin-error"></div>
   <div class="ep-pin-hint">Contact Inaal on 021 146 1766 for access</div>
+</div>
+
+<!-- ── WELCOME OVERLAY ── -->
+<div id="welcomeOverlay">
+  <div class="ov-wrap">
+    <div class="ov-head">
+      <div class="ov-logo">⛺</div>
+      <div class="ov-title">EVENTSPACE PRO</div>
+      <div class="ov-sub">MARQUEE &amp; EVENT HIRE MANAGEMENT · WHETŪ DIGITAL</div>
+    </div>
+    <div class="ov-steps">
+      <div class="ov-step"><div class="ov-step-num">1</div><div class="ov-step-icon">📋</div><div class="ov-step-name">Client</div><div class="ov-step-desc">Enter client details &amp; find the property on the map</div></div>
+      <div class="ov-step"><div class="ov-step-num">2</div><div class="ov-step-icon">🗺</div><div class="ov-step-name">Zone</div><div class="ov-step-desc">Draw the outdoor event space to calculate area</div></div>
+      <div class="ov-step"><div class="ov-step-num">3</div><div class="ov-step-icon">⛺</div><div class="ov-step-name">Package</div><div class="ov-step-desc">Choose marquee &amp; furniture package for guests</div></div>
+      <div class="ov-step"><div class="ov-step-num">4</div><div class="ov-step-icon">💰</div><div class="ov-step-name">Quote</div><div class="ov-step-desc">Review, adjust &amp; send a professional quote</div></div>
+      <div class="ov-step"><div class="ov-step-num">5</div><div class="ov-step-icon">📅</div><div class="ov-step-name">Bookings</div><div class="ov-step-desc">Manage confirmed bookings in calendar view</div></div>
+    </div>
+    <div class="ov-foot">
+      <button class="ov-begin" onclick="dismissWelcome(false)">🚀 Get Started</button>
+      <span class="ov-skip" onclick="dismissWelcome(true)">Skip intro</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── WELCOME RIBBON ── -->
+<div id="welcomeRibbon" class="hidden">
+  <span class="ribbon-text">👋 <b>Welcome back!</b> You're on <b>Step 1</b> — enter client details to begin a new quote.</span>
+  <div class="ribbon-actions">
+    <span class="ribbon-help" onclick="openHelpGuide()">? View guide</span>
+    <button class="ribbon-close" onclick="document.getElementById('welcomeRibbon').classList.add('hidden')">✕</button>
+  </div>
 </div>
 
 <!-- AURORA -->
@@ -2430,20 +2584,29 @@ input[type=range]{
     <div class="hdr-client-name" id="hdrClientName">— New Quote —</div>
   </div>
   <div class="hdr-btns">
-    <button class="hdr-btn btn-cyan hdr-desktop" onclick="openModal('galleryModal')">🖼 Gallery</button>
-    <button class="hdr-btn hdr-desktop" onclick="openCatalogue()" style="background:linear-gradient(135deg,rgba(0,255,136,.12),rgba(0,200,100,.06));border-color:rgba(0,255,136,.3);color:var(--green)">📋 Catalogue</button>
-    <button class="hdr-btn btn-purple hdr-desktop" onclick="openModal('compareModal')">⚖ Compare</button>
-    <button class="hdr-btn hdr-desktop" onclick="openSavedModal()">📂 Saved</button>
-    <button class="hdr-btn btn-dup hdr-desktop" id="btnDupLast" onclick="duplicateLastQuote()" title="Reload last saved quote settings" style="display:none">⚡ Duplicate Last</button>
-    <button class="hdr-btn hdr-desktop" onclick="openUploadModal()">📸 Photo</button>
-    <button class="hdr-btn hdr-desktop" onclick="openVisitModal()">📅 Visit</button>
+    <!-- Primary actions always visible -->
+    <button class="hdr-btn btn-green-hdr" onclick="newQuote()">+ New</button>
     <button class="hdr-btn btn-gold-hdr hdr-desktop" onclick="openPresentation()">🖥 Present</button>
-    <button class="hdr-btn vh-toggle-btn hdr-desktop" onclick="showHero()" title="Show venue hero">🏛 Venue</button>
+    <!-- ⋯ Tools dropdown -->
+    <div class="tools-dropdown" id="toolsDropdown">
+      <button class="hdr-btn" onclick="toggleToolsMenu()" style="letter-spacing:1px">⋯ Tools</button>
+      <div class="tools-menu" id="toolsMenu">
+        <button class="tools-menu-item" onclick="openModal('galleryModal');toggleToolsMenu()">🖼 Gallery</button>
+        <button class="tools-menu-item" onclick="openCatalogue();toggleToolsMenu()">📋 Catalogue</button>
+        <button class="tools-menu-item" onclick="openModal('compareModal');toggleToolsMenu()">⚖ Compare</button>
+        <button class="tools-menu-item" onclick="openSavedModal();toggleToolsMenu()">📂 Saved</button>
+        <button class="tools-menu-item" id="btnDupLast" onclick="duplicateLastQuote();toggleToolsMenu()" style="display:none">⚡ Duplicate Last</button>
+        <div class="tools-menu-sep"></div>
+        <button class="tools-menu-item" onclick="openUploadModal();toggleToolsMenu()">📸 Photo</button>
+        <button class="tools-menu-item" onclick="openVisitModal();toggleToolsMenu()">📅 Visit</button>
+        <button class="tools-menu-item" onclick="showHero();toggleToolsMenu()">🏛 Venue Hero</button>
+        <div class="tools-menu-sep"></div>
+        <a href="./enquiry.html" class="tools-menu-item" style="text-decoration:none;color:rgba(255,255,255,.7)">📨 Enquire</a>
+        <a href="./capacity.html" class="tools-menu-item" style="text-decoration:none;color:rgba(255,255,255,.7)">📐 Capacity</a>
+      </div>
+    </div>
     <button class="hdr-btn btn-help" onclick="openHelpGuide()">? Help</button>
     <button class="hdr-btn btn-fs" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
-    <a href="./enquiry.html" class="hdr-btn hdr-desktop" style="background:linear-gradient(135deg,rgba(192,96,255,.22),rgba(140,60,220,.12));border-color:rgba(192,96,255,.45);color:oklch(78% 0.18 320);text-decoration:none">📨 Enquire</a>
-    <a href="./capacity.html" class="hdr-btn hdr-desktop" style="background:linear-gradient(135deg,rgba(0,255,136,.15),rgba(0,200,100,.08));border-color:rgba(0,255,136,.3);color:var(--green);text-decoration:none">📐 Capacity</a>
-    <button class="hdr-btn btn-green-hdr" onclick="newQuote()">+ New</button>
   </div>
   <!-- Mobile menu button -->
   <button class="hdr-btn hdr-mobile-menu" id="hdrMenuBtn" onclick="toggleMobileMenu()" style="display:none">☰ Menu</button>
@@ -2454,6 +2617,7 @@ input[type=range]{
   <div class="sn-step active" id="sn1" onclick="focusStep(1)">
     <span class="sn-num"><span class="sn-num-txt">1</span></span>
     <span class="sn-lbl">Property &amp; Client</span>
+    <span class="sn-tooltip">📋 Client details + satellite map</span>
   </div>
   <div class="sn-beam-wrap" id="sn-beam-2">
     <div class="sn-beam-track"></div>
@@ -2462,6 +2626,7 @@ input[type=range]{
   <div class="sn-step" id="sn2" onclick="focusStep(2)">
     <span class="sn-num"><span class="sn-num-txt">2</span></span>
     <span class="sn-lbl">Zone Mapping</span>
+    <span class="sn-tooltip">🗺 Draw outdoor event zones</span>
   </div>
   <div class="sn-beam-wrap" id="sn-beam-3">
     <div class="sn-beam-track"></div>
@@ -2470,6 +2635,7 @@ input[type=range]{
   <div class="sn-step" id="sn3" onclick="focusStep(3)">
     <span class="sn-num"><span class="sn-num-txt">3</span></span>
     <span class="sn-lbl">Marquee &amp; Furniture</span>
+    <span class="sn-tooltip">⛺ Pick package + add furniture</span>
   </div>
   <div class="sn-beam-wrap" id="sn-beam-4">
     <div class="sn-beam-track"></div>
@@ -2478,6 +2644,7 @@ input[type=range]{
   <div class="sn-step" id="sn4" onclick="focusStep(4)">
     <span class="sn-num"><span class="sn-num-txt">4</span></span>
     <span class="sn-lbl">Quote &amp; Export</span>
+    <span class="sn-tooltip">💰 Review, adjust &amp; send quote</span>
   </div>
   <div class="sn-beam-wrap" id="sn-beam-5">
     <div class="sn-beam-track"></div>
@@ -2486,6 +2653,7 @@ input[type=range]{
   <div class="sn-step" id="sn5" onclick="focusStep(5)">
     <span class="sn-num"><span class="sn-num-txt">📅</span></span>
     <span class="sn-lbl">Bookings</span>
+    <span class="sn-tooltip">📅 Confirmed bookings calendar</span>
   </div>
   <!-- Progress track -->
   <div class="sn-progress-track" style="pointer-events:none">
@@ -2508,6 +2676,22 @@ input[type=range]{
         <button onclick="loadDemoData()" style="margin-top:8px;padding:5px 12px;font-size:10px;border-radius:20px;border:1px solid rgba(0,230,255,.4);background:rgba(0,230,255,.08);color:var(--cyan);cursor:pointer;letter-spacing:.06em">✨ Load Demo Data</button>
       </div>
       <div class="panel-body">
+        <!-- STEP 1 HERO BANNER (first-visit guide) -->
+        <div class="s1-hero" id="s1Hero">
+          <div>
+            <div class="s1-hero-badge">START HERE</div>
+            <div class="s1-hero-title">Fill in client details below</div>
+            <div class="s1-hero-sub">Name → Phone → Email → Address → Continue</div>
+          </div>
+          <span class="s1-hero-arrow">→</span>
+          <button class="s1-hero-close" onclick="document.getElementById('s1Hero').style.display='none'" title="Dismiss">✕</button>
+        </div>
+        <!-- FIELD PROGRESS -->
+        <div class="s1-progress">
+          <span class="s1-prog-text">STEP 1 PROGRESS</span>
+          <div class="s1-prog-track"><div class="s1-prog-fill" id="s1ProgFill" style="width:0%"></div></div>
+          <span class="s1-prog-pct" id="s1ProgPct">0%</span>
+        </div>
         <!-- NEXT EVENT HERO CARD -->
         <div class="next-event-card" id="nextEventCard">
           <div class="nec-label">◈ Next Upcoming Event</div>
@@ -2866,6 +3050,7 @@ input[type=range]{
     <div id="map"></div>
     <div class="map-vignette" aria-hidden="true"></div>
     <div class="map-cursor-glow" id="mapCursorGlow"></div>
+    <div id="mapGuideOverlay">📍 Type address above → click Find Property to zoom the map</div>
     <div class="map-badge" id="mapBadge">📍 Searching…</div>
     <!-- Coverage Ring -->
     <div class="coverage-badge" id="coverageBadge">
@@ -3318,56 +3503,186 @@ input[type=range]{
 <!-- HELP GUIDE MODAL -->
 <div id="helpModal" onclick="if(event.target===this)closeHelpGuide()">
   <div class="help-wrap">
-    <div class="help-progress"><div class="help-progress-fill" id="helpProgressFill" style="width:25%"></div></div>
+    <div class="help-progress"><div class="help-progress-fill" id="helpProgressFill" style="width:20%"></div></div>
     <div class="help-header">
       <div class="help-title">⚡ HOW TO USE EVENTSPACE PRO</div>
       <button class="help-close" onclick="closeHelpGuide()">✕ CLOSE</button>
     </div>
     <div class="help-slides">
-      <!-- Slide 1 -->
+
+      <!-- ── Slide 1: Property & Client ── -->
       <div class="help-slide active" id="hslide-1">
         <div class="help-step-badge"><div class="help-step-num">1</div><div class="help-step-label">PROPERTY &amp; CLIENT</div></div>
         <div class="help-slide-title">Enter client details &amp; find the property</div>
-        <div class="help-slide-body">Fill in the client's name, phone, and email. Then type the event address and click <strong>Find Property</strong> — the satellite map will zoom to the exact location.</div>
+        <div class="help-slide-body">Fill in the client's name, phone, and email. Then type the event address and click <strong>Find Property</strong> — the satellite map zooms to the exact location.</div>
+        <!-- Animated demo screen -->
+        <div class="hslide-demo">
+          <div class="hslide-demo-screen">
+            <div class="demo-anim-bar"><div class="demo-anim-fill"></div></div>
+            <div class="demo-field-row">
+              <div class="demo-field"><span class="demo-typed-text">Sarah Mitchell</span><span class="demo-cursor"></span></div>
+              <div class="demo-field" style="flex:.6">021 555 0123</div>
+            </div>
+            <div class="demo-field-row">
+              <div class="demo-field">sarah@example.com</div>
+              <div class="demo-field" style="flex:.5;color:var(--cyan)">80 guests</div>
+            </div>
+            <div class="demo-field" style="border-color:rgba(0,230,255,.5);background:rgba(0,230,255,.1);color:var(--cyan)">📍 14 Ruakura Rd, Hamilton · <span style="color:var(--green);font-weight:800">Found ✓</span></div>
+          </div>
+        </div>
         <ul class="help-tips">
           <li>Use the full street address for best map accuracy</li>
-          <li>Event date defaults to the next Saturday — tap to change</li>
+          <li>Event date auto-fills to next Saturday — tap to change</li>
           <li>Guest count drives marquee recommendations in Step 3</li>
         </ul>
+        <div class="hslide-shortcut">
+          <span class="hslide-shortcut-tag">TAB — next field</span>
+          <span class="hslide-shortcut-tag">Enter — find property</span>
+          <span class="hslide-shortcut-tag">Quick-fill chips available</span>
+        </div>
       </div>
-      <!-- Slide 2 -->
+
+      <!-- ── Slide 2: Zone Mapping ── -->
       <div class="help-slide" id="hslide-2">
         <div class="help-step-badge"><div class="help-step-num">2</div><div class="help-step-label">ZONE MAPPING</div></div>
         <div class="help-slide-title">Draw the available outdoor space</div>
-        <div class="help-slide-body">Click <strong>Draw Zone</strong> then tap points around the usable area on the satellite map. Double-click to finish. The app calculates the exact square metres automatically.</div>
+        <div class="help-slide-body">Click <strong>Draw Zone</strong>, tap points around the usable area on the satellite map, then double-click to finish. Square metres calculate instantly.</div>
+        <!-- Animated demo screen -->
+        <div class="hslide-demo">
+          <div class="hslide-demo-screen">
+            <div class="demo-map-preview">
+              <span style="position:absolute;left:30%;top:20%;font-size:10px;color:rgba(0,230,255,.6)">●</span>
+              <span style="position:absolute;left:65%;top:22%;font-size:10px;color:rgba(0,230,255,.6)">●</span>
+              <span style="position:absolute;left:68%;top:65%;font-size:10px;color:rgba(0,230,255,.6)">●</span>
+              <span style="position:absolute;left:28%;top:68%;font-size:10px;color:rgba(0,230,255,.6)">●</span>
+              <span class="demo-pin">📍</span>
+              <span style="position:absolute;bottom:6px;right:10px;font-size:.6rem;color:var(--green);font-weight:800">≈ 180 m²</span>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:4px">
+              <div style="flex:1;padding:6px 8px;border-radius:6px;background:rgba(0,230,255,.1);border:1px solid rgba(0,230,255,.3);font-size:.65rem;color:var(--cyan);text-align:center;font-weight:700">✏ Draw Zone</div>
+              <div style="flex:1;padding:6px 8px;border-radius:6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);font-size:.65rem;color:var(--muted);text-align:center">🗑 Clear</div>
+              <div style="flex:1;padding:6px 8px;border-radius:6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);font-size:.65rem;color:var(--muted);text-align:center">+ Multi-zone</div>
+            </div>
+          </div>
+        </div>
         <ul class="help-tips">
           <li>Exclude the house, driveway, and trees from your zone</li>
           <li>Draw multiple zones if the space is split</li>
-          <li>Area updates instantly — aim for the marquee footprint + 2m clearance</li>
+          <li>Aim for marquee footprint + 2m clearance around all sides</li>
         </ul>
+        <div class="hslide-shortcut">
+          <span class="hslide-shortcut-tag">Click — place point</span>
+          <span class="hslide-shortcut-tag">Dbl-click — finish zone</span>
+          <span class="hslide-shortcut-tag">Esc — cancel draw</span>
+        </div>
       </div>
-      <!-- Slide 3 -->
+
+      <!-- ── Slide 3: Marquee & Furniture ── -->
       <div class="help-slide" id="hslide-3">
         <div class="help-step-badge"><div class="help-step-num">3</div><div class="help-step-label">MARQUEE &amp; FURNITURE</div></div>
         <div class="help-slide-title">Choose your marquee &amp; package</div>
-        <div class="help-slide-body">Select a <strong>Quick Package</strong> (Silver / Gold / Platinum) or build custom. Add individual furniture items using the + buttons. Smart suggestions appear based on guest count.</div>
+        <div class="help-slide-body">Pick a <strong>Quick Package</strong> (Silver / Gold / Platinum) or build custom. Add furniture with + buttons. Smart suggestions appear based on your guest count.</div>
+        <!-- Animated demo screen -->
+        <div class="hslide-demo">
+          <div class="hslide-demo-screen">
+            <div class="demo-marquee-cards">
+              <div class="demo-mq-card"><div class="demo-mq-name" style="color:rgba(255,255,255,.5)">SILVER</div><div class="demo-mq-price">$890</div></div>
+              <div class="demo-mq-card hl"><div class="demo-mq-name" style="color:var(--gold)">GOLD ★</div><div class="demo-mq-price">$1,490</div></div>
+              <div class="demo-mq-card"><div class="demo-mq-name" style="color:rgba(192,96,255,.8)">PLATINUM</div><div class="demo-mq-price">$2,100</div></div>
+            </div>
+            <div style="font-size:.62rem;color:var(--muted);margin-top:6px;padding:4px 8px;background:rgba(255,215,0,.06);border-radius:6px;border-left:2px solid var(--gold)">
+              ⭐ Gold recommended for 80 guests · includes 9×12m marquee + tables + chairs + lighting
+            </div>
+            <div style="display:flex;gap:6px;margin-top:6px;font-size:.62rem">
+              <span style="padding:3px 8px;border-radius:20px;background:rgba(0,230,255,.08);border:1px solid rgba(0,230,255,.2);color:var(--cyan)">Standard</span>
+              <span style="padding:3px 8px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:var(--muted)">Winter +10%</span>
+              <span style="padding:3px 8px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:var(--muted)">Peak +15%</span>
+            </div>
+          </div>
+        </div>
         <ul class="help-tips">
           <li>Gold package covers up to 60 guests — most popular choice</li>
           <li>Adjust seasonal pricing: Standard, Winter +10%, Peak +15%</li>
           <li>Furniture quantities save automatically for the session</li>
         </ul>
+        <div class="hslide-shortcut">
+          <span class="hslide-shortcut-tag">Quick Package = fastest</span>
+          <span class="hslide-shortcut-tag">+ / − adjust quantities</span>
+          <span class="hslide-shortcut-tag">Auto-saves each change</span>
+        </div>
       </div>
-      <!-- Slide 4 -->
+
+      <!-- ── Slide 4: Quote & Export ── -->
       <div class="help-slide" id="hslide-4">
         <div class="help-step-badge"><div class="help-step-num">4</div><div class="help-step-label">QUOTE &amp; EXPORT</div></div>
         <div class="help-slide-title">Review, adjust &amp; send the quote</div>
-        <div class="help-slide-body">Your professional quote is generated instantly. Click any field to edit inline. Send via <strong>WhatsApp</strong>, download as <strong>PDF</strong>, or email directly. Quote is valid for 30 days.</div>
+        <div class="help-slide-body">Your professional quote generates instantly. Edit inline, apply discounts, then send via <strong>WhatsApp</strong>, <strong>PDF</strong>, or email. Valid 30 days.</div>
+        <!-- Animated demo screen -->
+        <div class="hslide-demo">
+          <div class="hslide-demo-screen">
+            <div class="demo-quote-row"><span class="demo-q-lbl">9×12m Marquee</span><span class="demo-q-val">$1,200</span></div>
+            <div class="demo-quote-row"><span class="demo-q-lbl">Tables × 8</span><span class="demo-q-val">$160</span></div>
+            <div class="demo-quote-row"><span class="demo-q-lbl">Chairs × 80</span><span class="demo-q-val">$240</span></div>
+            <div class="demo-quote-row"><span class="demo-q-lbl">Fairy Lights</span><span class="demo-q-val">$90</span></div>
+            <div class="demo-total"><div style="font-size:.6rem;color:var(--muted);letter-spacing:2px;margin-bottom:2px">TOTAL INC. GST</div><div class="demo-total-val">$1,940</div></div>
+            <div class="demo-btn-row">
+              <div class="demo-btn green">💬 WhatsApp</div>
+              <div class="demo-btn gold">⬇ PDF</div>
+              <div class="demo-btn cyan">🖥 Present</div>
+            </div>
+          </div>
+        </div>
         <ul class="help-tips">
-          <li>Use the Manual Adjustments panel for discounts or extras</li>
-          <li>Tap Present for fullscreen client presentation mode</li>
-          <li>Hit Saved to store the quote and access it later</li>
+          <li>Use Manual Adjustments panel for discounts or extras</li>
+          <li>Present button = fullscreen client presentation mode</li>
+          <li>Saved stores the quote — access anytime with 📂 Saved</li>
         </ul>
+        <div class="hslide-shortcut">
+          <span class="hslide-shortcut-tag">Inline edit any line</span>
+          <span class="hslide-shortcut-tag">PDF — print quality</span>
+          <span class="hslide-shortcut-tag">30-day validity auto-set</span>
+        </div>
       </div>
+
+      <!-- ── Slide 5: Bookings & Tips ── -->
+      <div class="help-slide" id="hslide-5">
+        <div class="help-step-badge"><div class="help-step-num">5</div><div class="help-step-label">BOOKINGS &amp; PRO TIPS</div></div>
+        <div class="help-slide-title">Manage bookings &amp; work smarter</div>
+        <div class="help-slide-body">Step 5 tracks confirmed bookings in a calendar view. Use <strong>+ New</strong> to start a fresh quote anytime. Your last quote can be reloaded with <strong>⚡ Duplicate Last</strong>.</div>
+        <!-- Animated demo screen -->
+        <div class="hslide-demo">
+          <div class="hslide-demo-screen">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+              <div style="padding:8px;border-radius:8px;background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.2)">
+                <div style="font-size:.58rem;color:var(--green);letter-spacing:1.5px;font-weight:700">CONFIRMED</div>
+                <div style="font-size:.72rem;font-weight:800;margin-top:2px">Mitchell Wedding</div>
+                <div style="font-size:.6rem;color:var(--muted)">Sat 12 Jul · 80pax</div>
+              </div>
+              <div style="padding:8px;border-radius:8px;background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.2)">
+                <div style="font-size:.58rem;color:var(--gold);letter-spacing:1.5px;font-weight:700">PENDING</div>
+                <div style="font-size:.72rem;font-weight:800;margin-top:2px">Johnson 21st</div>
+                <div style="font-size:.6rem;color:var(--muted)">Sat 19 Jul · 50pax</div>
+              </div>
+            </div>
+            <div style="margin-top:8px;padding:6px 10px;border-radius:8px;background:rgba(0,230,255,.06);border:1px solid rgba(0,230,255,.15);font-size:.65rem;color:var(--cyan);text-align:center">
+              ⚡ Duplicate Last — reload previous quote in one click
+            </div>
+          </div>
+        </div>
+        <ul class="help-tips">
+          <li>📂 Saved — browse all stored quotes with search</li>
+          <li>⚖ Compare — side-by-side package comparison</li>
+          <li>📸 Photo — attach venue photos to the quote</li>
+          <li>🖼 Gallery — showcase past events to the client</li>
+        </ul>
+        <div class="hslide-shortcut">
+          <span class="hslide-shortcut-tag">? Help — this guide</span>
+          <span class="hslide-shortcut-tag">⛶ Fullscreen mode</span>
+          <span class="hslide-shortcut-tag">+ New — fresh quote</span>
+          <span class="hslide-shortcut-tag">⚡ Duplicate Last</span>
+        </div>
+      </div>
+
     </div>
     <div class="help-nav">
       <button class="help-btn" id="helpPrevBtn" onclick="helpNav(-1)" disabled>← PREV</button>
@@ -7758,7 +8073,7 @@ document.addEventListener('click', function(e) {
 
 // ── HELP GUIDE ───────────────────────────────────────────────
 var _helpSlide = 1;
-var _helpTotal = 4;
+var _helpTotal = 5;
 var _helpTimer = null;
 
 function openHelpGuide() {
@@ -7809,6 +8124,95 @@ function _renderHelpDots() {
     c.appendChild(d);
   }
 }
+
+// ═══════════════════════════════════════════════════════════════════════
+//  ELEVATION v3 — Welcome, Progress, Tools Dropdown, Map Guide
+// ═══════════════════════════════════════════════════════════════════════
+
+var _WEL_KEY = 'esp_welcomed_v3';
+
+function initWelcome() {
+  if (localStorage.getItem(_WEL_KEY)) {
+    // Returning user — show ribbon briefly
+    var r = document.getElementById('welcomeRibbon');
+    if (r) { r.classList.remove('hidden'); setTimeout(function(){ r.classList.add('hidden'); }, 8000); }
+  } else {
+    // First visit — show overlay
+    var ov = document.getElementById('welcomeOverlay');
+    if (ov) ov.classList.add('open');
+  }
+}
+
+function dismissWelcome(skip) {
+  localStorage.setItem(_WEL_KEY, '1');
+  var ov = document.getElementById('welcomeOverlay');
+  if (ov) { ov.style.animation = 'ovFadeIn .3s ease reverse forwards'; setTimeout(function(){ ov.classList.remove('open'); ov.style.animation = ''; }, 280); }
+  if (!skip) { setTimeout(function(){ openHelpGuide(); }, 400); }
+}
+
+// Field progress tracker for Step 1
+var _S1_FIELDS = ['clientName','clientPhone','clientEmail','eventDate','eventType','guestCount','eventAddress'];
+function updateS1Progress() {
+  var filled = 0;
+  _S1_FIELDS.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el && el.value && el.value.trim()) filled++;
+    // Show field check
+    var wrap = el && el.closest('.field-wrap');
+    if (wrap) {
+      var chk = wrap.querySelector('.field-check');
+      if (chk) { if (el.value.trim()) chk.classList.add('show'); else chk.classList.remove('show'); }
+    }
+  });
+  var pct = Math.round(filled / _S1_FIELDS.length * 100);
+  var fill = document.getElementById('s1ProgFill');
+  var txt = document.getElementById('s1ProgPct');
+  if (fill) fill.style.width = pct + '%';
+  if (txt) txt.textContent = pct + '%';
+  // Continue button state
+  var btn = document.querySelector('#step1 .btn-next');
+  if (btn) {
+    btn.classList.remove('btn-continue-locked','btn-continue-ready','btn-continue-done');
+    if (pct === 100) btn.classList.add('btn-continue-done');
+    else if (pct >= 40) btn.classList.add('btn-continue-ready');
+    else btn.classList.add('btn-continue-locked');
+  }
+}
+
+// Wire oninput to all S1 fields after DOM ready
+document.addEventListener('DOMContentLoaded', function() {
+  initWelcome();
+  _S1_FIELDS.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('input', updateS1Progress);
+  });
+  updateS1Progress();
+  // Close tools menu on outside click
+  document.addEventListener('click', function(e) {
+    var dd = document.getElementById('toolsDropdown');
+    if (dd && !dd.contains(e.target)) {
+      var m = document.getElementById('toolsMenu');
+      if (m) m.classList.remove('open');
+    }
+  });
+});
+
+function toggleToolsMenu() {
+  var m = document.getElementById('toolsMenu');
+  if (m) m.classList.toggle('open');
+}
+
+// Map guide overlay — show when address field is focused
+(function() {
+  document.addEventListener('DOMContentLoaded', function() {
+    var addr = document.getElementById('eventAddress');
+    var guide = document.getElementById('mapGuideOverlay');
+    if (addr && guide) {
+      addr.addEventListener('focus', function() { guide.classList.add('show'); });
+      addr.addEventListener('blur', function() { setTimeout(function(){ guide.classList.remove('show'); }, 1200); });
+    }
+  });
+})();
 
 // ═══════════════════════════════════════════════════════════════════════
 //  FURNITURE ICON VISUALISATION — Whetū Digital · EventSpace Pro
