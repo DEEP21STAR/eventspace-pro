@@ -31,8 +31,8 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/MorphSVGPlugin.min.js"></script>
 <!-- Lenis 1.3.3 — smooth scroll wrapper -->
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.3/dist/lenis.min.js"></script>
-<!-- Anime.js v4 — lightweight keyframe animations -->
-<script src="https://cdn.jsdelivr.net/npm/animejs@4.0.2/lib/anime.min.js"></script>
+<!-- Anime.js v3 UMD — v4 is ESM-only and breaks as a regular script -->
+<script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
 <!-- Motion One 10.x — 2.3KB micro-interactions -->
 <script src="https://cdn.jsdelivr.net/npm/motion@10.18.0/dist/motion.min.js"></script>
 <!-- Splitting.js 1.0.6 — text char/word splitting -->
@@ -871,11 +871,17 @@ input[type=range]{
 .tl-date{font-size:10px;font-weight:700;color:var(--text)}
 
 /* ── PAST EVENTS GALLERY ── */
-.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.gal-item{border-radius:8px;overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:all .2s;position:relative}
-.gal-item:hover{border-color:rgba(0,230,255,.4);transform:scale(1.03)}
-.gal-thumb{height:100px;display:flex;align-items:center;justify-content:center;font-size:36px}
-.gal-cap{font-size:8px;color:var(--muted);padding:5px 7px;letter-spacing:.5px;background:rgba(0,0,0,.4)}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.gal-item{border-radius:10px;overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:all .25s cubic-bezier(.34,1.56,.64,1);position:relative}
+.gal-item:hover{border-color:rgba(0,230,255,.5);transform:scale(1.04);box-shadow:0 8px 30px rgba(0,0,0,.5),0 0 20px rgba(0,230,255,.15)}
+.gal-thumb{height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:28px;position:relative;overflow:hidden}
+.gal-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0) 40%,rgba(0,0,0,.7) 100%)}
+.gal-tag{position:absolute;top:6px;right:7px;font-size:7px;font-weight:800;letter-spacing:1.5px;padding:2px 7px;border-radius:20px;z-index:1}
+.gal-tag.gold{background:rgba(255,215,0,.2);border:1px solid rgba(255,215,0,.5);color:var(--gold)}
+.gal-tag.silver{background:rgba(200,200,200,.15);border:1px solid rgba(200,200,200,.4);color:#ccc}
+.gal-tag.plat{background:rgba(192,96,255,.2);border:1px solid rgba(192,96,255,.5);color:var(--purple)}
+.gal-cap{font-size:8px;color:var(--muted);padding:6px 8px;letter-spacing:.5px;background:rgba(0,0,0,.5);line-height:1.5}
+.gal-cap strong{color:var(--text);font-size:9px;display:block;margin-bottom:1px}
 
 /* ── COMPARE MODAL ── */
 .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
@@ -2588,19 +2594,19 @@ input[type=range]{
         <!-- PACKAGE BUNDLES -->
         <div style="font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;text-transform:uppercase">◈ Quick Packages</div>
         <div class="pkg-grid">
-          <div class="pkg-card pkg-silver" id="pkgSilver" onclick="applyPackage('silver')" data-aos="fade-up" data-aos-delay="0">
+          <div class="pkg-card pkg-silver" id="pkgSilver" onclick="applyPackage('silver')">
             <div class="pkg-icon">🥈</div>
             <div class="pkg-name" style="color:silver">SILVER</div>
             <div class="pkg-price" style="color:silver">$950</div>
             <div class="pkg-desc">Up to 30 guests · 6×9m · Chairs + Tables</div>
           </div>
-          <div class="pkg-card pkg-gold-card" id="pkgGold" onclick="applyPackage('gold')" data-aos="fade-up" data-aos-delay="100">
+          <div class="pkg-card pkg-gold-card" id="pkgGold" onclick="applyPackage('gold')">
             <div class="pkg-icon">🥇</div>
             <div class="pkg-name" style="color:var(--gold)">GOLD</div>
             <div class="pkg-price" style="color:var(--gold)">$1,650</div>
             <div class="pkg-desc">Up to 60 guests · 9×12m · Full setup + Lights</div>
           </div>
-          <div class="pkg-card pkg-plat" id="pkgPlat" onclick="applyPackage('platinum')" data-aos="fade-up" data-aos-delay="200">
+          <div class="pkg-card pkg-plat" id="pkgPlat" onclick="applyPackage('platinum')">
             <div class="pkg-icon">💎</div>
             <div class="pkg-name" style="color:var(--purple)">PLATINUM</div>
             <div class="pkg-price" style="color:var(--purple)">$2,980</div>
@@ -3313,12 +3319,48 @@ input[type=range]{
     <h2>🖼 PAST EVENTS GALLERY</h2>
     <p>Recent events by Events Pro Hire Company — showcasing our setups across the Waikato.</p>
     <div class="gallery-grid">
-      <div class="gal-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#0a1a2e,#0c2240)">⛺</div><div class="gal-cap">Wedding · Hamilton · 9×12m Gold</div></div>
-      <div class="gal-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#1a0a2e,#2a0c40)">🎉</div><div class="gal-cap">Birthday · Cambridge · 6×9m Silver</div></div>
-      <div class="gal-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#0a2e0a,#0c400c)">🏢</div><div class="gal-cap">Corporate · Te Rapa · 12×15m</div></div>
-      <div class="gal-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#2e1a0a,#401c0c)">🌸</div><div class="gal-cap">Garden Party · Raglan · 6×12m</div></div>
-      <div class="gal-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#0a2a2e,#0c3040)">🎓</div><div class="gal-cap">Graduation · Morrinsville · 9×15m</div></div>
-      <div class="gal-item"><div class="gal-thumb" style="background:linear-gradient(135deg,#2e0a1a,#400c20)">🎪</div><div class="gal-cap">Market Expo · Mystery Creek · 12×18m</div></div>
+      <div class="gal-item">
+        <div class="gal-thumb" style="background:linear-gradient(135deg,oklch(20% 0.06 250),oklch(30% 0.12 240))">
+          <span style="font-size:38px;z-index:1">⛺</span>
+          <div class="gal-tag gold">GOLD</div>
+        </div>
+        <div class="gal-cap"><strong>Wedding Reception</strong>Waikato · 9×12m · 80 guests · Lights + Dance Floor</div>
+      </div>
+      <div class="gal-item">
+        <div class="gal-thumb" style="background:linear-gradient(135deg,oklch(18% 0.08 290),oklch(28% 0.15 280))">
+          <span style="font-size:38px;z-index:1">🎉</span>
+          <div class="gal-tag silver">SILVER</div>
+        </div>
+        <div class="gal-cap"><strong>Birthday Celebration</strong>Cambridge · 6×9m · 45 guests · Fairy lights</div>
+      </div>
+      <div class="gal-item">
+        <div class="gal-thumb" style="background:linear-gradient(135deg,oklch(18% 0.08 160),oklch(28% 0.12 150))">
+          <span style="font-size:38px;z-index:1">🏢</span>
+          <div class="gal-tag plat">PLATINUM</div>
+        </div>
+        <div class="gal-cap"><strong>Corporate Conference</strong>Te Rapa · 12×15m · 120 guests · Staging + AV</div>
+      </div>
+      <div class="gal-item">
+        <div class="gal-thumb" style="background:linear-gradient(135deg,oklch(22% 0.07 50),oklch(30% 0.10 40))">
+          <span style="font-size:38px;z-index:1">🌸</span>
+          <div class="gal-tag silver">SILVER</div>
+        </div>
+        <div class="gal-cap"><strong>Garden Party</strong>Raglan · 6×12m · 55 guests · Sidewalls + Carpet</div>
+      </div>
+      <div class="gal-item">
+        <div class="gal-thumb" style="background:linear-gradient(135deg,oklch(18% 0.07 200),oklch(28% 0.10 190))">
+          <span style="font-size:38px;z-index:1">🎓</span>
+          <div class="gal-tag gold">GOLD</div>
+        </div>
+        <div class="gal-cap"><strong>Graduation Ceremony</strong>Morrinsville · 9×15m · 90 guests · Full setup</div>
+      </div>
+      <div class="gal-item">
+        <div class="gal-thumb" style="background:linear-gradient(135deg,oklch(20% 0.09 340),oklch(28% 0.14 330))">
+          <span style="font-size:38px;z-index:1">🎪</span>
+          <div class="gal-tag plat">PLATINUM</div>
+        </div>
+        <div class="gal-cap"><strong>Market Expo</strong>Mystery Creek · 12×18m · 200 guests · 4-bay setup</div>
+      </div>
     </div>
     <br>
     <div style="text-align:center;font-size:10px;color:var(--muted)">📸 Upload your own photos to showcase — contact hello@whetudigital.co.nz</div>
@@ -4505,7 +4547,7 @@ function focusStep(n) {
   if (nextWait) nextWait.classList.add('next-waiting');
 
   if (n === 3) { updateMarqueeRecs(); renderFurniture(); }
-  if (n === 4) buildQuote();
+  if (n === 4) { buildQuote(); var ep=document.getElementById('eqPalette'); if(ep) ep.classList.remove('active'); }
   if (n === 2) map.addControl(drawControl);
   else { try { map.removeControl(drawControl); } catch(e) {} }
   setTimeout(updateGuide, 50);
@@ -8355,7 +8397,7 @@ function fpToggleRowBar() {
     <span class="wf-divider"></span>
     <a href="mailto:hire@eventsprohire.co.nz">✉️ hire@eventsprohire.co.nz</a>
     <span class="wf-divider"></span>
-    <span>📍 Hamilton, Waikato</span>
+    <span>📍 Waikato, New Zealand</span>
     <span class="wf-divider"></span>
     <span>Marquee &amp; Event Hire · Waikato Region</span>
   </div>
@@ -9213,11 +9255,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // ④ GSAP entrance animations + ScrollTrigger
   if (window.gsap) {
     gsap.registerPlugin(ScrollTrigger, SplitText, Flip);
-    gsap.from('.hero-title .word', { duration: 0.75, y: 28, opacity: 0, ease: 'power3.out', delay: 0.15, stagger: 0.08 });
-    gsap.from('.hero-subtitle, .hero-meta', { duration: 0.9, y: 18, opacity: 0, ease: 'power3.out', delay: 0.5, stagger: 0.1 });
-    gsap.from('.step-panel:first-child .panel-head', { scrollTrigger: { trigger: '.step-panel', start: 'top 88%' }, duration: 0.8, y: 24, opacity: 0, ease: 'power2.out' });
-    // Animate step number badges
-    gsap.from('.step-badge, .step-num', { duration: 0.5, scale: 0, opacity: 0, stagger: 0.1, ease: 'back.out(2)', delay: 0.3 });
+    if (document.querySelector('.hero-title .word')) gsap.from('.hero-title .word', { duration: 0.75, y: 28, opacity: 0, ease: 'power3.out', delay: 0.15, stagger: 0.08 });
+    if (document.querySelector('.hero-subtitle, .hero-meta')) gsap.from('.hero-subtitle, .hero-meta', { duration: 0.9, y: 18, opacity: 0, ease: 'power3.out', delay: 0.5, stagger: 0.1 });
+    if (document.querySelector('.step-panel .panel-head')) gsap.from('.step-panel:first-child .panel-head', { scrollTrigger: { trigger: '.step-panel', start: 'top 88%' }, duration: 0.8, y: 24, opacity: 0, ease: 'power2.out' });
+    if (document.querySelector('.sn-step')) gsap.from('.sn-step', { duration: 0.5, scale: 0.9, opacity: 0, stagger: 0.08, ease: 'back.out(2)', delay: 0.3 });
   }
 
   // ⑤ ScrollReveal on sidebar panels and cards
