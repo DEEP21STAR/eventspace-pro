@@ -2215,6 +2215,73 @@ input[type=range]{
 /* DUPLICATE LAST BUTTON */
 .hdr-btn.btn-dup{background:linear-gradient(135deg,rgba(255,215,0,.15),rgba(255,140,0,.08));border-color:rgba(255,215,0,.3);color:var(--gold);font-size:10px}
 .hdr-btn.btn-dup:hover{box-shadow:0 4px 20px rgba(255,215,0,.35);border-color:rgba(255,215,0,.6)}
+
+/* ══════════════ VISUAL ELEVATION v2 — 2026-07 ══════════════ */
+
+/* ── PKG CARD SELECTED BADGE ── */
+.pkg-card.active::after{
+  content:'✓ SELECTED';position:absolute;top:6px;right:6px;
+  font-size:7px;font-weight:900;letter-spacing:1.5px;
+  padding:2px 6px;border-radius:10px;color:#000;background:rgba(180,180,180,.9);
+  animation:pkgBadgeIn .3s cubic-bezier(.34,1.56,.64,1)}
+.pkg-gold-card.active::after{background:var(--gold)}
+.pkg-plat.active::after{background:var(--purple);color:#fff}
+@keyframes pkgBadgeIn{from{transform:scale(0) rotate(-10deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+.pkg-card.active .pkg-price{animation:priceGrow .4s cubic-bezier(.34,1.56,.64,1) forwards}
+@keyframes priceGrow{0%{transform:scale(1)}50%{transform:scale(1.18)}100%{transform:scale(1.1)}}
+
+/* ── QUOTE BRAND HEADER ── */
+.quote-brand-header{border-radius:12px;margin-bottom:14px;overflow:hidden;
+  background:linear-gradient(135deg,rgba(0,230,255,.06),rgba(192,96,255,.04));
+  border:1px solid rgba(0,230,255,.2)}
+.quote-brand-top{background:linear-gradient(90deg,rgba(0,230,255,.12),rgba(192,96,255,.08));
+  padding:10px 14px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(0,230,255,.12)}
+.quote-brand-name{font-size:11px;font-weight:900;letter-spacing:3px;color:var(--cyan);text-transform:uppercase}
+.quote-brand-sub{font-size:8px;color:var(--muted);letter-spacing:1px;margin-top:2px}
+.quote-brand-ref{font-size:10px;font-weight:900;color:var(--gold);letter-spacing:1px}
+.quote-brand-meta{padding:8px 14px;display:flex;gap:20px;font-size:9px;color:var(--muted);flex-wrap:wrap}
+.quote-brand-meta strong{color:var(--text);font-size:10px}
+
+/* ── QUOTE TOTAL PUNCH v2 ── */
+.quote-total-punch{position:relative;overflow:hidden}
+.quote-total-punch::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(0,230,255,.15),transparent 60%,rgba(192,96,255,.08));
+  pointer-events:none}
+.quote-total-punch::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:linear-gradient(45deg,transparent 40%,rgba(255,255,255,.04) 50%,transparent 60%);
+  animation:totalShimmer 4s linear infinite;pointer-events:none}
+@keyframes totalShimmer{0%{transform:translate(-50%,-50%) rotate(30deg)}100%{transform:translate(150%,-50%) rotate(30deg)}}
+.quote-total-val{font-size:32px;font-weight:900;color:var(--gold);
+  text-shadow:0 0 30px rgba(255,215,0,.5),0 0 60px rgba(255,215,0,.2);
+  letter-spacing:1px;line-height:1;
+  animation:totalAppear .6s cubic-bezier(.34,1.56,.64,1)}
+@keyframes totalAppear{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+.quote-valid-badge{display:inline-flex;align-items:center;gap:4px;
+  background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.3);
+  border-radius:20px;padding:3px 10px;font-size:8px;color:var(--green);
+  letter-spacing:1px;margin-top:6px}
+.quote-valid-badge::before{content:'●';font-size:6px;color:var(--green);
+  animation:liveDot 1.5s ease-in-out infinite}
+@keyframes liveDot{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── QUOTE CONFIDENCE METER ── */
+.qconf-wrap{display:flex;align-items:center;gap:10px;margin-bottom:12px;
+  padding:8px 12px;background:rgba(255,255,255,.025);
+  border-radius:8px;border:1px solid rgba(255,255,255,.06)}
+.qconf-label{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;white-space:nowrap}
+.qconf-bar{flex:1;height:5px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden}
+.qconf-fill{height:100%;border-radius:3px;
+  background:linear-gradient(90deg,var(--green),var(--cyan));
+  transition:width .5s ease;box-shadow:0 0 8px rgba(0,255,136,.4)}
+.qconf-pct{font-size:10px;font-weight:800;color:var(--green);min-width:28px;text-align:right}
+
+/* ── STEP-SPECIFIC PANEL HEAD ACCENT ── */
+#step1 .panel-head{border-left:3px solid rgba(0,230,255,.5)}
+#step2 .panel-head{border-left:3px solid rgba(192,96,255,.5)}
+#step3 .panel-head{border-left:3px solid rgba(255,215,0,.5)}
+#step4 .panel-head{border-left:3px solid rgba(0,255,136,.5)}
+#step5 .panel-head{border-left:3px solid rgba(255,140,0,.5)}
 </style>
 <!-- WDS-SGM SCORE: 8.0/10 · SEAL: EVENTSPACE-SGMDS-2026-05 · Target 8.5+ -->
 <!-- GSAP already loaded at top of <head> (lines 25-31) — duplicates removed -->
@@ -4255,7 +4322,36 @@ function buildQuote() {
   var gst = sub * CONFIG.gstRate;
   var total = sub + gst;
   var client = document.getElementById('clientName').value || '';
-  var html = '<div class="qs-card quote-section">' +
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('en-NZ', {day:'numeric',month:'short',year:'numeric'});
+  var validDate = new Date(now); validDate.setDate(validDate.getDate()+30);
+  var validStr = validDate.toLocaleDateString('en-NZ', {day:'numeric',month:'short',year:'numeric'});
+  // Confidence score (0–100%) based on filled fields
+  var conf = 0;
+  if (client) conf += 20;
+  if (document.getElementById('clientPhone').value) conf += 15;
+  if (document.getElementById('eventDate').value) conf += 20;
+  if (state.address) conf += 20;
+  if (state.selectedMarquee) conf += 15;
+  if (fItems.length) conf += 10;
+  var html = '<div class="qconf-wrap">' +
+    '<div class="qconf-label">Quote Completeness</div>' +
+    '<div class="qconf-bar"><div class="qconf-fill" style="width:' + conf + '%"></div></div>' +
+    '<div class="qconf-pct">' + conf + '%</div>' +
+    '</div>' +
+    '<div class="quote-brand-header">' +
+    '<div class="quote-brand-top">' +
+    '<div><div class="quote-brand-name">◈ EventSpace NZ</div>' +
+    '<div class="quote-brand-sub">Marquee &amp; Event Hire — Waikato, New Zealand</div></div>' +
+    '<div class="quote-brand-ref">REF: ' + state.quoteRef + '</div>' +
+    '</div>' +
+    '<div class="quote-brand-meta">' +
+    '<div><div style="letter-spacing:1.5px">PREPARED</div><strong>' + dateStr + '</strong></div>' +
+    '<div><div style="letter-spacing:1.5px">VALID UNTIL</div><strong>' + validStr + '</strong></div>' +
+    (client ? '<div><div style="letter-spacing:1.5px">CLIENT</div><strong>' + escH(client) + '</strong></div>' : '') +
+    '</div>' +
+    '</div>' +
+    '<div class="qs-card quote-section">' +
     '<div class="quote-section-title" style="display:flex;justify-content:space-between;align-items:center">Client Details<span style="font-size:8px;color:var(--cyan);opacity:.6;letter-spacing:1px;font-weight:400;text-transform:none">✏ click any field to edit</span></div>' +
     qEditRow('Client', client, 'clientName', 'text') +
     qEditRow('Phone', document.getElementById('clientPhone').value, 'clientPhone', 'tel') +
@@ -4300,11 +4396,9 @@ function buildQuote() {
     '<div class="quote-row"><span class="lbl">GST (15%)</span><span class="val" id="qGstDisplay">$' + gst.toFixed(2) + '</span></div>' +
     '</div>' +
     '<div class="quote-total-punch">' +
-      '<div style="display:flex;justify-content:space-between;align-items:center">' +
-        '<div><div style="font-size:10px;letter-spacing:3px;color:var(--cyan);text-transform:uppercase;margin-bottom:4px">Total (incl. GST)</div>' +
-        '<div class="val" id="qTotalDisplay">$' + total.toFixed(2) + '</div></div>' +
-        '<div style="text-align:right;font-size:9px;color:rgba(255,255,255,.4);line-height:1.6">Valid for 30 days<br>Ref: ' + state.quoteRef + '</div>' +
-      '</div>' +
+      '<div style="font-size:9px;letter-spacing:3px;color:var(--cyan);text-transform:uppercase;margin-bottom:6px;opacity:.8">Total (incl. GST)</div>' +
+      '<div class="quote-total-val" id="qTotalDisplay">$' + total.toFixed(2) + '</div>' +
+      '<div class="quote-valid-badge">Valid 30 days · ' + validStr + '</div>' +
     '</div>' +
     '<div style="margin-top:12px"><div class="field"><label>Internal Notes</label><textarea id="quoteNotes" placeholder="Delivery instructions, access notes, special requirements…" style="background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--font);font-size:13px;padding:9px 12px;width:100%;min-height:60px;resize:vertical;outline:none"></textarea></div></div>';
 
