@@ -41,11 +41,11 @@
 <!-- Typed.js 2.1.0 — typewriter effect -->
 <script src="https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js"></script>
 <!-- CountUp.js 2.8.0 — animated number counters -->
-<script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.umd.js"></script>
 <!-- Lottie Web 5.12.2 — JSON animation player for loading states -->
 <script src="https://cdn.jsdelivr.net/npm/lottie-web@5.12.2/build/player/lottie.min.js"></script>
 <!-- Zdog 1.1.3 — pseudo-3D marquee/tent illustrations (28KB, no WebGL conflicts) -->
-<script src="https://cdn.jsdelivr.net/npm/zdog@1.1.3/js/zdog.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/zdog@1.1.3/dist/zdog.dist.min.js"></script>
 <!-- Animate.css 4.1.1 — utility class animations -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
 <!-- ScrollReveal.js 4.0.9 — scroll-triggered reveals -->
@@ -53,9 +53,9 @@
 <!-- Sal.js 0.8.5 — lightweight scroll animation library (UI_STANDARD 2026-07-04) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sal.js@0.8.5/dist/sal.css">
 <script src="https://cdn.jsdelivr.net/npm/sal.js@0.8.5/dist/sal.min.js"></script>
-<!-- tsParticles 3.7.1 — ambient background particles -->
-<script src="https://cdn.jsdelivr.net/npm/@tsparticles/engine@3.7.1/tsparticles.engine.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tsparticles/preset-links@3.7.1/tsparticles.preset.links.min.js"></script>
+<!-- tsParticles v3 — ambient background particles -->
+<script src="https://cdn.jsdelivr.net/npm/@tsparticles/engine@3/tsparticles.engine.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tsparticles/preset-links@3/tsparticles.preset.links.min.js"></script>
 <!-- ──────────────────────────────────────────────────────────────────── -->
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
@@ -2217,14 +2217,12 @@ input[type=range]{
 .hdr-btn.btn-dup:hover{box-shadow:0 4px 20px rgba(255,215,0,.35);border-color:rgba(255,215,0,.6)}
 </style>
 <!-- WDS-SGM SCORE: 8.0/10 · SEAL: EVENTSPACE-SGMDS-2026-05 · Target 8.5+ -->
-<!-- GSAP + ScrollTrigger (all free Apr 2025) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/ScrollTrigger.min.js"></script>
+<!-- GSAP already loaded at top of <head> (lines 25-31) — duplicates removed -->
 <!-- AOS -->
 <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <!-- Mo.js particle burst -->
-<script src="https://cdn.jsdelivr.net/npm/@mojs/core" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@mojs/core/build/mo.min.js" defer></script>
 </head>
 <body class="wes-grain">
 <div class="wes-bg"><div class="wes-l1"></div><div class="wes-l2"></div><div class="wes-l3"></div></div>
@@ -8427,7 +8425,6 @@ function fpToggleRowBar() {
 })();
 </script>
 
-<script src="./whetu_upgrade.js"></script>
 
 <!-- ══════════════════════════════════════════════════════
      V6 JS: CINEMATIC HERO · BOOKING CALENDAR · EQUIPMENT DASHBOARD · NEXT-EVENT CARD
@@ -9257,7 +9254,7 @@ document.addEventListener('DOMContentLoaded', function() {
     gsap.registerPlugin(ScrollTrigger, SplitText, Flip);
     if (document.querySelector('.hero-title .word')) gsap.from('.hero-title .word', { duration: 0.75, y: 28, opacity: 0, ease: 'power3.out', delay: 0.15, stagger: 0.08 });
     if (document.querySelector('.hero-subtitle, .hero-meta')) gsap.from('.hero-subtitle, .hero-meta', { duration: 0.9, y: 18, opacity: 0, ease: 'power3.out', delay: 0.5, stagger: 0.1 });
-    if (document.querySelector('.step-panel .panel-head')) gsap.from('.step-panel:first-child .panel-head', { scrollTrigger: { trigger: '.step-panel', start: 'top 88%' }, duration: 0.8, y: 24, opacity: 0, ease: 'power2.out' });
+    if (document.querySelector('.step-panel:first-child .panel-head')) gsap.from('.step-panel:first-child .panel-head', { scrollTrigger: { trigger: '.step-panel', start: 'top 88%' }, duration: 0.8, y: 24, opacity: 0, ease: 'power2.out' });
     if (document.querySelector('.sn-step')) gsap.from('.sn-step', { duration: 0.5, scale: 0.9, opacity: 0, stagger: 0.08, ease: 'back.out(2)', delay: 0.3 });
   }
 
