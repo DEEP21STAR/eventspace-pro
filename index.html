@@ -48,8 +48,8 @@ select option{background:var(--bg2)}
 
 /* Aurora */
 body::before,body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0}
-body::before{background:radial-gradient(ellipse 80% 55% at 15% 45%,oklch(60% var(--step-chroma) var(--step-hue)/.13) 0%,transparent 55%),radial-gradient(ellipse 55% 75% at 85% 25%,oklch(55% .22 calc(var(--step-hue)+50)/.10) 0%,transparent 50%);animation:aurora 14s ease-in-out infinite alternate;transition:--step-hue 700ms ease,--step-chroma 700ms ease}
-body::after{background:radial-gradient(ellipse 40% 60% at 50% 90%,oklch(50% var(--step-chroma) calc(var(--step-hue)-30)/.08) 0%,transparent 50%);animation:aurora 18s ease-in-out infinite alternate-reverse}
+body::before{background:radial-gradient(ellipse 80% 55% at 15% 45%,oklch(60% var(--step-chroma) var(--step-hue)/.28) 0%,transparent 55%),radial-gradient(ellipse 55% 75% at 85% 25%,oklch(55% .22 calc(var(--step-hue)+50)/.22) 0%,transparent 50%);animation:aurora 14s ease-in-out infinite alternate;transition:--step-hue 700ms ease,--step-chroma 700ms ease}
+body::after{background:radial-gradient(ellipse 40% 60% at 50% 90%,oklch(50% var(--step-chroma) calc(var(--step-hue)-30)/.18) 0%,transparent 50%);animation:aurora 18s ease-in-out infinite alternate-reverse}
 @keyframes aurora{from{transform:scale(1) translate(0,0)}to{transform:scale(1.08) translate(2%,1.5%)}}
 
 /* Depth canvas */
@@ -84,8 +84,8 @@ body::after{background:radial-gradient(ellipse 40% 60% at 50% 90%,oklch(50% var(
 #main{flex:1;height:100vh;overflow:hidden;position:relative}
 
 /* Views */
-.view{position:absolute;inset:0;padding:2rem;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity 300ms}
-.view.active{opacity:1;pointer-events:all}
+.view{position:absolute;inset:0;padding:2rem;overflow-y:auto;opacity:0;pointer-events:none}
+.view.active{pointer-events:all}
 .vh{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
 .vt{font-size:1.4rem;font-weight:700}
 .vs{font-size:.8rem;color:var(--text3);margin-top:.15rem}
@@ -354,6 +354,19 @@ body::after{background:radial-gradient(ellipse 40% 60% at 50% 90%,oklch(50% var(
 .bgr{background:var(--bg3);color:var(--text3)}
 .empty{text-align:center;padding:2.5rem 1rem;color:var(--text3);font-size:.83rem}
 .empty-i{font-size:2.2rem;margin-bottom:.65rem}
+/* ── Empty hero ── */
+.empty-hero{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:62vh;text-align:center;padding:2rem;position:relative;overflow:hidden}
+.empty-hero-glow{position:absolute;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,var(--accent-glow) 0%,transparent 65%);opacity:.22;pointer-events:none;animation:ehg 4s ease-in-out infinite alternate}
+@keyframes ehg{from{transform:scale(.9)}to{transform:scale(1.1)}}
+.empty-icon-ring{width:88px;height:88px;border-radius:50%;background:var(--accent-dim);border:2px solid var(--accent-glow);display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin-bottom:1.5rem;box-shadow:0 0 40px var(--accent-glow),inset 0 0 20px var(--accent-dim);animation:ehp 2.4s ease-in-out infinite;position:relative;z-index:1}
+@keyframes ehp{0%,100%{box-shadow:0 0 24px var(--accent-glow)}50%{box-shadow:0 0 48px var(--accent-glow),0 0 0 12px var(--accent-dim)}}
+.empty-hero-h{font-size:1.9rem;font-weight:700;margin-bottom:.55rem;color:var(--text);position:relative;z-index:1}
+.empty-hero-s{color:var(--text3);font-size:.9rem;margin-bottom:2rem;max-width:320px;line-height:1.5;position:relative;z-index:1}
+.empty-cta{background:var(--accent);color:oklch(10% 0 0);padding:.9rem 2.5rem;border-radius:99px;font-size:1rem;font-weight:700;cursor:pointer;border:none;box-shadow:0 4px 24px var(--accent-glow);transition:transform 150ms,box-shadow 150ms;margin-bottom:2.2rem;position:relative;z-index:1;font-family:inherit}
+.empty-cta:hover{transform:scale(1.05);box-shadow:0 8px 36px var(--accent-glow)}
+.empty-feat{display:flex;gap:2rem;position:relative;z-index:1}
+.empty-feat-item{display:flex;flex-direction:column;align-items:center;gap:.4rem;color:var(--text3);font-size:.78rem}
+.empty-feat-item span:first-child{font-size:1.4rem;display:block}
 .toast{position:fixed;bottom:5.5rem;right:2rem;z-index:300;background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--accent-glow);border-radius:99px;padding:.42rem .95rem;font-size:.76rem;color:var(--accent);opacity:0;transform:translateY(8px);transition:opacity 200ms,transform 200ms;pointer-events:none}
 .toast.show{opacity:1;transform:none}
 
@@ -413,6 +426,7 @@ body::after{background:radial-gradient(ellipse 40% 60% at 50% 90%,oklch(50% var(
         <div><div class="vt" id="dTitle">Good evening</div><div class="vs">Your event pipeline</div></div>
         <button class="btn-g" onclick="openSettings()" style="padding:.45rem .9rem;font-size:.8rem">⚙ Settings</button>
       </div>
+      <div id="dashHero"></div>
       <div class="rev-strip" id="revStrip"></div>
       <div style="font-size:.74rem;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.4rem">Quote Pipeline — drag to update status</div>
       <div class="pipeline" id="pipeline"></div>
@@ -721,7 +735,9 @@ function sv(id){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
   const v=document.getElementById('v'+id.charAt(0));
-  if(v){v.classList.add('active');gsap.fromTo(v,{opacity:0,y:10},{opacity:1,y:0,duration:.3,ease:'power2.out'})}
+  gsap.killTweensOf('.view');
+  document.querySelectorAll('.view').forEach(u=>gsap.set(u,{opacity:0,y:0}));
+  if(v){v.classList.add('active');gsap.fromTo(v,{opacity:0,y:10},{opacity:1,y:0,duration:.3,ease:'power2.out',overwrite:true})}
   const ni=document.querySelector(`.ni[onclick="sv('${id}')"]`);
   if(ni) ni.classList.add('active');
   if(id==='analytics') initAnalytics();
@@ -751,6 +767,14 @@ function renderRev(){
   const mrev=mq.reduce((s,x)=>s+x.total,0);
   const avg=q.length?Math.round(q.reduce((s,x)=>s+x.total,0)/q.length):0;
   const cv=q.length?Math.round(conf.length/q.length*100):0;
+  const hero=document.getElementById('dashHero');
+  if(hero){hero.innerHTML=q.length===0?`<div style="background:linear-gradient(135deg,var(--accent-dim) 0%,oklch(14% .025 250/.6) 100%);border:1px solid var(--accent-glow);border-radius:20px;padding:1.8rem 2rem;margin-bottom:1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap">
+    <div>
+      <div style="font-size:1.4rem;font-weight:700;margin-bottom:.35rem">Welcome to ZENITH ✦</div>
+      <div style="font-size:.85rem;color:var(--text3);max-width:420px;line-height:1.5">Your event management OS is ready. Create your first quote to unlock the full pipeline, AI brain insights, and revenue analytics.</div>
+    </div>
+    <button onclick="openWizard()" style="background:var(--accent);color:oklch(10% 0 0);padding:.85rem 2rem;border-radius:99px;font-size:.95rem;font-weight:700;border:none;cursor:pointer;box-shadow:0 4px 20px var(--accent-glow);transition:transform 150ms;white-space:nowrap;font-family:inherit" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">✦ Create First Quote</button>
+  </div>`:''}
   document.getElementById('revStrip').innerHTML=[
     {l:'Total Revenue',v:'$'+fmt(tot),d:'All confirmed'},
     {l:'This Month',v:'$'+fmt(mrev),d:mq.length+' events',c:mrev>0?'up':''},
@@ -1222,7 +1246,19 @@ function renderQL(){
         <div><div class="qc-name">${x.clientName}</div><div class="qc-meta">${x.eventType} · ${fmtD(x.date)} · ${x.guests||'?'} guests</div></div>
         <div style="text-align:right"><div class="qc-amt">$${fmt(x.total)}</div></div>
       </div>
-    </div>`).join(''):`<div class="empty"><div class="empty-i">◫</div>No quotes yet. Use the ✦ button to create one.</div>`;
+    </div>`).join(''):`<div class="empty-hero">
+  <div class="empty-hero-glow"></div>
+  <div class="empty-icon-ring">◫</div>
+  <div class="empty-hero-h">Your Pipeline Awaits</div>
+  <div class="empty-hero-s">Create your first quote and watch your event business come to life</div>
+  <button onclick="openWizard()" class="empty-cta">✦ Create First Quote</button>
+  <div class="empty-feat">
+    <div class="empty-feat-item"><span>📋</span><span>Track Quotes</span></div>
+    <div class="empty-feat-item"><span>👥</span><span>Manage Clients</span></div>
+    <div class="empty-feat-item"><span>📊</span><span>Revenue Insights</span></div>
+    <div class="empty-feat-item"><span>📄</span><span>Generate PDFs</span></div>
+  </div>
+</div>`;
 }
 function renderCL(){
   const q=gQ();const cm={};
@@ -1235,7 +1271,13 @@ function renderCL(){
         <div class="av-lg" style="background:oklch(30% .12 ${nHue(c.name)});font-size:1rem;width:44px;height:44px;flex-shrink:0">${c.name.charAt(0).toUpperCase()}</div>
         <div><div class="qc-name">${c.name}${c.q.length>1?` <span class="badge bp">↩ ${c.q.length}x</span>`:''}</div><div class="qc-meta">${c.email||'—'} · ${c.phone||'—'}</div><div class="qc-meta">${c.q.length} quote${c.q.length!==1?'s':''} · $${fmt(c.q.reduce((s,x)=>s+x.total,0))} total</div></div>
       </div>
-    </div>`).join(''):`<div class="empty"><div class="empty-i">◉</div>No clients yet.</div>`;
+    </div>`).join(''):`<div class="empty-hero">
+  <div class="empty-hero-glow"></div>
+  <div class="empty-icon-ring">◉</div>
+  <div class="empty-hero-h">No Clients Yet</div>
+  <div class="empty-hero-s">Clients appear here automatically when you create your first quote</div>
+  <button onclick="openWizard()" class="empty-cta">✦ Create First Quote</button>
+</div>`;
 }
 function editQ(id){
   const q=gQ().find(x=>x.id===id);if(!q)return;
