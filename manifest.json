@@ -1,0 +1,18 @@
+{
+  "name": "ZENITH — Event Space OS",
+  "short_name": "ZENITH",
+  "description": "Cinematic event space booking & quote management system",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0d14",
+  "theme_color": "#0a0d14",
+  "orientation": "any",
+  "icons": [
+    { "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='36' fill='%230a0d14'/><text y='140' x='96' font-size='120' text-anchor='middle' fill='oklch(72%25 0.18 210)'>⬡</text></svg>", "sizes": "192x192", "type": "image/svg+xml" },
+    { "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='96' fill='%230a0d14'/><text y='370' x='256' font-size='320' text-anchor='middle' fill='oklch(72%25 0.18 210)'>⬡</text></svg>", "sizes": "512x512", "type": "image/svg+xml" }
+  ],
+  "categories": ["business", "productivity"],
+  "shortcuts": [
+    { "name": "New Quote", "url": "/?new=1", "description": "Start a new event quote" }
+  ]
+}
