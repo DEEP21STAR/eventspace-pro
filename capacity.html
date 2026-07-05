@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Capacity Planner — EventSpace</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:oklch(8% 0 0);--bg2:oklch(11% 0.01 150);--border:oklch(22% 0.02 150);--text:oklch(92% 0 0);--sub:oklch(65% 0 0);--green:oklch(72% 0.22 150);--teal:oklch(75% 0.18 185);--radius:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;padding:48px 20px;background-image:radial-gradient(ellipse at 50% -10%,oklch(14% 0.04 150/0.4),transparent 55%)}
+.container{max-width:900px;margin:0 auto}
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:40px}
+.brand{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;background:linear-gradient(135deg,var(--green),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.back-link{color:var(--sub);font-size:13px;text-decoration:none;transition:color .2s}.back-link:hover{color:var(--green)}
+h1{font-family:'Space Grotesk',sans-serif;font-size:30px;font-weight:700;margin-bottom:8px}
+.subtitle{color:var(--sub);font-size:15px;margin-bottom:36px;line-height:1.6}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:700px){.grid-2{grid-template-columns:1fr}}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:20px}
+.card-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;margin-bottom:20px;color:var(--teal);display:flex;align-items:center;gap:8px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+label{font-size:12px;font-weight:500;color:var(--sub);text-transform:uppercase;letter-spacing:.06em}
+input,select{background:oklch(7% 0.01 150);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;transition:border-color .2s;width:100%}
+input:focus,select:focus{outline:none;border-color:var(--green)}
+select option{background:oklch(11% 0.01 150)}
+.layout-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:500px){.layout-grid{grid-template-columns:1fr 1fr}}
+.layout-card{background:oklch(9% 0.01 150);border:1px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all .2s;text-align:center}
+.layout-card:hover,.layout-card.sel{border-color:var(--green);background:oklch(12% 0.02 150/0.5)}
+.layout-card.sel{box-shadow:0 0 0 1px var(--green) inset}
+.layout-icon{font-size:28px;margin-bottom:6px}
+.layout-name{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px}
+.layout-cap{font-size:12px;color:var(--sub);margin-top:2px}
+.result-panel{background:oklch(7% 0 0);border:1px solid var(--border);border-radius:var(--radius);padding:28px}
+.result-panel.show{display:block}
+.cap-big{text-align:center;margin-bottom:24px}
+.cap-big-num{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:56px;color:var(--green);line-height:1}
+.cap-big-label{font-size:13px;color:var(--sub);margin-top:6px}
+.config-table{width:100%;border-collapse:collapse;font-size:13px}
+.config-table td{padding:10px;border-bottom:1px solid oklch(18% 0.01 150)}
+.config-table td:first-child{color:var(--sub)}
+.config-table td:last-child{text-align:right;font-weight:600}
+.warn{background:oklch(10% 0.02 50/0.5);border:1px solid oklch(28% 0.06 60/0.4);border-radius:10px;padding:14px;font-size:13px;color:oklch(75% 0.12 70);margin-top:16px;line-height:1.6}
+.btn{padding:12px 22px;border-radius:10px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;cursor:pointer;border:none;background:linear-gradient(135deg,var(--green),var(--teal));color:#000;transition:opacity .2s;width:100%;margin-top:4px}
+.btn:hover{opacity:.88}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="hdr">
+    <div class="brand">✦ EventSpace</div>
+    <a href="./index.html" class="back-link">← Home</a>
+  </div>
+  <h1>Capacity Planner</h1>
+  <p class="subtitle">Calculate maximum attendance for any seating layout. Select your venue dimensions, choose a layout style, and get recommended capacities instantly.</p>
+
+  <div class="grid-2">
+    <div>
+      <div class="card">
+        <div class="card-title">📐 Venue Dimensions</div>
+        <div class="field"><label>Room Length (metres)</label><input id="roomLen" type="number" placeholder="20" oninput="calculate()"></div>
+        <div class="field"><label>Room Width (metres)</label><input id="roomWid" type="number" placeholder="15" oninput="calculate()"></div>
+        <div class="field"><label>Usable Area % (subtract stage, bar, dance floor)</label><input id="usable" type="number" value="75" oninput="calculate()"></div>
+        <div class="field"><label>Stage / Feature Area (m²)</label><input id="stageArea" type="number" placeholder="0" oninput="calculate()"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🪑 Seating Layout</div>
+        <div class="layout-grid" id="layoutGrid">
+          <div class="layout-card sel" onclick="selLayout(this,'theatre',0.9)" data-factor="0.9"><div class="layout-icon">🎭</div><div class="layout-name">Theatre</div><div class="layout-cap">0.9 m² / person</div></div>
+          <div class="layout-card" onclick="selLayout(this,'banquet',1.5)" data-factor="1.5"><div class="layout-icon">🍽️</div><div class="layout-name">Banquet</div><div class="layout-cap">1.5 m² / person</div></div>
+          <div class="layout-card" onclick="selLayout(this,'classroom',1.8)" data-factor="1.8"><div class="layout-icon">🏫</div><div class="layout-name">Classroom</div><div class="layout-cap">1.8 m² / person</div></div>
+          <div class="layout-card" onclick="selLayout(this,'cocktail',0.6)" data-factor="0.6"><div class="layout-icon">🥂</div><div class="layout-name">Cocktail</div><div class="layout-cap">0.6 m² / person</div></div>
+          <div class="layout-card" onclick="selLayout(this,'cabaret',2.0)" data-factor="2.0"><div class="layout-icon">🎤</div><div class="layout-name">Cabaret</div><div class="layout-cap">2.0 m² / person</div></div>
+          <div class="layout-card" onclick="selLayout(this,'boardroom',2.5)" data-factor="2.5"><div class="layout-icon">💼</div><div class="layout-name">Boardroom</div><div class="layout-cap">2.5 m² / person</div></div>
+        </div>
+        <button class="btn" onclick="calculate()">Calculate Capacity</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="result-panel" id="resultPanel">
+        <div class="card-title" style="color:var(--green)">📊 Results</div>
+        <div class="cap-big"><div class="cap-big-num" id="capNum">—</div><div class="cap-big-label" id="capLabel">Select dimensions to calculate</div></div>
+        <table class="config-table" id="configTable"></table>
+        <div id="capWarn"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var _layout='theatre',_factor=0.9;
+function selLayout(el,name,factor){
+  document.querySelectorAll('.layout-card').forEach(function(c){c.classList.remove('sel');});
+  el.classList.add('sel');
+  _layout=name;_factor=factor;
+  calculate();
+}
+function calculate(){
+  var len=parseFloat(document.getElementById('roomLen').value)||0;
+  var wid=parseFloat(document.getElementById('roomWid').value)||0;
+  var usable=parseFloat(document.getElementById('usable').value)||75;
+  var stage=parseFloat(document.getElementById('stageArea').value)||0;
+  if(!len||!wid)return;
+  var totalArea=len*wid;
+  var netArea=(totalArea*(usable/100))-stage;
+  if(netArea<=0){document.getElementById('capNum').textContent='0';document.getElementById('capLabel').textContent='No usable space after stage/features';return;}
+  var cap=Math.floor(netArea/_factor);
+  var comfortable=Math.floor(cap*0.8);
+  var max=Math.floor(cap*1.1);
+  document.getElementById('capNum').textContent=cap;
+  document.getElementById('capLabel').textContent=cap+' people ('+_layout+' layout)';
+  document.getElementById('configTable').innerHTML=
+    '<tr><td>Total floor area</td><td>'+totalArea.toFixed(1)+' m²</td></tr>'+
+    '<tr><td>Usable area</td><td>'+netArea.toFixed(1)+' m²</td></tr>'+
+    '<tr><td>Space per person</td><td>'+_factor+' m²</td></tr>'+
+    '<tr><td>Comfortable capacity</td><td>~'+comfortable+'</td></tr>'+
+    '<tr><td>Recommended max</td><td>'+cap+'</td></tr>'+
+    '<tr><td>Absolute maximum</td><td>'+max+' ⚠️</td></tr>';
+  var warn='';
+  if(cap<20)warn='<div class="warn">⚠️ Small capacity — consider removing stage or increasing usable area percentage.</div>';
+  if(usable>90)warn='<div class="warn">⚠️ Usable area above 90% may not account for emergency egress paths. Check NZ Building Code Clause D1 (access and egress).</div>';
+  document.getElementById('capWarn').innerHTML=warn;
+}
+calculate();
+</script>
+</body>
+</html>

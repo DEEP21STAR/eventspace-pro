@@ -1,0 +1,209 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Event Enquiry — EVENTSPACE</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:oklch(5% 0.01 280);--bg2:oklch(9% 0.015 280);--bg3:oklch(12% 0.02 280);--border:oklch(20% 0.025 280);--text:oklch(92% 0 0);--sub:oklch(62% 0 0);--violet:oklch(68% 0.28 290);--pink:oklch(78% 0.18 320);--cyan:oklch(72% 0.18 200);--radius:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;padding:40px 20px;background-image:radial-gradient(ellipse at 20% 20%,oklch(12% 0.04 280),transparent 60%),radial-gradient(ellipse at 80% 80%,oklch(10% 0.05 320),transparent 60%)}
+.container{max-width:680px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:40px}
+.brand-icon{width:44px;height:44px;background:linear-gradient(135deg,var(--violet),var(--pink));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.brand-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:20px;background:linear-gradient(135deg,var(--violet),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.brand-tag{font-size:11px;color:var(--sub);letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
+h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(24px,5vw,36px);font-weight:700;margin-bottom:8px;line-height:1.2}
+.subtitle{color:var(--sub);font-size:15px;margin-bottom:36px;line-height:1.6}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:20px;backdrop-filter:blur(10px)}
+.card-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--violet);margin-bottom:18px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12px;font-weight:500;color:var(--sub);margin-bottom:6px;letter-spacing:.02em}
+.field input,.field textarea,.field select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:11px 14px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color .2s}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--violet)}
+.field select option{background:var(--bg3)}
+.field textarea{resize:vertical;min-height:90px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:520px){.grid-2{grid-template-columns:1fr}}
+.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+@media(max-width:480px){.type-grid{grid-template-columns:repeat(2,1fr)}}
+.type-btn{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 6px;text-align:center;cursor:pointer;font-size:12px;font-weight:500;line-height:1.4;transition:all .2s;user-select:none}
+.type-btn:hover,.type-btn.active{border-color:var(--violet);background:oklch(14% 0.03 280);color:var(--violet)}
+.guest-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:460px){.guest-grid{grid-template-columns:repeat(2,1fr)}}
+.guest-btn{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px;text-align:center;cursor:pointer;font-size:12px;font-weight:500;transition:all .2s;user-select:none}
+.guest-btn:hover,.guest-btn.active{border-color:var(--pink);background:oklch(13% 0.02 320);color:var(--pink)}
+.features-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.feat-item{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;transition:border-color .2s;user-select:none}
+.feat-item input[type=checkbox]{accent-color:var(--violet);width:14px;height:14px;cursor:pointer}
+.feat-item.checked{border-color:var(--violet);background:oklch(13% 0.025 280)}
+.feat-item span{font-size:13px}
+.btn-submit{width:100%;background:linear-gradient(135deg,var(--violet),var(--pink));border:none;border-radius:var(--radius);padding:16px;color:#fff;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;cursor:pointer;letter-spacing:.02em;transition:opacity .2s;margin-top:8px}
+.btn-submit:hover{opacity:.88}
+.note{font-size:12px;color:var(--sub);margin-top:10px;text-align:center;line-height:1.5}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--sub);font-size:13px;text-decoration:none;margin-bottom:24px;transition:color .2s}
+.back-link:hover{color:var(--violet)}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="./index.html" class="back-link">← Back to EventSpace</a>
+  <div class="brand">
+    <div class="brand-icon">🎪</div>
+    <div>
+      <div class="brand-name">EVENTSPACE</div>
+      <div class="brand-tag">Venue Enquiry Form</div>
+    </div>
+  </div>
+
+  <h1>Book your event</h1>
+  <p class="subtitle">Tell us about your event and we'll send you availability, pricing, and a tailored proposal within 24 hours.</p>
+
+  <form id="enquiryForm">
+    <div class="card">
+      <div class="card-title">Your Details</div>
+      <div class="grid-2">
+        <div class="field"><label>First name *</label><input type="text" id="eFirst" placeholder="Jane" required></div>
+        <div class="field"><label>Last name *</label><input type="text" id="eLast" placeholder="Smith" required></div>
+      </div>
+      <div class="field"><label>Email address *</label><input type="email" id="eEmail" placeholder="jane@yourcompany.co.nz" required></div>
+      <div class="field"><label>Phone</label><input type="tel" id="ePhone" placeholder="+64 21 000 0000"></div>
+      <div class="field"><label>Organisation / Company</label><input type="text" id="eOrg" placeholder="Smith & Co Ltd"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Event Type</div>
+      <div class="type-grid" id="typeGrid">
+        <div class="type-btn" data-v="Corporate Conference">🏢 Corporate</div>
+        <div class="type-btn" data-v="Wedding / Celebration">💍 Wedding</div>
+        <div class="type-btn" data-v="Birthday Party">🎂 Birthday</div>
+        <div class="type-btn" data-v="Product Launch">🚀 Launch</div>
+        <div class="type-btn" data-v="Workshop / Training">📚 Workshop</div>
+        <div class="type-btn" data-v="Gala / Awards">🏆 Gala</div>
+        <div class="type-btn" data-v="Private Dinner">🍽 Dinner</div>
+        <div class="type-btn" data-v="Exhibition">🖼 Exhibition</div>
+        <div class="type-btn" data-v="Other">✦ Other</div>
+      </div>
+      <input type="hidden" id="eventType">
+    </div>
+
+    <div class="card">
+      <div class="card-title">Date & Guests</div>
+      <div class="grid-2">
+        <div class="field"><label>Preferred date *</label><input type="date" id="eDate" required></div>
+        <div class="field"><label>End date / Duration</label><input type="date" id="eDateEnd"></div>
+      </div>
+      <div class="field"><label>Number of guests</label></div>
+      <div class="guest-grid" id="guestGrid">
+        <div class="guest-btn" data-v="Under 50">Under 50</div>
+        <div class="guest-btn" data-v="50–100">50–100</div>
+        <div class="guest-btn" data-v="100–200">100–200</div>
+        <div class="guest-btn" data-v="200+">200+</div>
+      </div>
+      <input type="hidden" id="guestCount">
+    </div>
+
+    <div class="card">
+      <div class="card-title">Requirements</div>
+      <div class="features-grid" id="featGrid">
+        <label class="feat-item"><input type="checkbox" value="AV & Projector"> <span>📽 AV & Projector</span></label>
+        <label class="feat-item"><input type="checkbox" value="Catering"> <span>🍱 Catering</span></label>
+        <label class="feat-item"><input type="checkbox" value="Bar Service"> <span>🍷 Bar Service</span></label>
+        <label class="feat-item"><input type="checkbox" value="DJ / Sound"> <span>🎵 DJ / Sound</span></label>
+        <label class="feat-item"><input type="checkbox" value="Stage / Podium"> <span>🎤 Stage / Podium</span></label>
+        <label class="feat-item"><input type="checkbox" value="Parking"> <span>🚗 Parking</span></label>
+        <label class="feat-item"><input type="checkbox" value="Photo / Video"> <span>📸 Photo / Video</span></label>
+        <label class="feat-item"><input type="checkbox" value="Decor / Flowers"> <span>💐 Decor</span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Budget & Notes</div>
+      <div class="grid-2">
+        <div class="field"><label>Budget range (NZD)</label>
+          <select id="eBudget">
+            <option value="">Select range…</option>
+            <option>Under $2,000</option><option>$2,000–$5,000</option><option>$5,000–$10,000</option>
+            <option>$10,000–$20,000</option><option>$20,000+</option><option>TBC / Flexible</option>
+          </select>
+        </div>
+        <div class="field"><label>Setup time needed</label>
+          <select id="eSetup">
+            <option value="">Select…</option>
+            <option>Same day (2hrs)</option><option>Day before</option><option>2 days</option><option>Full week</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Tell us more about your event *</label>
+        <textarea id="eNotes" placeholder="Describe your vision, theme, special requirements, or anything else we should know…" required></textarea>
+      </div>
+      <div class="field"><label>How did you hear about us?</label>
+        <select id="eSource">
+          <option value="">Select…</option>
+          <option>Google Search</option><option>Instagram</option><option>Word of mouth</option>
+          <option>Past client</option><option>Event directory</option><option>Other</option>
+        </select>
+      </div>
+    </div>
+
+    <button type="submit" class="btn-submit">Send Enquiry → events@eventspace.co.nz</button>
+    <p class="note">This opens your email client with everything pre-filled. We respond within 24 hours.</p>
+  </form>
+</div>
+
+<script>
+document.querySelectorAll('.type-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.type-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById('eventType').value = btn.dataset.v;
+  });
+});
+
+document.querySelectorAll('.guest-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.guest-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById('guestCount').value = btn.dataset.v;
+  });
+});
+
+document.querySelectorAll('.feat-item input').forEach(function(cb) {
+  cb.addEventListener('change', function() {
+    cb.closest('.feat-item').classList.toggle('checked', cb.checked);
+  });
+});
+
+// Set min date to today
+document.getElementById('eDate').min = new Date().toISOString().split('T')[0];
+document.getElementById('eDateEnd').min = new Date().toISOString().split('T')[0];
+
+document.getElementById('enquiryForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var name = document.getElementById('eFirst').value + ' ' + document.getElementById('eLast').value;
+  var features = Array.from(document.querySelectorAll('#featGrid input:checked')).map(function(c){ return c.value; }).join(', ') || 'None selected';
+  var body = encodeURIComponent(
+    'Hi EVENTSPACE team,\n\n' +
+    'I\'d like to enquire about hosting an event at your venue.\n\n' +
+    'NAME: ' + name + '\n' +
+    'EMAIL: ' + document.getElementById('eEmail').value + '\n' +
+    'PHONE: ' + (document.getElementById('ePhone').value || 'Not provided') + '\n' +
+    'ORGANISATION: ' + (document.getElementById('eOrg').value || 'Not provided') + '\n\n' +
+    'EVENT TYPE: ' + (document.getElementById('eventType').value || 'Not specified') + '\n' +
+    'DATE: ' + document.getElementById('eDate').value + '\n' +
+    'END DATE: ' + (document.getElementById('eDateEnd').value || 'TBC') + '\n' +
+    'GUESTS: ' + (document.getElementById('guestCount').value || 'Not specified') + '\n' +
+    'BUDGET: ' + (document.getElementById('eBudget').value || 'TBC') + '\n' +
+    'SETUP TIME: ' + (document.getElementById('eSetup').value || 'TBC') + '\n\n' +
+    'REQUIREMENTS: ' + features + '\n\n' +
+    'EVENT DETAILS:\n' + document.getElementById('eNotes').value + '\n\n' +
+    'HOW THEY HEARD: ' + (document.getElementById('eSource').value || 'Not specified') + '\n\n' +
+    '---\nSubmitted via EVENTSPACE enquiry form'
+  );
+  var subject = encodeURIComponent('Event Enquiry — ' + name + ' · ' + document.getElementById('eDate').value);
+  window.location.href = 'mailto:events@eventspace.co.nz?subject=' + subject + '&body=' + body;
+});
+</script>
+</body>
+</html>
