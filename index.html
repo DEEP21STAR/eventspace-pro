@@ -2405,6 +2405,47 @@ input[type=range]{
 .demo-btn.cyan{background:rgba(0,230,255,.12);border:1px solid rgba(0,230,255,.3);color:var(--cyan)}
 .hslide-shortcut{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
 .hslide-shortcut-tag{padding:3px 8px;border-radius:20px;font-size:.62rem;font-weight:700;background:rgba(0,230,255,.08);border:1px solid rgba(0,230,255,.2);color:var(--cyan);letter-spacing:.5px}
+
+/* ── CLIENT AVATAR ── */
+.client-avatar{width:30px;height:30px;border-radius:50%;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:rgba(255,255,255,.4);font-size:.72rem;font-weight:900;display:flex;align-items:center;justify-content:center;letter-spacing:0;flex-shrink:0;transition:all .3s;cursor:default;margin-right:4px}
+
+/* ── SEASON BADGE ── */
+.season-badge{display:none;padding:2px 8px;border-radius:20px;font-size:.6rem;font-weight:800;letter-spacing:1px;margin-left:8px;vertical-align:middle;cursor:default}
+.season-peak{background:rgba(255,140,0,.15);border:1px solid rgba(255,140,0,.4);color:rgba(255,180,0,.9)}
+.season-winter{background:rgba(100,180,255,.1);border:1px solid rgba(100,180,255,.35);color:rgba(140,200,255,.9)}
+.season-standard{background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.3);color:var(--green)}
+
+/* ── AVAILABILITY CONFLICT ── */
+.date-conflict-warn{display:none;margin-top:5px;padding:6px 10px;border-radius:8px;background:rgba(255,68,102,.1);border:1px solid rgba(255,68,102,.3);color:rgba(255,120,140,.9);font-size:.7rem;font-weight:600;animation:fadeUp .25s ease}
+
+/* ── WHATSAPP PREVIEW ── */
+.wa-preview-wrap{display:none;margin-top:12px}
+.wa-preview-hdr{font-size:.6rem;letter-spacing:2px;color:rgba(0,255,136,.7);font-weight:700;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.wa-preview-hdr::after{content:'';flex:1;height:1px;background:rgba(0,255,136,.15)}
+.wa-preview-bubble{background:rgba(15,40,25,.8);border:1px solid rgba(0,255,136,.15);border-radius:12px;padding:10px 12px;font-size:.72rem;line-height:1.7;color:rgba(255,255,255,.8);position:relative;max-height:140px;overflow-y:auto}
+.wa-preview-bubble::before{content:'';position:absolute;top:14px;left:-6px;width:0;height:0;border-top:6px solid transparent;border-bottom:6px solid transparent;border-right:6px solid rgba(0,255,136,.15)}
+
+/* ── QUOTE READINESS SCORE ── */
+.readiness-wrap{display:flex;align-items:center;gap:14px;padding:12px 14px;background:rgba(0,230,255,.04);border:1px solid rgba(0,230,255,.12);border-radius:12px;margin-bottom:12px}
+.readiness-canvas-wrap{position:relative;width:54px;height:54px;flex-shrink:0}
+.readiness-canvas-wrap canvas{display:block}
+.readiness-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column}
+#readinessScore{font-size:.72rem;font-weight:900;color:var(--cyan);line-height:1}
+.readiness-info{flex:1}
+.readiness-title{font-size:.6rem;letter-spacing:2px;color:var(--muted);font-weight:700;text-transform:uppercase;margin-bottom:3px}
+#readinessLabel{font-size:.8rem;font-weight:800;color:var(--text)}
+.readiness-checks{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.readiness-check{font-size:.6rem;padding:2px 6px;border-radius:10px;font-weight:700}
+.readiness-check.ok{background:rgba(0,255,136,.1);color:var(--green);border:1px solid rgba(0,255,136,.25)}
+.readiness-check.no{background:rgba(255,255,255,.04);color:var(--muted);border:1px solid rgba(255,255,255,.08)}
+
+/* ── KEYBOARD SHORTCUT BAR ── */
+.kb-bar{display:flex;align-items:center;gap:2px;padding:4px 16px;background:rgba(0,0,0,.3);border-bottom:1px solid rgba(255,255,255,.04);overflow-x:auto;scrollbar-width:none}
+.kb-bar::-webkit-scrollbar{display:none}
+.kb-bar-label{font-size:.58rem;color:var(--muted);letter-spacing:.5px;margin-right:6px;white-space:nowrap;flex-shrink:0}
+.kb-key{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:5px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);font-size:.6rem;color:rgba(255,255,255,.55);white-space:nowrap;cursor:pointer;transition:all .15s;flex-shrink:0}
+.kb-key:hover{background:rgba(0,230,255,.1);border-color:rgba(0,230,255,.3);color:var(--cyan)}
+.kb-key kbd{font-family:monospace;font-size:.58rem;background:rgba(255,255,255,.08);border-radius:3px;padding:1px 4px;border:1px solid rgba(255,255,255,.12)}
 </style>
 <!-- WDS-SGM SCORE: 8.0/10 · SEAL: EVENTSPACE-SGMDS-2026-05 · Target 8.5+ -->
 <!-- GSAP already loaded at top of <head> (lines 25-31) — duplicates removed -->
@@ -2579,9 +2620,12 @@ input[type=range]{
       <div class="hdr-logo-sub">Marquee Sizing Wizard · Whetū Digital</div>
     </div>
   </div>
-  <div class="hdr-client" onclick="focusStep(1)">
-    <div class="hdr-client-lbl">Active Quote</div>
-    <div class="hdr-client-name" id="hdrClientName">— New Quote —</div>
+  <div class="hdr-client" onclick="focusStep(1)" style="display:flex;align-items:center;gap:8px">
+    <div class="client-avatar" id="clientAvatar" title="Client">?</div>
+    <div>
+      <div class="hdr-client-lbl">Active Quote</div>
+      <div class="hdr-client-name" id="hdrClientName">— New Quote —</div>
+    </div>
   </div>
   <div class="hdr-btns">
     <!-- Primary actions always visible -->
@@ -2661,6 +2705,21 @@ input[type=range]{
   </div>
 </nav>
 
+<!-- ── KEYBOARD SHORTCUT BAR ── -->
+<div class="kb-bar">
+  <span class="kb-bar-label">SHORTCUTS</span>
+  <span class="kb-key" onclick="focusStep(1)"><kbd>Alt+1</kbd> Client</span>
+  <span class="kb-key" onclick="focusStep(2)"><kbd>Alt+2</kbd> Zone</span>
+  <span class="kb-key" onclick="focusStep(3)"><kbd>Alt+3</kbd> Package</span>
+  <span class="kb-key" onclick="focusStep(4)"><kbd>Alt+4</kbd> Quote</span>
+  <span class="kb-key" onclick="focusStep(5)"><kbd>Alt+5</kbd> Bookings</span>
+  <span class="kb-key" onclick="openHelpGuide()"><kbd>?</kbd> Help</span>
+  <span class="kb-key" onclick="loadDemoData()"><kbd>D</kbd> Demo</span>
+  <span class="kb-key" onclick="newQuote()"><kbd>N</kbd> New Quote</span>
+  <span class="kb-key" onclick="openPresentation()"><kbd>P</kbd> Present</span>
+  <span class="kb-key" onclick="toggleFullscreen()"><kbd>F</kbd> Fullscreen</span>
+</div>
+
 <!-- ═══════════════════ MAIN ═══════════════════ -->
 <div class="main">
 
@@ -2692,50 +2751,82 @@ input[type=range]{
           <div class="s1-prog-track"><div class="s1-prog-fill" id="s1ProgFill" style="width:0%"></div></div>
           <span class="s1-prog-pct" id="s1ProgPct">0%</span>
         </div>
-        <!-- NEXT EVENT HERO CARD -->
-        <div class="next-event-card" id="nextEventCard">
-          <div class="nec-label">◈ Next Upcoming Event</div>
-          <div class="nec-name" id="necName">Loading…</div>
-          <div class="nec-date" id="necDate">—</div>
-          <div class="nec-pills">
-            <span class="nec-pill cyan" id="necBookings">— bookings</span>
-            <span class="nec-pill gold" id="necRevenue">—</span>
-            <span class="nec-pill green" id="necItems">— items</span>
-          </div>
-          <div class="nec-days"><div class="nec-days-num" id="necDays">—</div><div class="nec-days-lbl">days away</div></div>
+        <!-- QUICK-FILL SCENARIO CHIPS -->
+        <div class="qf-chips">
+          <span class="qf-chip" data-scenario="wedding"   onclick="fillScenario('wedding')">💍 Wedding · 80pax</span>
+          <span class="qf-chip" data-scenario="birthday"  onclick="fillScenario('birthday')">🎉 Birthday · 50pax</span>
+          <span class="qf-chip" data-scenario="corporate" onclick="fillScenario('corporate')">💼 Corporate · 30pax</span>
+          <span class="qf-chip" data-scenario="family"    onclick="fillScenario('family')">👨‍👩‍👧 Family · 40pax</span>
+          <span class="qf-chip" data-scenario="market"    onclick="fillScenario('market')">🛍 Market · 120pax</span>
         </div>
+
+        <!-- NEXT EVENT HERO CARD (collapsible) -->
+        <div class="biz-dash-toggle" onclick="toggleBizDash()">
+          <span>◈ BUSINESS DASHBOARD</span>
+          <span class="biz-dash-arrow" id="bizDashArrow">▼</span>
+        </div>
+        <div id="bizDashContent">
+          <div class="next-event-card" id="nextEventCard">
+            <div class="nec-label">◈ Next Upcoming Event</div>
+            <div class="nec-name" id="necName">Loading…</div>
+            <div class="nec-date" id="necDate">—</div>
+            <div class="nec-pills">
+              <span class="nec-pill cyan" id="necBookings">— bookings</span>
+              <span class="nec-pill gold" id="necRevenue">—</span>
+              <span class="nec-pill green" id="necItems">— items</span>
+            </div>
+            <div class="nec-days"><div class="nec-days-num" id="necDays">—</div><div class="nec-days-lbl">days away</div></div>
+          </div>
+        </div>
+
         <div class="field-row">
           <div class="field">
             <label>Client Name</label>
-            <input id="clientName" type="text" placeholder="Full name" oninput="updateClientHeader()">
+            <div class="field-wrap">
+              <input id="clientName" type="text" placeholder="Full name" oninput="updateClientHeader()">
+              <span class="field-check" id="chk-clientName">✓</span>
+            </div>
           </div>
           <div class="field">
             <label>Phone</label>
-            <input id="clientPhone" type="tel" placeholder="021 xxx xxxx">
+            <div class="field-wrap">
+              <input id="clientPhone" type="tel" placeholder="021 xxx xxxx" oninput="updateS1Progress()">
+              <span class="field-check" id="chk-clientPhone">✓</span>
+            </div>
           </div>
         </div>
         <div class="field">
           <label>Email</label>
-          <input id="clientEmail" type="email" placeholder="client@email.com">
+          <div class="field-wrap">
+            <input id="clientEmail" type="email" placeholder="client@email.com" oninput="updateS1Progress();renderWaPreview()">
+            <span class="field-check" id="chk-clientEmail">✓</span>
+          </div>
         </div>
         <div class="field-row">
           <div class="field">
-            <label>Event Date</label>
-            <input id="eventDate" type="date" oninput="renderAvailHeatmap()">
+            <label>Event Date <span id="seasonBadge" class="season-badge" style="display:none"></span></label>
+            <div class="field-wrap">
+              <input id="eventDate" type="date" oninput="renderAvailHeatmap();checkDateConflict();renderWaPreview()">
+              <span class="field-check" id="chk-eventDate">✓</span>
+            </div>
+            <div class="date-conflict-warn" id="dateConflictWarn"></div>
           </div>
           <div class="field">
             <label>Event Type</label>
-            <select id="eventType">
-              <option value="">Select type</option>
-              <option>Birthday Party</option>
-              <option>Wedding Reception</option>
-              <option>Corporate Event</option>
-              <option>Family Gathering</option>
-              <option>Market / Expo</option>
-              <option>School Event</option>
-              <option>Sports Event</option>
-              <option>Other</option>
-            </select>
+            <div class="field-wrap">
+              <select id="eventType" oninput="updateS1Progress();renderWaPreview()">
+                <option value="">Select type</option>
+                <option>Birthday Party</option>
+                <option>Wedding Reception</option>
+                <option>Corporate Event</option>
+                <option>Family Gathering</option>
+                <option>Market / Expo</option>
+                <option>School Event</option>
+                <option>Sports Event</option>
+                <option>Other</option>
+              </select>
+              <span class="field-check" id="chk-eventType">✓</span>
+            </div>
           </div>
         </div>
         <!-- AVAILABILITY HEATMAP CALENDAR -->
@@ -2756,10 +2847,15 @@ input[type=range]{
         <div class="field">
           <label>🗺 Property Address (NZ)</label>
           <div class="addr-search">
-            <input class="addr-input" id="addrInput" type="text" placeholder="e.g. 14 Beaumont Street, Hamilton" value="14 Beaumont Street, Hamilton, NZ" onkeydown="if(event.key==='Enter')searchAddress()">
+            <input class="addr-input" id="addrInput" type="text" placeholder="e.g. 14 Beaumont Street, Hamilton" value="14 Beaumont Street, Hamilton, NZ" onkeydown="if(event.key==='Enter')searchAddress()" oninput="updateS1Progress();renderWaPreview()">
             <button class="addr-search-btn" onclick="searchAddress()">🔍</button>
             <div class="addr-results" id="addrResults"></div>
           </div>
+        </div>
+        <!-- WHATSAPP MESSAGE PREVIEW -->
+        <div class="wa-preview-wrap" id="waPreviewWrap">
+          <div class="wa-preview-hdr">💬 WhatsApp message preview</div>
+          <div class="wa-preview-bubble" id="waPreview"></div>
         </div>
         <div class="property-analysis" id="propAnalysis" style="display:none">
           <div class="pa-title">◈ Property Analysis</div>
@@ -2970,6 +3066,18 @@ input[type=range]{
         <div class="panel-sub">Review, adjust pricing, then export or send to client.</div>
       </div>
       <div class="panel-body">
+        <!-- QUOTE READINESS SCORE -->
+        <div class="readiness-wrap" id="readinessWrap">
+          <div class="readiness-canvas-wrap">
+            <canvas id="readinessCanvas" width="54" height="54"></canvas>
+            <div class="readiness-inner"><span id="readinessScore">0%</span></div>
+          </div>
+          <div class="readiness-info">
+            <div class="readiness-title">QUOTE READINESS</div>
+            <div id="readinessLabel">Getting started</div>
+            <div class="readiness-checks" id="readinessChecks"></div>
+          </div>
+        </div>
         <div id="quoteSummary">
           <div style="text-align:center;font-size:11px;color:var(--muted);padding:20px 0">Complete Steps 1-3 to generate a quote.</div>
         </div>
@@ -4954,7 +5062,7 @@ function focusStep(n) {
   if (nextWait) nextWait.classList.add('next-waiting');
 
   if (n === 3) { updateMarqueeRecs(); renderFurniture(); }
-  if (n === 4) { buildQuote(); var ep=document.getElementById('eqPalette'); if(ep) ep.classList.remove('active'); }
+  if (n === 4) { buildQuote(); var ep=document.getElementById('eqPalette'); if(ep) ep.classList.remove('active'); setTimeout(function(){ if(typeof updateReadinessScore==='function') updateReadinessScore(); }, 300); }
   if (n === 2) map.addControl(drawControl);
   else { try { map.removeControl(drawControl); } catch(e) {} }
   setTimeout(updateGuide, 50);
@@ -5329,6 +5437,9 @@ updateClientHeader = function() {
   (function type() {
     if (i < name.length) { el.textContent += name[i++]; _twTimer = setTimeout(type, 40); }
   })();
+  updateClientAvatar();
+  updateS1Progress();
+  renderWaPreview();
 };
 
 // ── VIEW TRANSITION CSS (add to head) ────────────────────────
@@ -8126,8 +8237,16 @@ function _renderHelpDots() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════
-//  ELEVATION v3 — Welcome, Progress, Tools Dropdown, Map Guide
+//  ELEVATION v3/v4 — Welcome, Progress, Tools Dropdown, Map Guide, BizDash
 // ═══════════════════════════════════════════════════════════════════════
+
+function toggleBizDash() {
+  var c = document.getElementById('bizDashContent');
+  var a = document.getElementById('bizDashArrow');
+  if (!c) return;
+  c.classList.toggle('open');
+  if (a) a.classList.toggle('open');
+}
 
 var _WEL_KEY = 'esp_welcomed_v3';
 
@@ -8151,7 +8270,7 @@ function dismissWelcome(skip) {
 }
 
 // Field progress tracker for Step 1
-var _S1_FIELDS = ['clientName','clientPhone','clientEmail','eventDate','eventType','guestCount','eventAddress'];
+var _S1_FIELDS = ['clientName','clientPhone','clientEmail','eventDate','eventType','addrInput'];
 function updateS1Progress() {
   var filled = 0;
   _S1_FIELDS.forEach(function(id) {
@@ -8205,7 +8324,7 @@ function toggleToolsMenu() {
 // Map guide overlay — show when address field is focused
 (function() {
   document.addEventListener('DOMContentLoaded', function() {
-    var addr = document.getElementById('eventAddress');
+    var addr = document.getElementById('addrInput');
     var guide = document.getElementById('mapGuideOverlay');
     if (addr && guide) {
       addr.addEventListener('focus', function() { guide.classList.add('show'); });
@@ -8213,6 +8332,133 @@ function toggleToolsMenu() {
     }
   });
 })();
+
+// ── QUICK-FILL SCENARIOS ─────────────────────────────────────────────────
+var _scenarios = {
+  wedding:   { type:'Wedding Reception', guests:80, label:'💍 Wedding · 80pax' },
+  birthday:  { type:'Birthday Party',    guests:50, label:'🎉 Birthday · 50pax' },
+  corporate: { type:'Corporate Event',   guests:30, label:'💼 Corporate · 30pax' },
+  family:    { type:'Family Gathering',  guests:40, label:'👨‍👩‍👧 Family · 40pax'  },
+  market:    { type:'Market / Expo',     guests:120,label:'🛍 Market · 120pax'  }
+};
+function fillScenario(key) {
+  var s = _scenarios[key]; if (!s) return;
+  var et = document.getElementById('eventType');
+  if (et) { for (var i=0;i<et.options.length;i++) { if (et.options[i].text === s.type) { et.value = et.options[i].value || et.options[i].text; break; } } }
+  if (typeof updateGuests === 'function') updateGuests(s.guests);
+  var sl = document.getElementById('guestSlider'); if (sl) { sl.value = s.guests; sl.dispatchEvent(new Event('input')); }
+  document.querySelectorAll('.qf-chip').forEach(function(c){ c.classList.remove('active'); });
+  var chip = document.querySelector('[data-scenario="' + key + '"]');
+  if (chip) chip.classList.add('active');
+  updateS1Progress();
+}
+
+// ── CLIENT AVATAR INITIALS ────────────────────────────────────────────────
+function _nameToColor(name) {
+  var hash = 0;
+  for (var i=0;i<name.length;i++) hash = name.charCodeAt(i) + ((hash<<5)-hash);
+  var hue = Math.abs(hash) % 360;
+  return 'oklch(55% 0.18 ' + hue + ')';
+}
+function updateClientAvatar() {
+  var name = (document.getElementById('clientName') || {}).value || '';
+  var av = document.getElementById('clientAvatar');
+  if (!av) return;
+  if (!name.trim()) { av.textContent = '?'; av.style.background = 'rgba(255,255,255,.08)'; av.style.borderColor = 'rgba(255,255,255,.1)'; return; }
+  var parts = name.trim().split(/\s+/);
+  var initials = (parts[0][0] + (parts.length > 1 ? parts[parts.length-1][0] : '')).toUpperCase();
+  var col = _nameToColor(name);
+  av.textContent = initials;
+  av.style.background = col.replace('55%','18%');
+  av.style.borderColor = col;
+  av.style.color = col;
+  av.style.boxShadow = '0 0 12px ' + col.replace('55%','40%');
+}
+
+// ── SEASON BADGE ─────────────────────────────────────────────────────────
+function detectSeason(dateStr) {
+  if (!dateStr) return null;
+  var d = new Date(dateStr); var m = d.getMonth() + 1;
+  if (m >= 12 || m <= 2) return { label:'☀ PEAK SEASON', cls:'peak', tip:'+15% pricing applies' };
+  if (m >= 6 && m <= 8)  return { label:'❄ WINTER',      cls:'winter', tip:'+10% pricing applies' };
+  return { label:'🌿 STANDARD', cls:'standard', tip:'Standard pricing' };
+}
+function updateSeasonBadge() {
+  var d = document.getElementById('eventDate');
+  var b = document.getElementById('seasonBadge');
+  if (!d || !b) return;
+  var s = detectSeason(d.value);
+  if (!s) { b.style.display = 'none'; return; }
+  b.textContent = s.label; b.title = s.tip;
+  b.className = 'season-badge season-' + s.cls;
+  b.style.display = 'inline-flex';
+}
+
+// ── AVAILABILITY CONFLICT CHECK ───────────────────────────────────────────
+function checkDateConflict() {
+  var d = document.getElementById('eventDate');
+  var warn = document.getElementById('dateConflictWarn');
+  if (!d || !warn) return;
+  var val = d.value; if (!val) { warn.style.display='none'; return; }
+  // Check localStorage for existing bookings on same date
+  var quotes = JSON.parse(localStorage.getItem('ep_quotes') || '[]');
+  var clash = quotes.filter(function(q){ return q.date === val && q.status !== 'cancelled'; });
+  if (clash.length > 0) {
+    warn.textContent = '⚠️ ' + clash.length + ' booking' + (clash.length>1?'s':'') + ' already on this date — check availability';
+    warn.style.display = 'block';
+  } else {
+    warn.style.display = 'none';
+  }
+  updateSeasonBadge();
+  updateS1Progress();
+}
+
+// ── LIVE WHATSAPP PREVIEW ────────────────────────────────────────────────
+function renderWaPreview() {
+  var el = document.getElementById('waPreview'); if (!el) return;
+  var name = (document.getElementById('clientName')||{}).value || 'client';
+  var date = (document.getElementById('eventDate')||{}).value || '';
+  var type = (document.getElementById('eventType')||{}).value || 'event';
+  var addr = (document.getElementById('addrInput')||{}).value || 'TBC';
+  var guests = (document.getElementById('guestDisplay')||{}).textContent || '50';
+  var fmt = date ? new Date(date).toLocaleDateString('en-NZ',{weekday:'short',day:'numeric',month:'short',year:'numeric'}) : 'TBC';
+  var msg = 'Hi ' + name.split(' ')[0] + ' 👋\n\nThank you for your enquiry with Events Pro Hire Company!\n\n📅 Date: ' + fmt + '\n🏠 Venue: ' + addr.split(',')[0] + '\n👥 Guests: ' + guests + '\n🎉 Event: ' + type + '\n\nI\'ll send through your personalised quote shortly.\n\nContact us anytime on 021 146 1766\n\n— Inaal | Events Pro Hire Co.';
+  var lines = msg.split('\n');
+  el.innerHTML = lines.map(function(l){ return l ? '<div>' + l + '</div>' : '<br>'; }).join('');
+  el.closest('.wa-preview-wrap').style.display = name.trim() ? 'block' : 'none';
+}
+
+// ── QUOTE READINESS SCORE ─────────────────────────────────────────────────
+function updateReadinessScore() {
+  var canvas = document.getElementById('readinessCanvas');
+  var scoreEl = document.getElementById('readinessScore');
+  var labelEl = document.getElementById('readinessLabel');
+  if (!canvas || !scoreEl) return;
+  // Score = weighted completion across all steps
+  var checks = [
+    !!(document.getElementById('clientName')||{}).value,
+    !!(document.getElementById('clientPhone')||{}).value,
+    !!(document.getElementById('clientEmail')||{}).value,
+    !!(document.getElementById('eventDate')||{}).value,
+    state && state.drawnArea > 0,
+    state && state.selectedMarquee,
+    state && state.quoteTotal > 0
+  ];
+  var score = Math.round(checks.filter(Boolean).length / checks.length * 100);
+  scoreEl.textContent = score + '%';
+  labelEl.textContent = score < 40 ? 'Getting started' : score < 70 ? 'Looking good' : score < 100 ? 'Nearly there' : '🎉 Quote ready!';
+  // Draw arc
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height, cx = W/2, cy = H/2, r = (W/2)-8;
+  ctx.clearRect(0,0,W,H);
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.strokeStyle='rgba(255,255,255,.07)'; ctx.lineWidth=8; ctx.stroke();
+  if (score > 0) {
+    var grad = ctx.createLinearGradient(0,0,W,H);
+    grad.addColorStop(0,'#00e6ff'); grad.addColorStop(1,'#00ff88');
+    ctx.beginPath(); ctx.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+Math.PI*2*score/100);
+    ctx.strokeStyle=grad; ctx.lineWidth=8; ctx.lineCap='round'; ctx.stroke();
+  }
+}
 
 // ═══════════════════════════════════════════════════════════════════════
 //  FURNITURE ICON VISUALISATION — Whetū Digital · EventSpace Pro
@@ -9518,9 +9764,16 @@ document.addEventListener('keydown', function(e) {
   var inInput = tag === 'input' || tag === 'textarea' || e.target.isContentEditable;
   // ESC closes overlay
   if (e.key === 'Escape') { closeKbShortcuts(); return; }
+  // Alt+1-5: jump steps (works even in inputs)
+  if (e.altKey && e.key >= '1' && e.key <= '5') { e.preventDefault(); focusStep(parseInt(e.key)); return; }
   if (inInput) return;
   // ? opens shortcuts
   if (e.key === '?' || e.key === '/') { openKbShortcuts(); e.preventDefault(); return; }
+  // D = demo data, N = new quote, P = present, F = fullscreen
+  if (e.key === 'd' || e.key === 'D') { loadDemoData(); return; }
+  if (e.key === 'n' || e.key === 'N') { newQuote(); return; }
+  if (e.key === 'p' || e.key === 'P') { openPresentation(); return; }
+  if (e.key === 'f' || e.key === 'F') { toggleFullscreen(); return; }
   // floor-plan zoom when FP modal is open
   var fpModal = document.getElementById('fpModal');
   var fpOpen = fpModal && fpModal.style.display !== 'none' && fpModal.classList.contains('open');
