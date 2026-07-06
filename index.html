@@ -31,14 +31,14 @@
 @property --border-angle{syntax:'<angle>';inherits:false;initial-value:0deg}
 
 :root{
-  --step-hue:210;--step-chroma:0.18;--step-l:72%;
+  --step-hue:210;--step-chroma:0.2;--step-l:73%;
   --accent:oklch(var(--step-l) var(--step-chroma) var(--step-hue));
-  --accent-2:oklch(68% .2 calc(var(--step-hue) + 55));
-  --accent-dim:oklch(var(--step-l) var(--step-chroma) var(--step-hue)/.16);
-  --accent-glow:oklch(var(--step-l) var(--step-chroma) var(--step-hue)/.42);
-  --bg:oklch(7% .012 255);--bg2:oklch(11% .018 252);--bg3:oklch(15% .022 250);
-  --glass:oklch(12% .018 252/.72);--border:oklch(32% .04 250/.4);
-  --text:oklch(95% .008 250);--text2:oklch(72% .02 250);--text3:oklch(48% .03 250);
+  --accent-2:oklch(68% .23 calc(var(--step-hue) + 60));
+  --accent-dim:oklch(var(--step-l) var(--step-chroma) var(--step-hue)/.2);
+  --accent-glow:oklch(var(--step-l) var(--step-chroma) var(--step-hue)/.5);
+  --bg:oklch(8% .018 252);--bg2:oklch(12% .022 250);--bg3:oklch(16% .026 248);
+  --glass:oklch(15% .026 250/.8);--border:oklch(40% .06 240/.45);
+  --text:oklch(96% .008 250);--text2:oklch(74% .025 245);--text3:oklch(52% .035 245);
   --r:8px;--rm:14px;--rl:20px;--rx:28px;
   --sw:64px;--sw2:220px;
   --font-d:'Space Grotesk',system-ui,sans-serif;
@@ -55,8 +55,8 @@ select option{background:var(--bg2)}
 
 /* Aurora — cinematic presence */
 body::before,body::after{content:'';position:fixed;inset:-10%;pointer-events:none;z-index:0}
-body::before{background:radial-gradient(ellipse 75% 60% at 12% 40%,oklch(58% var(--step-chroma) var(--step-hue)/.34) 0%,transparent 58%),radial-gradient(ellipse 55% 70% at 88% 18%,oklch(55% .24 calc(var(--step-hue)+55)/.26) 0%,transparent 52%);animation:aurora 14s ease-in-out infinite alternate;transition:--step-hue 700ms ease,--step-chroma 700ms ease}
-body::after{background:radial-gradient(ellipse 50% 65% at 55% 96%,oklch(52% var(--step-chroma) calc(var(--step-hue)-35)/.22) 0%,transparent 55%),radial-gradient(ellipse 30% 40% at 35% 70%,oklch(60% .2 calc(var(--step-hue)+110)/.1) 0%,transparent 60%);animation:aurora 19s ease-in-out infinite alternate-reverse}
+body::before{background:radial-gradient(ellipse 85% 70% at 10% 38%,oklch(60% .24 var(--step-hue)/.46) 0%,transparent 60%),radial-gradient(ellipse 65% 80% at 90% 15%,oklch(58% .26 calc(var(--step-hue)+60)/.36) 0%,transparent 55%);animation:aurora 14s ease-in-out infinite alternate;transition:--step-hue 700ms ease,--step-chroma 700ms ease}
+body::after{background:radial-gradient(ellipse 60% 75% at 55% 98%,oklch(55% .24 calc(var(--step-hue)-35)/.3) 0%,transparent 58%),radial-gradient(ellipse 35% 45% at 35% 68%,oklch(62% .22 calc(var(--step-hue)+115)/.16) 0%,transparent 60%);animation:aurora 19s ease-in-out infinite alternate-reverse}
 @keyframes aurora{from{transform:scale(1) translate(0,0) rotate(0deg)}to{transform:scale(1.1) translate(2%,1.8%) rotate(1.2deg)}}
 /* Spatial dot grid */
 #main::after{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(oklch(80% .02 250/.05) 1px,transparent 1px);background-size:26px 26px;mask-image:radial-gradient(ellipse 90% 80% at 50% 20%,#000 0%,transparent 75%)}
@@ -97,19 +97,20 @@ body::after{background:radial-gradient(ellipse 50% 65% at 55% 96%,oklch(52% var(
 .view{position:absolute;inset:0;padding:2rem;overflow-y:auto;opacity:0;pointer-events:none}
 .view.active{pointer-events:all;opacity:1}
 .vh{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.6rem}
-.vt{font-size:clamp(1.6rem,3vw,2.1rem);font-weight:700;letter-spacing:-.03em}
+.vt{font-size:clamp(1.6rem,3vw,2.1rem);font-weight:700;letter-spacing:-.03em;background:linear-gradient(110deg,var(--text) 30%,var(--accent) 55%,var(--accent-2) 75%,var(--text) 95%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:vtShine 7s ease-in-out infinite}
+@keyframes vtShine{0%,55%{background-position:100% 0}80%,100%{background-position:0% 0}}
 .vs{font-size:.8rem;color:var(--text3);margin-top:.2rem;letter-spacing:.02em}
 
 /* Revenue strip — bento hierarchy */
 .rev-strip{display:grid;grid-template-columns:1.65fr 1fr 1fr 1fr;gap:1rem;margin-bottom:1.6rem}
-.rev-tile{background:linear-gradient(150deg,oklch(14% .02 252/.85),oklch(10% .015 252/.7));backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:var(--rl);padding:1.3rem 1.4rem;transition:transform 220ms cubic-bezier(.3,.7,.4,1.2),border-color 220ms,box-shadow 220ms}
-.rev-tile:hover{transform:translateY(-3px);border-color:var(--accent-glow);box-shadow:0 14px 44px oklch(0% 0 0/.45),0 0 24px var(--accent-dim)}
-.rev-tile:first-child{position:relative;background:linear-gradient(150deg,var(--accent-dim),oklch(11% .02 252/.75) 60%)}
-.rev-tile:first-child::before{content:'';position:absolute;inset:-1px;border-radius:var(--rl);padding:1px;background:conic-gradient(from var(--border-angle),transparent 10%,var(--accent-glow) 22%,var(--accent-2) 28%,transparent 40%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:beam 5s linear infinite;pointer-events:none}
+.rev-tile{background:linear-gradient(150deg,oklch(17% .03 250/.9),oklch(12% .022 252/.78));backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:var(--rl);padding:1.3rem 1.4rem;transition:border-color 220ms,box-shadow 220ms;transform-style:preserve-3d;will-change:transform}
+.rev-tile:hover{border-color:var(--accent-glow);box-shadow:0 16px 48px oklch(0% 0 0/.5),0 0 34px var(--accent-dim),inset 0 1px 0 oklch(100% 0 0/.08)}
+.rev-tile:first-child{position:relative;background:linear-gradient(150deg,var(--accent-dim),oklch(13% .025 252/.8) 60%)}
+.rev-tile:first-child::before{content:'';position:absolute;inset:-1px;border-radius:var(--rl);padding:1.5px;background:conic-gradient(from var(--border-angle),transparent 8%,var(--accent) 20%,var(--accent-2) 28%,transparent 42%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:beam 4.5s linear infinite;pointer-events:none}
 @keyframes beam{to{--border-angle:360deg}}
-.rev-tile:first-child .rev-val{font-size:clamp(2rem,3.4vw,2.7rem);background:linear-gradient(120deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 18px var(--accent-dim))}
+.rev-tile:first-child .rev-val{font-size:clamp(2rem,3.4vw,2.7rem);background:linear-gradient(120deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 22px var(--accent-glow))}
 .rev-lbl{font-size:.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:.14em;font-weight:500}
-.rev-val{font-size:1.75rem;font-weight:700;margin-top:.45rem;color:var(--accent);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.rev-val{font-size:1.75rem;font-weight:700;margin-top:.45rem;color:var(--accent);letter-spacing:-.02em;font-variant-numeric:tabular-nums;text-shadow:0 0 24px var(--accent-glow)}
 .rev-d{font-size:.75rem;margin-top:.3rem;color:var(--text3)}
 .rev-d.up{color:oklch(74% .18 155)}.rev-d.dn{color:oklch(62% .18 20)}
 .rev-d.up::before{content:'▲ ';font-size:.6rem}
@@ -1002,10 +1003,10 @@ function livingSky(){
   const mrev=conf.filter(x=>{const d=new Date(x.date||0);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()}).reduce((s,x)=>s+x.total,0);
   const best=JSON.parse(localStorage.getItem('zen_best')||'{}');
   const active=q.filter(x=>['draft','sent'].includes(x.status)).length;
-  let h=250,c=.15;                               // violet-blue — calm, no data
-  if(mrev>0&&mrev>=(best.v||0)){h=85;c=.14}      // gold — record month in progress
-  else if(active>=3){h=195;c=.19}                // cyan — busy pipeline
-  else if(q.length){h=210;c=.18}                 // working blue
+  // Chroma floor .2 — every sky state stays electric, never washed out
+  let h=210,c=.2;                                // signature cyan — the ZENITH look
+  if(mrev>0&&mrev>=(best.v||0)){h=85;c=.19}      // molten gold — record month in progress
+  else if(active>=3){h=190;c=.22}                // hot teal — busy pipeline
   gsap.to(document.documentElement,{'--step-hue':h,'--step-chroma':c,duration:1.4,ease:'power2.inOut'});
 }
 
@@ -1531,10 +1532,20 @@ function tourEnd(){
 }
 window.addEventListener('resize',()=>{if(_tour>=0)tourStep(_tour)});
 
-// ── Ambient cursor glow (§15) ──
+// ── Ambient cursor glow (§15) + KPI tile 3D tilt ──
 document.addEventListener('mousemove',e=>{
   const g=document.getElementById('cursorGlow');
   if(g){g.style.left=e.clientX+'px';g.style.top=e.clientY+'px'}
+});
+document.addEventListener('mousemove',e=>{
+  const t=e.target.closest?.('.rev-tile');
+  document.querySelectorAll('.rev-tile').forEach(tile=>{
+    if(tile===t){
+      const r=tile.getBoundingClientRect();
+      const rx=((e.clientY-r.top)/r.height-.5)*-7,ry=((e.clientX-r.left)/r.width-.5)*7;
+      tile.style.transform=`perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-3px)`;
+    } else tile.style.transform='';
+  });
 });
 
 // ── Zdog venue wireframe — roof assembles over the hero (E2) ──
