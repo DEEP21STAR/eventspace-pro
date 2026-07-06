@@ -475,6 +475,13 @@ body::after{background:radial-gradient(ellipse 60% 75% at 55% 98%,oklch(55% .24 
 #vzdog{position:absolute;right:2%;bottom:-6%;opacity:.85;pointer-events:none}
 @media(max-width:900px){#vzdog{display:none}}
 
+/* Self-Driving Demo Mode */
+#demo-cursor{position:fixed;width:22px;height:22px;border-radius:50%;border:2px solid var(--accent);background:var(--accent-dim);box-shadow:0 0 18px var(--accent-glow),0 0 46px var(--accent-dim);z-index:520;pointer-events:none;transform:translate(-50%,-50%);left:50%;top:50%}
+#demo-cursor::after{content:'';position:absolute;inset:-9px;border-radius:50%;border:1.5px solid var(--accent-glow);animation:demoPing 1.6s ease-out infinite}
+@keyframes demoPing{from{transform:scale(.6);opacity:1}to{transform:scale(1.5);opacity:0}}
+#demo-badge{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:521;padding:.5rem 1.3rem;border-radius:99px;background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--accent-glow);font-size:.78rem;font-weight:600;color:var(--accent);box-shadow:0 8px 30px oklch(0% 0 0/.45);animation:demoBadge 2.4s ease-in-out infinite}
+@keyframes demoBadge{0%,100%{box-shadow:0 8px 30px oklch(0% 0 0/.45),0 0 14px var(--accent-dim)}50%{box-shadow:0 8px 30px oklch(0% 0 0/.45),0 0 30px var(--accent-glow)}}
+
 /* @media */
 @media(max-width:768px){
   .wgrid{grid-template-columns:repeat(2,1fr)}
@@ -1457,6 +1464,7 @@ const CK_ACTS=[
   {i:'✦',t:'New Quote',k:'n',s:'Actions',fn:()=>openWizard()},
   {i:'⚙',t:'Settings',k:'',s:'Actions',fn:()=>openSettings()},
   {i:'🧭',t:'Take the tour',k:'',s:'Actions',fn:()=>tourStart()},
+  {i:'▶',t:'Run 60-second self-driving demo',k:'',s:'Actions',fn:()=>runDemo()},
 ];
 let _ckSel=0,_ckItems=[];
 function ckOpen(){const ck=document.getElementById('cmdk');ck.classList.add('open');const inp=document.getElementById('cmdk-in');inp.value='';ckFilter('');setTimeout(()=>inp.focus(),30)}
@@ -1547,6 +1555,59 @@ document.addEventListener('mousemove',e=>{
     } else tile.style.transform='';
   });
 });
+
+// ── Self-Driving Demo Mode — the dashboard demos itself for 60s ──
+let _demo=null;
+function runDemo(){
+  if(_demo)return;
+  try{ckClose()}catch(_){}
+  const saved=localStorage.getItem('zen_quotes');
+  const t=new Date();const dd=n=>new Date(t.getTime()+n*864e5).toISOString().slice(0,10);
+  LS.s('quotes',[
+    {id:'D-1',status:'sent',clientName:'Sarah Mitchell',eventType:'Wedding',date:dd(3),guests:'120',total:8450,createdAt:t.toISOString(),updatedAt:t.toISOString()},
+    {id:'D-2',status:'complete',clientName:'Fonterra Ltd',eventType:'Corporate',date:dd(-1),guests:'80',total:5200,createdAt:t.toISOString(),updatedAt:t.toISOString()},
+    {id:'D-3',status:'draft',clientName:'Te Whare Trust',eventType:'Gala',date:dd(9),guests:'200',total:12300,createdAt:t.toISOString(),updatedAt:t.toISOString()},
+  ]);
+  const cur=document.createElement('div');cur.id='demo-cursor';document.body.appendChild(cur);
+  const badge=document.createElement('div');badge.id='demo-badge';badge.textContent='▶ SELF-DRIVING DEMO — click anywhere to exit';document.body.appendChild(badge);
+  const done=()=>{
+    if(!_demo)return;
+    _demo.kill();_demo=null;cur.remove();badge.remove();
+    if(saved!==null)localStorage.setItem('zen_quotes',saved);else localStorage.removeItem('zen_quotes');
+    document.removeEventListener('click',onExit,true);document.removeEventListener('keydown',onKey,true);
+    renderPipeline();renderRev();renderBrain();sv('dashboard');
+  };
+  const onExit=e=>{e.preventDefault();e.stopPropagation();done()};
+  const onKey=e=>{if(e.key==='Escape')done()};
+  setTimeout(()=>{document.addEventListener('click',onExit,true);document.addEventListener('keydown',onKey,true)},800);
+  const mv=(sel,dur)=>()=>{const el=document.querySelector(sel);if(!el)return;const r=el.getBoundingClientRect();gsap.to(cur,{left:r.left+r.width/2,top:r.top+r.height/2,duration:dur||.9,ease:'power2.inOut'})};
+  sv('dashboard');renderPipeline();renderRev();renderBrain();
+  const tl=gsap.timeline({onComplete:done});
+  _demo=tl;
+  tl.set(cur,{left:innerWidth/2,top:innerHeight*.75})
+    .add(()=>showT('▶ Watch — ZENITH will drive'))
+    .add(mv('#rv0',1.1)).to({},{duration:1.2})
+    .add(mv('#rv3',.8)).to({},{duration:.9})
+    .add(mv('#pc-sent .qc',1)).to({},{duration:.8})
+    .add(()=>{ // close the deal live — the money moment
+      const card=document.querySelector('#pc-sent .qc');
+      const r=card?card.getBoundingClientRect():{left:innerWidth/2,top:innerHeight/2,width:0,height:0};
+      const q=gQ();const x=q.find(i=>i.id==='D-1');
+      if(x){x.status='confirmed';x.updatedAt=new Date().toISOString();LS.s('quotes',q);
+        renderPipeline();renderRev();renderBrain();
+        dealClosed({clientX:r.left+r.width/2,clientY:r.top+r.height/2},x);}
+    })
+    .to({},{duration:2})
+    .add(()=>{document.getElementById('tonight')?.scrollIntoView({behavior:'smooth',block:'center'})})
+    .add(mv('#tonight',1.2)).to({},{duration:2.2})
+    .add(()=>sv('venue')).to({},{duration:3})
+    .add(()=>{sv('dashboard');document.querySelector('#vd')?.scrollTo?.(0,0)})
+    .add(mv('#fab',1)).to({},{duration:.9})
+    .add(()=>showT('▶ That was ZENITH on autopilot — your turn ✦'))
+    .to({},{duration:1.4});
+}
+// URL trigger for sending clients a self-running demo link: index.html?demo
+if(new URLSearchParams(location.search).has('demo')){window.addEventListener('load',()=>setTimeout(runDemo,4200))}
 
 // ── Zdog venue wireframe — roof assembles over the hero (E2) ──
 let _zd=null;
