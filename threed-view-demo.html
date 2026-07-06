@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>EVENTSPACE 3D Inside View — Demo</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; color: #e8e8e8; font-family: -apple-system, system-ui, sans-serif; min-height: 100vh; }
+  .topbar { padding: 1rem 2rem; display: flex; align-items: center; gap: 1rem; border-bottom: 1px solid #222; }
+  .topbar h1 { font-size: 1.2rem; color: #c084fc; }
+  .topbar .controls { display: flex; gap: 0.5rem; margin-left: auto; }
+  .topbar button { background: #1a1a1a; color: #e8e8e8; border: 1px solid #333; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+  .topbar button.active { background: #6366f1; border-color: #6366f1; }
+  .canvas-wrap { width: 100%; height: calc(100vh - 70px); position: relative; }
+  canvas#three { width: 100% !important; height: 100% !important; display: block; }
+  .legend { position: absolute; bottom: 1rem; left: 1rem; background: rgba(0,0,0,0.7); padding: 0.8rem 1rem; border-radius: 8px; font-size: 0.85rem; }
+  .legend strong { color: #c084fc; }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <h1>◆ EVENTSPACE — 12×15 Grand Marquee · 3D Inside View</h1>
+  <div class="controls">
+    <button id="day">☀ Day</button>
+    <button id="night">🌙 Night</button>
+    <button id="reception" class="active">✨ Reception</button>
+    <button id="flyin">🎬 Fly In</button>
+  </div>
+</div>
+<div class="canvas-wrap">
+  <canvas id="three"></canvas>
+  <div class="legend">
+    <strong>Demo equipment:</strong><br>
+    2× round-10p tables · 1× stage · 1× DJ booth · 1× dance floor 16m²
+  </div>
+</div>
+<script type="module">
+  import { mountInsideView } from './threed-view.js'
+  const canvas = document.getElementById('three')
+  const view = mountInsideView(canvas, {
+    width: 12, length: 15,
+    lighting: 'reception',
+    equipment: [
+      { type: 'round-10p', x: -3, z: -3 },
+      { type: 'round-10p', x:  3, z: -3 },
+      { type: 'stage',     x:  0, z: -5.5 },
+      { type: 'dj',        x:  4.5, z: -5 },
+      { type: 'dance-16',  x:  0, z:  3 },
+      { type: 'banquet-2.4m', x: -4, z:  4 },
+      { type: 'banquet-2.4m', x:  4, z:  4 }
+    ]
+  })
+  document.getElementById('day').onclick = (e) => { view.setLighting('day'); ['day','night','reception'].forEach(id => document.getElementById(id).classList.remove('active')); e.target.classList.add('active') }
+  document.getElementById('night').onclick = (e) => { view.setLighting('night'); ['day','night','reception'].forEach(id => document.getElementById(id).classList.remove('active')); e.target.classList.add('active') }
+  document.getElementById('reception').onclick = (e) => { view.setLighting('reception'); ['day','night','reception'].forEach(id => document.getElementById(id).classList.remove('active')); e.target.classList.add('active') }
+  document.getElementById('flyin').onclick = () => view.flyInto()
+  window.addEventListener('resize', () => { canvas.width = canvas.clientWidth; canvas.height = canvas.clientHeight })
+</script>
+</body>
+</html>

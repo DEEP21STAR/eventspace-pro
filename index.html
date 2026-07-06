@@ -6,6 +6,9 @@
 <meta name="theme-color" content="#0a0d14">
 <title>ZENITH — Event Space OS</title>
 <link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50 6 L58 38 L94 50 L58 62 L50 94 L42 62 L6 50 L42 38 Z' fill='%236ee0ff'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <!-- GSAP Suite -->
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
@@ -17,6 +20,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/zdog@1.1.3/dist/zdog.dist.min.js" defer></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 <style>
 /* ═══════════════════════════════════════════════════════════
@@ -27,18 +31,21 @@
 @property --border-angle{syntax:'<angle>';inherits:false;initial-value:0deg}
 
 :root{
-  --step-hue:210;--step-chroma:0.18;--step-l:70%;
+  --step-hue:210;--step-chroma:0.18;--step-l:72%;
   --accent:oklch(var(--step-l) var(--step-chroma) var(--step-hue));
-  --accent-dim:oklch(var(--step-l) var(--step-chroma) var(--step-hue)/.18);
-  --accent-glow:oklch(var(--step-l) var(--step-chroma) var(--step-hue)/.4);
-  --bg:oklch(9% .015 250);--bg2:oklch(12% .02 250);--bg3:oklch(16% .025 250);
-  --glass:oklch(14% .02 250/.82);--border:oklch(28% .035 250/.55);
-  --text:oklch(93% .01 250);--text2:oklch(70% .02 250);--text3:oklch(45% .03 250);
+  --accent-2:oklch(68% .2 calc(var(--step-hue) + 55));
+  --accent-dim:oklch(var(--step-l) var(--step-chroma) var(--step-hue)/.16);
+  --accent-glow:oklch(var(--step-l) var(--step-chroma) var(--step-hue)/.42);
+  --bg:oklch(7% .012 255);--bg2:oklch(11% .018 252);--bg3:oklch(15% .022 250);
+  --glass:oklch(12% .018 252/.72);--border:oklch(32% .04 250/.4);
+  --text:oklch(95% .008 250);--text2:oklch(72% .02 250);--text3:oklch(48% .03 250);
   --r:8px;--rm:14px;--rl:20px;--rx:28px;
   --sw:64px;--sw2:220px;
+  --font-d:'Space Grotesk',system-ui,sans-serif;
+  --font-m:'JetBrains Mono','Geist Mono',monospace;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
+html,body{height:100%;font-family:var(--font-d);background:var(--bg);color:var(--text);overflow:hidden}
 button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
 input,select,textarea{font:inherit;color:var(--text);background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:.6rem .85rem;width:100%;outline:none;transition:border-color 200ms,box-shadow 200ms}
 input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-dim)}
@@ -46,11 +53,13 @@ select option{background:var(--bg2)}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
 
-/* Aurora */
-body::before,body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0}
-body::before{background:radial-gradient(ellipse 80% 55% at 15% 45%,oklch(60% var(--step-chroma) var(--step-hue)/.28) 0%,transparent 55%),radial-gradient(ellipse 55% 75% at 85% 25%,oklch(55% .22 calc(var(--step-hue)+50)/.22) 0%,transparent 50%);animation:aurora 14s ease-in-out infinite alternate;transition:--step-hue 700ms ease,--step-chroma 700ms ease}
-body::after{background:radial-gradient(ellipse 40% 60% at 50% 90%,oklch(50% var(--step-chroma) calc(var(--step-hue)-30)/.18) 0%,transparent 50%);animation:aurora 18s ease-in-out infinite alternate-reverse}
-@keyframes aurora{from{transform:scale(1) translate(0,0)}to{transform:scale(1.08) translate(2%,1.5%)}}
+/* Aurora — cinematic presence */
+body::before,body::after{content:'';position:fixed;inset:-10%;pointer-events:none;z-index:0}
+body::before{background:radial-gradient(ellipse 75% 60% at 12% 40%,oklch(58% var(--step-chroma) var(--step-hue)/.34) 0%,transparent 58%),radial-gradient(ellipse 55% 70% at 88% 18%,oklch(55% .24 calc(var(--step-hue)+55)/.26) 0%,transparent 52%);animation:aurora 14s ease-in-out infinite alternate;transition:--step-hue 700ms ease,--step-chroma 700ms ease}
+body::after{background:radial-gradient(ellipse 50% 65% at 55% 96%,oklch(52% var(--step-chroma) calc(var(--step-hue)-35)/.22) 0%,transparent 55%),radial-gradient(ellipse 30% 40% at 35% 70%,oklch(60% .2 calc(var(--step-hue)+110)/.1) 0%,transparent 60%);animation:aurora 19s ease-in-out infinite alternate-reverse}
+@keyframes aurora{from{transform:scale(1) translate(0,0) rotate(0deg)}to{transform:scale(1.1) translate(2%,1.8%) rotate(1.2deg)}}
+/* Spatial dot grid */
+#main::after{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(oklch(80% .02 250/.05) 1px,transparent 1px);background-size:26px 26px;mask-image:radial-gradient(ellipse 90% 80% at 50% 20%,#000 0%,transparent 75%)}
 
 /* Depth canvas */
 #depth-canvas{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.5}
@@ -72,9 +81,10 @@ body::after{background:radial-gradient(ellipse 40% 60% at 50% 90%,oklch(50% var(
 .sl-icon{width:36px;height:36px;border-radius:10px;background:var(--accent-dim);border:1px solid var(--accent-glow);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;color:var(--accent)}
 .sl-text{font-weight:700;font-size:.9rem;opacity:0;transition:opacity 200ms 80ms}
 #sidebar:hover .sl-text,.nl{opacity:1}
-.ni{display:flex;align-items:center;gap:.85rem;padding:.65rem 1.1rem;border-radius:var(--r);margin:1px .5rem;cursor:pointer;transition:background 150ms,color 150ms;white-space:nowrap;overflow:hidden;color:var(--text2)}
+.ni{display:flex;align-items:center;gap:.85rem;padding:.65rem 1.1rem;border-radius:var(--r);margin:1px .5rem;cursor:pointer;transition:background 150ms,color 150ms;white-space:nowrap;overflow:hidden;color:var(--text2);position:relative}
 .ni:hover{background:var(--bg3);color:var(--text)}
-.ni.active{background:var(--accent-dim);color:var(--accent)}
+.ni.active{background:linear-gradient(90deg,var(--accent-dim),transparent 85%);color:var(--accent)}
+.ni.active::before{content:'';position:absolute;left:0;top:18%;bottom:18%;width:2.5px;border-radius:99px;background:var(--accent);box-shadow:0 0 12px var(--accent-glow)}
 .ni-icon{font-size:1rem;width:22px;text-align:center;flex-shrink:0}
 .ni-label{font-size:.85rem;font-weight:500;opacity:0;transition:opacity 200ms 60ms}
 #sidebar:hover .ni-label{opacity:1}
@@ -85,18 +95,24 @@ body::after{background:radial-gradient(ellipse 40% 60% at 50% 90%,oklch(50% var(
 
 /* Views */
 .view{position:absolute;inset:0;padding:2rem;overflow-y:auto;opacity:0;pointer-events:none}
-.view.active{pointer-events:all}
-.vh{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
-.vt{font-size:1.4rem;font-weight:700}
-.vs{font-size:.8rem;color:var(--text3);margin-top:.15rem}
+.view.active{pointer-events:all;opacity:1}
+.vh{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.6rem}
+.vt{font-size:clamp(1.6rem,3vw,2.1rem);font-weight:700;letter-spacing:-.03em}
+.vs{font-size:.8rem;color:var(--text3);margin-top:.2rem;letter-spacing:.02em}
 
-/* Revenue strip */
-.rev-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
-.rev-tile{background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:var(--rl);padding:1.25rem}
-.rev-lbl{font-size:.75rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em}
-.rev-val{font-size:1.6rem;font-weight:700;margin-top:.4rem;color:var(--accent)}
-.rev-d{font-size:.75rem;margin-top:.25rem;color:var(--text3)}
-.rev-d.up{color:oklch(72% .18 155)}.rev-d.dn{color:oklch(60% .18 20)}
+/* Revenue strip — bento hierarchy */
+.rev-strip{display:grid;grid-template-columns:1.65fr 1fr 1fr 1fr;gap:1rem;margin-bottom:1.6rem}
+.rev-tile{background:linear-gradient(150deg,oklch(14% .02 252/.85),oklch(10% .015 252/.7));backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:var(--rl);padding:1.3rem 1.4rem;transition:transform 220ms cubic-bezier(.3,.7,.4,1.2),border-color 220ms,box-shadow 220ms}
+.rev-tile:hover{transform:translateY(-3px);border-color:var(--accent-glow);box-shadow:0 14px 44px oklch(0% 0 0/.45),0 0 24px var(--accent-dim)}
+.rev-tile:first-child{position:relative;background:linear-gradient(150deg,var(--accent-dim),oklch(11% .02 252/.75) 60%)}
+.rev-tile:first-child::before{content:'';position:absolute;inset:-1px;border-radius:var(--rl);padding:1px;background:conic-gradient(from var(--border-angle),transparent 10%,var(--accent-glow) 22%,var(--accent-2) 28%,transparent 40%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:beam 5s linear infinite;pointer-events:none}
+@keyframes beam{to{--border-angle:360deg}}
+.rev-tile:first-child .rev-val{font-size:clamp(2rem,3.4vw,2.7rem);background:linear-gradient(120deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 18px var(--accent-dim))}
+.rev-lbl{font-size:.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:.14em;font-weight:500}
+.rev-val{font-size:1.75rem;font-weight:700;margin-top:.45rem;color:var(--accent);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.rev-d{font-size:.75rem;margin-top:.3rem;color:var(--text3)}
+.rev-d.up{color:oklch(74% .18 155)}.rev-d.dn{color:oklch(62% .18 20)}
+.rev-d.up::before{content:'▲ ';font-size:.6rem}
 
 /* Pipeline */
 .pipeline{display:flex;gap:1rem;overflow-x:auto;padding-bottom:1rem;margin-bottom:1.5rem}
@@ -111,17 +127,24 @@ body::after{background:radial-gradient(ellipse 40% 60% at 50% 90%,oklch(50% var(
 .pcol[data-s=lost] .col-dot{background:oklch(50% .15 20)}
 .pcards{display:flex;flex-direction:column;gap:.45rem;min-height:80px;padding:.2rem;border-radius:var(--rm);border:1px dashed transparent;transition:border-color 200ms,background 200ms}
 .pcards.dov{border-color:var(--accent-glow);background:var(--accent-dim)}
-.qc{background:var(--glass);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:var(--rm);padding:.8rem;cursor:grab;transition:transform 200ms,box-shadow 200ms;user-select:none}
+.qc{background:var(--glass);backdrop-filter:blur(10px);border:1px solid var(--border);border-left:2.5px solid var(--border);border-radius:var(--rm);padding:.8rem;cursor:grab;transition:transform 200ms cubic-bezier(.3,.7,.4,1.2),box-shadow 200ms,border-color 200ms;user-select:none}
+.pcol[data-s=draft] .qc{border-left-color:oklch(70% .18 75/.7)}
+.pcol[data-s=sent] .qc{border-left-color:oklch(72% .18 210/.7)}
+.pcol[data-s=confirmed] .qc{border-left-color:oklch(72% .18 155/.7)}
+.pcol[data-s=deposit] .qc{border-left-color:oklch(65% .22 290/.7)}
+.pcol[data-s=complete] .qc{border-left-color:oklch(70% .14 155/.5)}
+.pcol[data-s=lost] .qc{border-left-color:oklch(50% .15 20/.6)}
 .qc:active{cursor:grabbing}
-.qc:hover{transform:translateY(-2px);box-shadow:0 8px 24px oklch(0% 0 0/.3),0 0 0 1px var(--accent-glow)}
+.qc:hover{transform:translateY(-3px) scale(1.015);box-shadow:0 12px 32px oklch(0% 0 0/.4),0 0 0 1px var(--accent-glow),0 0 20px var(--accent-dim)}
 .qc-name{font-weight:600;font-size:.88rem}
 .qc-meta{font-size:.74rem;color:var(--text3);margin-top:.25rem}
-.qc-amt{font-size:1rem;font-weight:700;color:var(--accent);margin-top:.4rem}
+.qc-amt{font-size:1.05rem;font-weight:700;color:var(--accent);margin-top:.4rem;font-family:var(--font-m);font-size:.95rem}
 .qc-cd{font-size:.72rem;color:var(--text3);margin-top:.3rem}
 .qc-cd.urg{color:oklch(70% .18 75);font-weight:600}
 
 /* Brain */
-.brain{background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:var(--rl);padding:1.25rem;margin-bottom:1.5rem}
+.brain{background:linear-gradient(150deg,oklch(13% .022 290/.6),oklch(10% .015 252/.7));backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:var(--rl);padding:1.25rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.brain::before{content:'';position:absolute;top:-40%;right:-10%;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,var(--accent-dim) 0%,transparent 65%);pointer-events:none}
 .brain-h{display:flex;align-items:center;gap:.5rem;font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:1rem}
 .brain-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent-glow);animation:bp 2s ease-in-out infinite}
 @keyframes bp{0%,100%{transform:scale(1)}50%{transform:scale(1.5)}}
@@ -339,8 +362,8 @@ body::after{background:radial-gradient(ellipse 40% 60% at 50% 90%,oklch(50% var(
 .vzones{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
 
 /* Shared */
-.btn-p{padding:.65rem 1.4rem;font-weight:600;font-size:.88rem;border-radius:var(--rx);background:var(--accent);color:oklch(10% 0 0);box-shadow:0 4px 16px var(--accent-glow);transition:transform 150ms,box-shadow 150ms;cursor:pointer;border:none;font:inherit}
-.btn-p:hover{transform:scale(1.04);box-shadow:0 6px 24px var(--accent-glow)}
+.btn-p{padding:.65rem 1.4rem;font-weight:600;font-size:.88rem;border-radius:var(--rx);background:linear-gradient(120deg,var(--accent),var(--accent-2));color:oklch(10% 0 0);box-shadow:0 4px 20px var(--accent-dim),inset 0 1px 0 oklch(100% 0 0/.25);transition:transform 150ms,box-shadow 150ms;cursor:pointer;border:none;font:inherit;font-weight:700}
+.btn-p:hover{transform:scale(1.045);box-shadow:0 8px 32px var(--accent-glow),inset 0 1px 0 oklch(100% 0 0/.25)}
 .btn-g{padding:.65rem 1.4rem;font-weight:500;font-size:.88rem;border-radius:var(--rx);border:1px solid var(--border);transition:border-color 150ms,background 150ms;cursor:pointer;background:none;font:inherit;color:var(--text)}
 .btn-g:hover{border-color:var(--accent-glow);background:var(--accent-dim)}
 .cls-btn{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--bg3);color:var(--text2);font-size:1rem;transition:background 150ms;cursor:pointer;flex-shrink:0}
@@ -370,6 +393,87 @@ body::after{background:radial-gradient(ellipse 40% 60% at 50% 90%,oklch(50% var(
 .toast{position:fixed;bottom:5.5rem;right:2rem;z-index:300;background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--accent-glow);border-radius:99px;padding:.42rem .95rem;font-size:.76rem;color:var(--accent);opacity:0;transform:translateY(8px);transition:opacity 200ms,transform 200ms;pointer-events:none}
 .toast.show{opacity:1;transform:none}
 
+/* ═══ ELEVATION v2 — Living Sky · Intro · Palette · Tour · Tonight · Handshake ═══ */
+/* Welcome hero banner */
+.hero-banner{position:relative;background:linear-gradient(135deg,var(--accent-dim) 0%,oklch(12% .025 290/.55) 55%,oklch(10% .015 252/.6) 100%);border:1px solid var(--accent-glow);border-radius:var(--rl);padding:2rem 2.2rem;margin-bottom:1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;overflow:hidden}
+.hero-banner::before{content:'';position:absolute;inset:-1px;border-radius:var(--rl);padding:1px;background:conic-gradient(from var(--border-angle),transparent 5%,var(--accent-glow) 18%,var(--accent-2) 25%,transparent 38%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:beam 6s linear infinite;pointer-events:none}
+.hb-t{font-size:clamp(1.5rem,2.6vw,2rem);font-weight:700;letter-spacing:-.02em;margin-bottom:.4rem;background:linear-gradient(110deg,var(--text),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hb-s{font-size:.86rem;color:var(--text2);max-width:440px;line-height:1.55}
+/* Film grain + cursor glow (§15) */
+#grain{position:fixed;inset:0;z-index:220;pointer-events:none;opacity:.035;mix-blend-mode:overlay;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/></filter><rect width="140" height="140" filter="url(%23n)" opacity="0.55"/></svg>')}
+#cursorGlow{position:fixed;width:220px;height:220px;border-radius:50%;pointer-events:none;z-index:3;background:radial-gradient(circle,var(--accent-glow) 0%,transparent 68%);opacity:.08;transform:translate(-50%,-50%);left:-300px;top:-300px}
+@media(hover:none){#cursorGlow{display:none}}
+
+/* Intro v2 */
+#splash{gap:0}
+#splash-star{width:104px;height:104px;margin-bottom:1.1rem;opacity:0}
+#splash-star path{stroke:var(--accent);stroke-width:2.2;fill:none;stroke-linejoin:round;filter:drop-shadow(0 0 14px var(--accent-glow))}
+#splash-cnt{font-family:'Geist Mono','JetBrains Mono','Cascadia Code',monospace;font-size:clamp(2.6rem,7vw,5rem);font-weight:700;letter-spacing:.08em;color:var(--text);position:absolute}
+.splash-logo{overflow:hidden}
+.splash-logo span{display:inline-block;transform:translateY(110%)}
+#splash-skip{position:fixed;bottom:2rem;right:2rem;z-index:1000;padding:.5rem 1.2rem;border:1px solid var(--border);border-radius:99px;font-size:.75rem;color:var(--text3);background:oklch(12% .02 250/.6);backdrop-filter:blur(8px);transition:color 150ms,border-color 150ms}
+#splash-skip:hover{color:var(--text);border-color:var(--accent-glow)}
+
+/* Mission Control palette */
+#cmdk{position:fixed;inset:0;z-index:420;display:none;align-items:flex-start;justify-content:center;padding-top:16vh;background:oklch(5% 0 0/.55);backdrop-filter:blur(6px)}
+#cmdk.open{display:flex}
+#cmdk-box{width:min(580px,92vw);background:var(--glass);backdrop-filter:blur(26px);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;box-shadow:0 24px 80px oklch(0% 0 0/.55),0 0 0 1px var(--accent-dim)}
+#cmdk-in{border:none;background:none;padding:1.05rem 1.25rem;font-size:1rem;border-bottom:1px solid var(--border);border-radius:0;box-shadow:none}
+#cmdk-list{max-height:330px;overflow-y:auto;padding:.4rem}
+.ck-s{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);padding:.5rem .8rem .25rem}
+.ck-i{display:flex;align-items:center;gap:.7rem;padding:.6rem .8rem;border-radius:var(--r);cursor:pointer;font-size:.87rem;color:var(--text2)}
+.ck-i.sel{background:var(--accent-dim);color:var(--text)}
+.ck-i .ck-ic{width:20px;text-align:center}
+.ck-k{margin-left:auto;font-size:.66rem;color:var(--text3);border:1px solid var(--border);border-radius:5px;padding:.12rem .42rem;font-family:monospace}
+#cmdk-hint{padding:.55rem 1rem;border-top:1px solid var(--border);font-size:.68rem;color:var(--text3);display:flex;gap:1.1rem;flex-wrap:wrap}
+#cmdk-hint b{color:var(--text2);font-weight:600}
+
+/* Tonight at your venue — footer-as-hero */
+#tonight{margin-top:1.5rem;border:1px solid var(--border);border-radius:var(--rl);padding:1.5rem 1.9rem 1.9rem;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:1.2rem;flex-wrap:wrap;background:linear-gradient(150deg,oklch(13% .035 260/.95),oklch(9% .02 250/.95))}
+#tonight::before{content:'';position:absolute;inset:0;background:radial-gradient(1.5px 1.5px at 12% 30%,oklch(90% .02 250/.8),transparent),radial-gradient(1px 1px at 28% 68%,oklch(90% .02 250/.6),transparent),radial-gradient(1.5px 1.5px at 45% 22%,oklch(90% .02 250/.7),transparent),radial-gradient(1px 1px at 62% 55%,oklch(90% .02 250/.5),transparent),radial-gradient(2px 2px at 78% 30%,oklch(90% .02 250/.8),transparent),radial-gradient(1px 1px at 90% 70%,oklch(90% .02 250/.6),transparent);animation:twinkle 5s ease-in-out infinite alternate}
+@keyframes twinkle{from{opacity:.4}to{opacity:1}}
+.tn-lbl{font-size:.72rem;text-transform:uppercase;letter-spacing:.14em;color:var(--text3);margin-bottom:.4rem}
+.tn-name{font-size:1.35rem;font-weight:700}
+.tn-meta{font-size:.8rem;color:var(--text2);margin-top:.3rem}
+.tn-count{font-family:'Geist Mono','JetBrains Mono',monospace;font-size:2.3rem;font-weight:700;color:var(--accent);text-shadow:0 0 24px var(--accent-glow);position:relative;z-index:1}
+.tn-cu{font-size:.7rem;color:var(--text3);text-align:right;letter-spacing:.08em;text-transform:uppercase}
+.tn-mq{position:absolute;bottom:.45rem;left:0;width:100%;overflow:hidden;pointer-events:none}
+.tn-mq div{white-space:nowrap;font-size:.62rem;letter-spacing:.34em;color:var(--text3);opacity:.55;animation:mq 36s linear infinite;display:inline-block}
+@keyframes mq{from{transform:translateX(20%)}to{transform:translateX(-100%)}}
+
+/* Venue Pulse — record flash + sparklines */
+@keyframes recflash{0%{box-shadow:0 0 0 0 transparent}25%{box-shadow:0 0 52px 6px oklch(80% .18 85/.5);border-color:oklch(80% .18 85/.8)}100%{box-shadow:0 0 0 0 transparent}}
+.rev-tile{position:relative;overflow:hidden}
+.rev-tile.record{animation:recflash 1.8s ease-out}
+.rev-spark{position:absolute;bottom:0;left:0;width:100%;height:26px;opacity:.5;pointer-events:none}
+
+/* Concierge tour */
+#tour-hl{position:fixed;z-index:396;border-radius:14px;box-shadow:0 0 0 9999px oklch(5% 0 0/.74);border:1.5px solid var(--accent-glow);transition:all .5s cubic-bezier(.4,0,.2,1);pointer-events:none;display:none}
+#tour-pop{position:fixed;z-index:397;width:300px;background:var(--glass);backdrop-filter:blur(22px);border:1px solid var(--accent-glow);border-radius:var(--rm);padding:1.05rem 1.15rem;transition:all .5s cubic-bezier(.4,0,.2,1);box-shadow:0 12px 48px oklch(0% 0 0/.5);display:none}
+.tp-t{font-weight:700;font-size:.95rem;margin-bottom:.35rem;color:var(--accent)}
+.tp-b{font-size:.8rem;color:var(--text2);line-height:1.55;margin-bottom:.85rem}
+.tp-f{display:flex;align-items:center;gap:.55rem}
+.tp-dots{display:flex;gap:.32rem;margin-right:auto}
+.tp-dot{width:6px;height:6px;border-radius:50%;background:var(--border);transition:background 200ms}
+.tp-dot.on{background:var(--accent)}
+.tp-btn{padding:.42rem 1rem;border-radius:99px;font-size:.76rem;font-weight:600;background:var(--accent);color:oklch(10% 0 0)}
+.tp-skip{font-size:.74rem;color:var(--text3);padding:.42rem .5rem}
+.tp-skip:hover{color:var(--text)}
+
+/* Handshake seal */
+#seal-ov{position:fixed;inset:0;z-index:410;display:none;align-items:center;justify-content:center;background:oklch(5% 0 0/.82);backdrop-filter:blur(8px)}
+#seal-ov.on{display:flex}
+#seal-sheet{width:min(320px,78vw);aspect-ratio:1/1.32;background:oklch(96% .004 250);border-radius:5px;position:relative;overflow:hidden;box-shadow:0 30px 90px oklch(0% 0 0/.65);transform:translateY(40px);opacity:0}
+#seal-sheet::before{content:'';position:absolute;inset:2rem 1.6rem auto;height:60%;background:repeating-linear-gradient(to bottom,oklch(78% .005 250) 0 1.5px,transparent 1.5px 17px)}
+#seal-sheet::after{content:'ZENITH — EVENT QUOTE';position:absolute;top:.95rem;left:1.6rem;font-size:.6rem;font-weight:700;letter-spacing:.22em;color:oklch(35% .02 250)}
+#seal-sweep{position:absolute;inset:0;background:linear-gradient(105deg,transparent 42%,oklch(100% 0 0/.9) 50%,transparent 58%);transform:translateX(-130%)}
+#seal-badge{position:absolute;bottom:1.1rem;right:1.1rem;width:82px;height:82px;border-radius:50%;background:radial-gradient(circle at 35% 30%,oklch(84% .15 85),oklch(58% .13 85));display:flex;align-items:center;justify-content:center;font-size:1.7rem;transform:scale(3);opacity:0;box-shadow:0 5px 24px oklch(60% .15 85/.6);border:2px solid oklch(88% .12 85)}
+#seal-txt{position:absolute;bottom:-3rem;width:100%;text-align:center;font-size:.78rem;letter-spacing:.2em;color:var(--text2);text-transform:uppercase}
+
+/* Zdog venue wireframe */
+#vzdog{position:absolute;right:2%;bottom:-6%;opacity:.85;pointer-events:none}
+@media(max-width:900px){#vzdog{display:none}}
+
 /* @media */
 @media(max-width:768px){
   .wgrid{grid-template-columns:repeat(2,1fr)}
@@ -383,7 +487,7 @@ body::after{background:radial-gradient(ellipse 40% 60% at 50% 90%,oklch(50% var(
   body::before,body::after{animation:none}
 }
 @media print{
-  #sidebar,#fab,#wiz-ov,#ceremony,#settings-modal,.toast{display:none!important}
+  #sidebar,#fab,#wiz-ov,#ceremony,#settings-modal,.toast,#grain,#cursorGlow,#cmdk,#seal-ov,#tour-hl,#tour-pop,#tonight,#splash{display:none!important}
   #app{opacity:1!important}
   body{overflow:auto!important;height:auto!important}
   .view{position:static!important;opacity:1!important;pointer-events:all!important;overflow:visible!important}
@@ -394,11 +498,14 @@ body::after{background:radial-gradient(ellipse 40% 60% at 50% 90%,oklch(50% var(
 
 <canvas id="depth-canvas"></canvas>
 
-<!-- Splash -->
+<!-- Splash — Whetū Intro v2 -->
 <div id="splash">
-  <div class="splash-logo">ZENITH</div>
-  <div class="splash-sub">Event Space OS</div>
-  <div class="splash-bar"><div class="splash-fill" id="sf"></div></div>
+  <div id="splash-cnt">000</div>
+  <svg id="splash-star" viewBox="0 0 100 100"><path id="splash-star-p" d="M50 6 L58 38 L94 50 L58 62 L50 94 L42 62 L6 50 L42 38 Z"/></svg>
+  <div class="splash-logo" aria-label="ZENITH"><span>Z</span><span>E</span><span>N</span><span>I</span><span>T</span><span>H</span></div>
+  <div class="splash-sub" style="opacity:0">Event Space OS</div>
+  <div class="splash-bar" style="display:none"><div class="splash-fill" id="sf"></div></div>
+  <button id="splash-skip" onclick="skipIntro()">Skip ›</button>
 </div>
 
 <!-- App -->
@@ -431,6 +538,7 @@ body::after{background:radial-gradient(ellipse 40% 60% at 50% 90%,oklch(50% var(
       <div style="font-size:.74rem;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.4rem">Quote Pipeline — drag to update status</div>
       <div class="pipeline" id="pipeline"></div>
       <div class="brain"><div class="brain-h"><div class="brain-dot"></div>ZENITH Brain — Live Insights</div><div class="brain-ins" id="brainIns"></div></div>
+      <div id="tonight"></div>
     </div>
     <!-- Quotes -->
     <div class="view" id="vq"><div class="vh"><div><div class="vt">All Quotes</div><div class="vs" id="qcnt"></div></div></div><div id="ql"></div></div>
@@ -466,6 +574,40 @@ body::after{background:radial-gradient(ellipse 40% 60% at 50% 90%,oklch(50% var(
   <button class="fab-btn" onclick="toggleFab()" title="New Quote">✦</button>
 </div>
 <div class="toast" id="toast">Draft saved ✓</div>
+
+<!-- Elevation chrome -->
+<div id="grain"></div>
+<div id="cursorGlow"></div>
+
+<!-- Mission Control (Ctrl+K) -->
+<div id="cmdk" onclick="if(event.target===this)ckClose()">
+  <div id="cmdk-box">
+    <input id="cmdk-in" placeholder="Type a command, search, or try: quote for Sarah, 120 guests…" autocomplete="off">
+    <div id="cmdk-list"></div>
+    <div id="cmdk-hint"><span><b>↑↓</b> navigate</span><span><b>↵</b> run</span><span><b>esc</b> close</span><span><b>Ctrl+K</b> or <b>?</b> anytime</span></div>
+  </div>
+</div>
+
+<!-- Concierge tour -->
+<div id="tour-hl"></div>
+<div id="tour-pop">
+  <div class="tp-t" id="tp-t"></div>
+  <div class="tp-b" id="tp-b"></div>
+  <div class="tp-f">
+    <div class="tp-dots" id="tp-dots"></div>
+    <button class="tp-skip" onclick="tourEnd()">Skip</button>
+    <button class="tp-btn" id="tp-next" onclick="tourNext()">Next</button>
+  </div>
+</div>
+
+<!-- Handshake seal -->
+<div id="seal-ov">
+  <div id="seal-sheet">
+    <div id="seal-sweep"></div>
+    <div id="seal-badge">✦</div>
+    <div id="seal-txt">Preparing your quote…</div>
+  </div>
+</div>
 
 <!-- ════ WIZARD ════ -->
 <div id="wiz-ov">
@@ -711,18 +853,35 @@ function nxtId(){const q=gQ(),yr=new Date().getFullYear(),n=String(q.length+1).p
 })();
 function r(){return Math.random()}
 
-// ── Splash ─────────────────────────────────────────────────
+// ── Whetū Intro v2 — counter → star draw → name reveal → portal out ──
+let _introTl=null;
 window.addEventListener('load',()=>{
-  const sf=document.getElementById('sf'),sp=document.getElementById('splash'),app=document.getElementById('app');
-  const first=!localStorage.getItem('zen_v');
-  if(!first){sp.style.display='none';app.style.opacity='1';initApp();return}
-  localStorage.setItem('zen_v','1');
-  requestAnimationFrame(()=>{sf.style.width='100%';
-    setTimeout(()=>{
-      gsap.to(sp,{opacity:0,y:-20,duration:.75,ease:'power2.in',onComplete:()=>{sp.style.display='none';gsap.to(app,{opacity:1,duration:.5,ease:'power2.out'});initApp()}});
-    },1800);
-  });
+  const sp=document.getElementById('splash'),app=document.getElementById('app');
+  const rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(rm||sessionStorage.getItem('zen_intro')){sp.style.display='none';app.style.opacity='1';initApp();maybeTour();return}
+  sessionStorage.setItem('zen_intro','1');
+  sp.style.transition='none'; // GSAP owns opacity — CSS transition would fight it
+  const cnt=document.getElementById('splash-cnt'),star=document.getElementById('splash-star'),
+        starP=document.getElementById('splash-star-p'),chars=sp.querySelectorAll('.splash-logo span'),
+        sub=sp.querySelector('.splash-sub');
+  const len=starP.getTotalLength();
+  starP.style.strokeDasharray=len;starP.style.strokeDashoffset=len;
+  const tl=gsap.timeline();
+  _introTl=tl;
+  tl.to({v:0},{v:100,duration:1.1,ease:'power2.inOut',onUpdate:function(){cnt.textContent=String(Math.round(this.targets()[0].v)).padStart(3,'0')}})
+    .to(cnt,{opacity:0,duration:.28,ease:'power2.in'})
+    .to(star,{opacity:1,duration:.1},'<')
+    .to(starP,{strokeDashoffset:0,duration:.6,ease:'power2.inOut'},'<')
+    .to(chars,{y:0,duration:.55,ease:'power3.out',stagger:.045},'-=.22')
+    .to(sub,{opacity:1,duration:.4},'-=.2')
+    .add(()=>{app.style.opacity='1';initApp()},'+=.45')
+    .to(sp,{scale:2.6,opacity:0,duration:.6,ease:'power3.in',onComplete:()=>{sp.style.display='none';dashIn();maybeTour()}});
 });
+function skipIntro(){if(_introTl&&_introTl.progress()<1)_introTl.progress(1)}
+function dashIn(){
+  gsap.fromTo('#vd .rev-tile,#vd .pcol,#vd .brain,#vd #tonight',{opacity:0,y:26},
+    {opacity:1,y:0,duration:.55,ease:'power3.out',stagger:.06,clearProps:'transform,opacity'});
+}
 
 // ── Init ──────────────────────────────────────────────────
 function initApp(){
@@ -743,7 +902,7 @@ function sv(id){
   if(id==='analytics') initAnalytics();
   if(id==='quotes') renderQL();
   if(id==='clients') renderCL();
-  if(id==='venue'){ const s=gS();document.getElementById('vHeroName').textContent=(s.name||'THE VENUE').toUpperCase();document.getElementById('vHeroTag').textContent=s.tagline||'Where memories are made'; }
+  if(id==='venue'){ const s=gS();document.getElementById('vHeroName').textContent=(s.name||'THE VENUE').toUpperCase();document.getElementById('vHeroTag').textContent=s.tagline||'Where memories are made';initVenue3D(); }
 }
 
 // ── Color world ───────────────────────────────────────────
@@ -767,20 +926,87 @@ function renderRev(){
   const mrev=mq.reduce((s,x)=>s+x.total,0);
   const avg=q.length?Math.round(q.reduce((s,x)=>s+x.total,0)/q.length):0;
   const cv=q.length?Math.round(conf.length/q.length*100):0;
+  // Record month detection (Venue Pulse)
+  const mk=y+'-'+m;
+  const best=JSON.parse(localStorage.getItem('zen_best')||'{}');
+  if(mrev>0&&mrev>(best.v||0)){
+    localStorage.setItem('zen_best',JSON.stringify({v:mrev,k:mk}));
+    if((best.v||0)>0&&best.k!==mk){
+      document.querySelectorAll('.rev-tile').forEach(t=>{t.classList.remove('record');void t.offsetWidth;t.classList.add('record')});
+      showT('🏆 Best month yet — $'+fmt(mrev));
+    }
+  }
   const hero=document.getElementById('dashHero');
-  if(hero){hero.innerHTML=q.length===0?`<div style="background:linear-gradient(135deg,var(--accent-dim) 0%,oklch(14% .025 250/.6) 100%);border:1px solid var(--accent-glow);border-radius:20px;padding:1.8rem 2rem;margin-bottom:1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap">
+  if(hero){hero.innerHTML=q.length===0?`<div class="hero-banner">
     <div>
-      <div style="font-size:1.4rem;font-weight:700;margin-bottom:.35rem">Welcome to ZENITH ✦</div>
-      <div style="font-size:.85rem;color:var(--text3);max-width:420px;line-height:1.5">Your event management OS is ready. Create your first quote to unlock the full pipeline, AI brain insights, and revenue analytics.</div>
+      <div class="hb-t">Welcome to ZENITH ✦</div>
+      <div class="hb-s">Your event management OS is ready. Create your first quote to unlock the full pipeline, AI brain insights, and revenue analytics.</div>
     </div>
-    <button onclick="openWizard()" style="background:var(--accent);color:oklch(10% 0 0);padding:.85rem 2rem;border-radius:99px;font-size:.95rem;font-weight:700;border:none;cursor:pointer;box-shadow:0 4px 20px var(--accent-glow);transition:transform 150ms;white-space:nowrap;font-family:inherit" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">✦ Create First Quote</button>
+    <button onclick="openWizard()" class="btn-p" style="padding:.9rem 2.1rem;border-radius:99px;font-size:.95rem;white-space:nowrap;position:relative;z-index:1">✦ Create First Quote</button>
   </div>`:''}
-  document.getElementById('revStrip').innerHTML=[
-    {l:'Total Revenue',v:'$'+fmt(tot),d:'All confirmed'},
-    {l:'This Month',v:'$'+fmt(mrev),d:mq.length+' events',c:mrev>0?'up':''},
-    {l:'Avg Quote',v:'$'+fmt(avg),d:'Across '+q.length+' quotes'},
-    {l:'Conversion',v:cv+'%',d:conf.length+'/'+q.length+' confirmed',c:cv>50?'up':''},
-  ].map(t=>`<div class="rev-tile"><div class="rev-lbl">${t.l}</div><div class="rev-val">${t.v}</div><div class="rev-d ${t.c||''}">${t.d}</div></div>`).join('');
+  // Venue Pulse — tiles count up when values change, sparklines under revenue
+  const tiles=[
+    {l:'Total Revenue',v:tot,f:x=>'$'+fmt(x),d:'All confirmed'},
+    {l:'This Month',v:mrev,f:x=>'$'+fmt(x),d:mq.length+' events',c:mrev>0?'up':''},
+    {l:'Avg Quote',v:avg,f:x=>'$'+fmt(x),d:'Across '+q.length+' quotes'},
+    {l:'Conversion',v:cv,f:x=>x+'%',d:conf.length+'/'+q.length+' confirmed',c:cv>50?'up':''},
+  ];
+  window._rv=window._rv||[0,0,0,0];
+  document.getElementById('revStrip').innerHTML=tiles.map((t,i)=>`<div class="rev-tile"><div class="rev-lbl">${t.l}</div><div class="rev-val" id="rv${i}">${t.f(window._rv[i])}</div><div class="rev-d ${t.c||''}">${t.d}</div>${i<2?`<canvas class="rev-spark" id="rs${i}"></canvas>`:''}</div>`).join('');
+  tiles.forEach((t,i)=>{
+    const el=document.getElementById('rv'+i);
+    if(window._rv[i]!==t.v){
+      gsap.to({v:window._rv[i]},{v:t.v,duration:1.5,ease:'expo.out',onUpdate:function(){el.textContent=t.f(Math.round(this.targets()[0].v))}});
+      window._rv[i]=t.v;
+    } else el.textContent=t.f(t.v);
+  });
+  drawSparks(conf);
+  renderTonight();
+  livingSky();
+}
+function drawSparks(conf){
+  const days=[...Array(30)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-29+i);return d.toDateString()});
+  let run=0;
+  const pts=days.map(ds=>{run+=conf.filter(x=>x.date&&new Date(x.date+'T12:00:00').toDateString()===ds).reduce((s,x)=>s+x.total,0);return run});
+  if(Math.max(...pts)===0)return;
+  const col=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#6ee0ff';
+  [0,1].forEach(i=>{
+    const c=document.getElementById('rs'+i);if(!c)return;
+    const w=c.width=Math.max(c.offsetWidth,100)*2,h=c.height=52,mx=Math.max(...pts,1);
+    const ctx=c.getContext('2d');ctx.lineWidth=2.5;ctx.lineJoin='round';
+    try{ctx.strokeStyle=col}catch(_){ctx.strokeStyle='#6ee0ff'}
+    ctx.beginPath();
+    pts.forEach((p,j)=>{const x=j/(pts.length-1)*w,y=h-5-(p/mx)*(h-10);j?ctx.lineTo(x,y):ctx.moveTo(x,y)});
+    ctx.stroke();
+  });
+}
+// Tonight at your venue — footer-as-hero (E10)
+function renderTonight(){
+  const el=document.getElementById('tonight');if(!el)return;
+  const up=gQ().filter(x=>['confirmed','deposit'].includes(x.status)&&x.date&&dUntil(x.date)>=0)
+    .sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const s=gS();
+  const mq=`<div class="tn-mq"><div>${((s.name||'ZENITH')+' · EVENT SPACE OS · ').repeat(8)}</div></div>`;
+  if(up.length){
+    const n=up[0],d=dUntil(n.date);
+    el.innerHTML=`<div style="position:relative;z-index:1"><div class="tn-lbl">${d===0?'✨ Tonight at your venue':'Next at your venue'}</div><div class="tn-name">${n.clientName} · ${n.eventType}</div><div class="tn-meta">${fmtD(n.date)} · ${n.guests||'?'} guests · $${fmt(n.total)}</div></div><div style="text-align:right;position:relative;z-index:1"><div class="tn-count">${d===0?'TONIGHT':d}</div>${d>0?'<div class="tn-cu">day'+(d>1?'s':'')+' to go</div>':''}</div>`+mq;
+  }else{
+    el.innerHTML=`<div style="position:relative;z-index:1"><div class="tn-lbl">Your stage awaits</div><div class="tn-name">No events booked — yet</div><div class="tn-meta">Confirmed events land here with a live countdown</div></div><button class="btn-p" style="position:relative;z-index:1" onclick="openWizard()">✦ New Quote</button>`+mq;
+  }
+}
+// Living Sky — aurora hue driven by business state (E7)
+function livingSky(){
+  const q=gQ();
+  const conf=q.filter(x=>['confirmed','deposit','complete'].includes(x.status));
+  const now=new Date();
+  const mrev=conf.filter(x=>{const d=new Date(x.date||0);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()}).reduce((s,x)=>s+x.total,0);
+  const best=JSON.parse(localStorage.getItem('zen_best')||'{}');
+  const active=q.filter(x=>['draft','sent'].includes(x.status)).length;
+  let h=250,c=.15;                               // violet-blue — calm, no data
+  if(mrev>0&&mrev>=(best.v||0)){h=85;c=.14}      // gold — record month in progress
+  else if(active>=3){h=195;c=.19}                // cyan — busy pipeline
+  else if(q.length){h=210;c=.18}                 // working blue
+  gsap.to(document.documentElement,{'--step-hue':h,'--step-chroma':c,duration:1.4,ease:'power2.inOut'});
 }
 
 // ── Pipeline Kanban ───────────────────────────────────────
@@ -812,7 +1038,23 @@ function dov(e,el){e.preventDefault();el.classList.add('dov')}
 function dp(e,s){
   e.preventDefault();document.querySelectorAll('.pcards').forEach(c=>c.classList.remove('dov'));
   if(!_drag)return;const q=gQ();const x=q.find(i=>i.id===_drag);
-  if(x){x.status=s;x.updatedAt=new Date().toISOString();LS.s('quotes',q);renderPipeline();renderRev();renderBrain();}_drag=null;
+  if(x){
+    const prev=x.status;
+    x.status=s;x.updatedAt=new Date().toISOString();LS.s('quotes',q);
+    renderPipeline();renderRev();renderBrain();
+    if((s==='confirmed'||s==='deposit')&&prev!==s)dealClosed(e,x);
+  }
+  _drag=null;
+}
+// Deal Closed dopamine chain (E3) — burst at drop point, gold ripple through KPIs
+function dealClosed(e,x){
+  if(typeof confetti==='function'){
+    confetti({particleCount:90,spread:75,startVelocity:34,ticks:130,
+      origin:{x:(e.clientX||innerWidth/2)/innerWidth,y:(e.clientY||innerHeight/2)/innerHeight},
+      colors:['#ffd76a','#7ee3ff','#b58cff','#ffffff']});
+  }
+  document.querySelectorAll('.rev-tile').forEach((t,i)=>setTimeout(()=>{t.classList.remove('record');void t.offsetWidth;t.classList.add('record')},i*90));
+  showT('🥂 Deal closed — $'+fmt(x.total));
 }
 
 // ── Brain ─────────────────────────────────────────────────
@@ -1181,14 +1423,141 @@ function initWizPtcl(){
   obs.observe(document.getElementById('wiz-ov'),{attributes:true,attributeFilter:['class']});
 }
 
-// ── Keyboard ──────────────────────────────────────────────
+// ── Keyboard router — wizard, Mission Control, quick keys ──
 document.addEventListener('keydown',e=>{
   const ov=document.getElementById('wiz-ov');
   if(ov.classList.contains('open')){
     if(e.key==='Escape')closeWizard();
     if(e.altKey&&e.key>='0'&&e.key<='4'){e.preventDefault();gotoStep(parseInt(e.key))}
+    return;
   }
+  const ck=document.getElementById('cmdk');
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();ck.classList.contains('open')?ckClose():ckOpen();return}
+  if(ck.classList.contains('open')){
+    if(e.key==='Escape')ckClose();
+    else if(e.key==='ArrowDown'){e.preventDefault();ckMove(1)}
+    else if(e.key==='ArrowUp'){e.preventDefault();ckMove(-1)}
+    else if(e.key==='Enter'){e.preventDefault();ckRun()}
+    return;
+  }
+  const typing=/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName||'');
+  if(typing)return;
+  if(e.key==='?'){e.preventDefault();ckOpen()}
+  else if(e.key.toLowerCase()==='n'&&!e.ctrlKey&&!e.metaKey&&!e.altKey)openWizard();
 });
+
+// ── Mission Control — Ctrl+K palette with natural language (E9) ──
+const CK_ACTS=[
+  {i:'⌂',t:'Dashboard',k:'',s:'Navigate',fn:()=>sv('dashboard')},
+  {i:'◫',t:'All Quotes',k:'',s:'Navigate',fn:()=>sv('quotes')},
+  {i:'👥',t:'Clients',k:'',s:'Navigate',fn:()=>sv('clients')},
+  {i:'📊',t:'Analytics',k:'',s:'Navigate',fn:()=>sv('analytics')},
+  {i:'🏛',t:'Venue Story',k:'',s:'Navigate',fn:()=>sv('venue')},
+  {i:'✦',t:'New Quote',k:'n',s:'Actions',fn:()=>openWizard()},
+  {i:'⚙',t:'Settings',k:'',s:'Actions',fn:()=>openSettings()},
+  {i:'🧭',t:'Take the tour',k:'',s:'Actions',fn:()=>tourStart()},
+];
+let _ckSel=0,_ckItems=[];
+function ckOpen(){const ck=document.getElementById('cmdk');ck.classList.add('open');const inp=document.getElementById('cmdk-in');inp.value='';ckFilter('');setTimeout(()=>inp.focus(),30)}
+function ckClose(){document.getElementById('cmdk').classList.remove('open')}
+function ckFilter(qs){
+  const ql=qs.trim().toLowerCase();let items=[];
+  const nl=qs.match(/(?:quote|q)\s+(?:for\s+)?([a-z' ]+?)(?:[,\s]+(\d+)\s*guests?)?\s*$/i);
+  if(nl&&nl[1])items.push({i:'✨',t:`Create quote for ${cap(nl[1].trim())}${nl[2]?' · '+nl[2]+' guests':''}`,s:'Magic',fn:()=>ckNL(cap(nl[1].trim()),nl[2])});
+  items=items.concat(CK_ACTS.filter(a=>!ql||a.t.toLowerCase().includes(ql)));
+  if(ql.length>1)gQ().filter(x=>(x.clientName||'').toLowerCase().includes(ql)).slice(0,5)
+    .forEach(x=>items.push({i:'◫',t:`${x.clientName} — ${x.eventType||'Event'} · $${fmt(x.total)}`,s:'Quotes',fn:()=>editQ(x.id)}));
+  _ckItems=items;_ckSel=0;ckRender();
+}
+function ckRender(){
+  const l=document.getElementById('cmdk-list');let last='';
+  l.innerHTML=_ckItems.map((a,i)=>{
+    const h=a.s!==last?`<div class="ck-s">${a.s}</div>`:'';last=a.s;
+    return h+`<div class="ck-i${i===_ckSel?' sel':''}" onmouseenter="_ckSel=${i};ckRender()" onclick="ckRun()"><span class="ck-ic">${a.i}</span><span>${a.t}</span>${a.k?`<span class="ck-k">${a.k}</span>`:''}</div>`;
+  }).join('')||'<div class="ck-s" style="padding:1rem">No matches — try "quote for Sarah, 120 guests"</div>';
+  const sel=l.querySelector('.ck-i.sel');if(sel)sel.scrollIntoView({block:'nearest'});
+}
+function ckMove(d){if(!_ckItems.length)return;_ckSel=(_ckSel+d+_ckItems.length)%_ckItems.length;ckRender()}
+function ckRun(){const a=_ckItems[_ckSel];if(a){ckClose();a.fn()}}
+function ckNL(name,guests){
+  openWizard();
+  setTimeout(()=>{
+    Z.d.name=name;if(guests)Z.d.guests=guests;
+    const fn2=document.getElementById('fn'),fg=document.getElementById('fg_');
+    if(fn2)fn2.value=name;if(fg&&guests)fg.value=guests;
+    showT('✨ Prefilled for '+name);
+  },400);
+}
+function cap(s){return s.replace(/\b\w/g,c=>c.toUpperCase())}
+document.getElementById('cmdk-in').addEventListener('input',e=>ckFilter(e.target.value));
+
+// ── ZENITH Concierge — interactive tour (E8) ──
+const TOUR=[
+  {el:'#sidebar',t:'Command deck',b:'Hover to expand. Dashboard, quotes, clients, analytics and your venue story all live here.'},
+  {el:'#revStrip',t:'Venue Pulse',b:'Live revenue, monthly take, average quote and conversion — the numbers count up as deals land.'},
+  {el:'#pipeline',t:'The pipeline',b:'Drag a quote card between stages. Drop one on Confirmed and watch what happens. 🥂'},
+  {el:'.brain',t:'ZENITH Brain',b:'Reads your pipeline and surfaces live insights — stale quotes, conversion rate, your most-booked event type.'},
+  {el:'#tonight',t:'Tonight at your venue',b:'Your next confirmed event lives down here with a live countdown.'},
+  {el:'#fab',t:'Create anything',b:'The ✦ button opens the quote wizard. Let’s build your first quote together — the tour ends there.'},
+];
+let _tour=-1;
+function maybeTour(){if(!localStorage.getItem('zen_tour')&&gQ().length===0)setTimeout(tourStart,900)}
+function tourStart(){sv('dashboard');_tour=0;setTimeout(()=>tourStep(0),350)}
+function tourStep(i){
+  const st=TOUR[i];const el=document.querySelector(st.el);
+  if(!el){tourNext();return}
+  const r=el.getBoundingClientRect(),hl=document.getElementById('tour-hl'),pop=document.getElementById('tour-pop');
+  hl.style.display='block';pop.style.display='block';
+  hl.style.left=(r.left-8)+'px';hl.style.top=(r.top-8)+'px';hl.style.width=(r.width+16)+'px';hl.style.height=(r.height+16)+'px';
+  document.getElementById('tp-t').textContent=st.t;
+  document.getElementById('tp-b').textContent=st.b;
+  document.getElementById('tp-dots').innerHTML=TOUR.map((_,j)=>`<div class="tp-dot${j<=i?' on':''}"></div>`).join('');
+  document.getElementById('tp-next').textContent=i===TOUR.length-1?'Create ✦':'Next';
+  const pw=300,ph=170;
+  let px=Math.min(Math.max(r.left,16),innerWidth-pw-16);
+  let py=r.bottom+18;if(py+ph>innerHeight)py=Math.max(r.top-ph-6,16);
+  if(st.el==='#sidebar'){px=r.right+18;py=Math.max((innerHeight-ph)/2,16)}
+  pop.style.left=px+'px';pop.style.top=py+'px';
+}
+function tourNext(){
+  _tour++;
+  if(_tour>=TOUR.length){tourEnd();openWizard();return}
+  tourStep(_tour);
+}
+function tourEnd(){
+  _tour=-1;localStorage.setItem('zen_tour','1');
+  document.getElementById('tour-hl').style.display='none';
+  document.getElementById('tour-pop').style.display='none';
+}
+window.addEventListener('resize',()=>{if(_tour>=0)tourStep(_tour)});
+
+// ── Ambient cursor glow (§15) ──
+document.addEventListener('mousemove',e=>{
+  const g=document.getElementById('cursorGlow');
+  if(g){g.style.left=e.clientX+'px';g.style.top=e.clientY+'px'}
+});
+
+// ── Zdog venue wireframe — roof assembles over the hero (E2) ──
+let _zd=null;
+function initVenue3D(){
+  if(_zd||!window.Zdog)return;
+  const host=document.querySelector('#vv .vhero');if(!host)return;
+  const c=document.createElement('canvas');c.id='vzdog';c.width=560;c.height=340;host.appendChild(c);
+  const line='oklch(68% .16 210 / .85)',dim='oklch(55% .1 250 / .45)';
+  const illo=new Zdog.Illustration({element:c,rotate:{x:-.42,y:.5}});
+  new Zdog.Rect({addTo:illo,width:190,height:130,stroke:2,color:dim,rotate:{x:Zdog.TAU/4}});
+  [[-95,-65],[95,-65],[-95,65],[95,65]].forEach(([x,z])=>
+    new Zdog.Shape({addTo:illo,path:[{y:0},{y:-64}],translate:{x,z},stroke:2,color:dim}));
+  const roof=new Zdog.Anchor({addTo:illo,translate:{y:-64}});
+  new Zdog.Shape({addTo:roof,path:[{x:-105,z:-72},{x:0,z:-72,y:-36},{x:105,z:-72}],closed:false,stroke:2.5,color:line});
+  new Zdog.Shape({addTo:roof,path:[{x:-105,z:72},{x:0,z:72,y:-36},{x:105,z:72}],closed:false,stroke:2.5,color:line});
+  new Zdog.Shape({addTo:roof,path:[{x:0,y:-36,z:-72},{x:0,y:-36,z:72}],stroke:2.5,color:line});
+  new Zdog.Shape({addTo:roof,path:[{x:-105,y:0,z:-72},{x:-105,y:0,z:72}],stroke:2,color:line});
+  new Zdog.Shape({addTo:roof,path:[{x:105,y:0,z:-72},{x:105,y:0,z:72}],stroke:2,color:line});
+  gsap.from(roof.translate,{y:-190,duration:1.5,ease:'power3.out'});
+  (function anim(){illo.rotate.y+=.0038;illo.updateRenderGraph();requestAnimationFrame(anim)})();
+  _zd=illo;
+}
 
 // ── Settings ──────────────────────────────────────────────
 function openSettings(){document.getElementById('settings-modal').classList.add('open');loadSettingsUI();renderPricingTable();renderPkgsUI()}
@@ -1301,7 +1670,22 @@ function copyLink(){
   const q=window._lq;if(!q)return;
   try{const d=btoa(encodeURIComponent(JSON.stringify({id:q.id,client:q.clientName,type:q.eventType,date:q.date,total:q.total})));const u=`${location.origin}${location.pathname}#quote/${d}`;navigator.clipboard.writeText(u).then(()=>showT('Link copied ✓')).catch(()=>showT('Copy manually: '+u))}catch(e){showT('Share: open browser console')}
 }
-function dlQuote(){window.print()}
+// The Handshake — cinematic seal before the PDF (E6)
+function dlQuote(){
+  const ov=document.getElementById('seal-ov');
+  if(!ov||matchMedia('(prefers-reduced-motion:reduce)').matches){window.print();return}
+  ov.classList.add('on');
+  const sheet=document.getElementById('seal-sheet'),sweep=document.getElementById('seal-sweep'),badge=document.getElementById('seal-badge');
+  gsap.timeline({onComplete:()=>{
+      ov.classList.remove('on');
+      gsap.set([sheet,badge,sweep],{clearProps:'all'});
+      setTimeout(()=>window.print(),120);
+    }})
+    .to(sheet,{y:0,opacity:1,duration:.5,ease:'power3.out'})
+    .to(sweep,{x:'260%',duration:.7,ease:'power2.inOut'},'-=.1')
+    .to(badge,{scale:1,opacity:1,duration:.45,ease:'back.out(2.2)'},'-=.3')
+    .to(sheet,{y:-12,duration:.4,ease:'power2.inOut',delay:.4});
+}
 
 // ── Analytics ─────────────────────────────────────────────
 let _cr,_ct;
