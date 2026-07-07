@@ -1,4 +1,4 @@
-const CACHE = 'eventspace-v4';
+const CACHE = 'eventspace-v5';
 const ASSETS = [
   '/',
   '/index.html',
