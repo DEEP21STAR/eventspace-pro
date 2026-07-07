@@ -25,8 +25,9 @@ const css = `
     border:1px solid rgba(212,165,50,.42);border-radius:12px;color:#f5c557;
     font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
     backdrop-filter:blur(14px);box-shadow:0 14px 50px rgba(0,0,0,.5);
-    transform:translateY(140%);transition:transform .5s cubic-bezier(.34,1.56,.64,1)}
-  .wu-toast.show{transform:translateY(0)}
+    transform:translateY(140%);opacity:0;visibility:hidden;pointer-events:none;
+    transition:transform .5s cubic-bezier(.34,1.56,.64,1),opacity .3s ease,visibility 0s .5s}
+  .wu-toast.show{transform:translateY(0);opacity:1;visibility:visible;pointer-events:auto;transition-delay:0s}
   .wu-reveal{opacity:0;transform:translateY(22px);transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1)}
   .wu-reveal.wu-visible{opacity:1;transform:translateY(0)}
   @media print {
