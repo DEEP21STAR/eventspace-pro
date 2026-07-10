@@ -1820,6 +1820,20 @@ input[type=range]{
   .hdr-desktop{display:none!important}
   #hdrMenuBtn{display:flex!important}
   .sn-beam-wrap{flex:0 0 40px}
+  /* 2026-07-11 restore polish: header crowding at <=390px — brand wrapped to 2 lines,
+     quote pill collided with buttons */
+  .hdr{gap:8px;padding:0 10px}
+  .hdr-logo{gap:7px;flex-shrink:0}
+  .hdr-logo-icon{width:28px;height:28px;font-size:13px}
+  .hdr-logo-text{font-size:11px;letter-spacing:1px;white-space:nowrap}
+  .hdr-logo-sub{display:none}
+  .hdr-client{padding:4px 8px;min-width:0;overflow:hidden}
+  .hdr-client>div:last-child{min-width:0;overflow:hidden}
+  .hdr-client-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:96px;font-size:11px}
+  .hdr-client-lbl{font-size:8px}
+  .hdr-btns{gap:5px;flex-shrink:0}
+  .hdr-btn{padding:5px 8px;font-size:10px}
+  .btn-help,.btn-fs{display:none!important} /* help lives in shortcut bar + ribbon; fullscreen is desktop-only */
 }
 @media(min-width:769px){
   #hdrMenuBtn{display:none!important}
