@@ -1,10 +1,11 @@
-const CACHE = 'eventspace-v5';
+const CACHE = 'eventspace-v6';
 const ASSETS = [
   '/',
   '/index.html',
   '/enquiry.html',
   '/capacity.html',
   '/promo.html',
+  '/zenith.html',
   '/manifest.json'
 ];
 
